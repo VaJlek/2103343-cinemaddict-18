@@ -1,7 +1,7 @@
 # Проект «Киноман»
 
 * Студент: [Валентин Максимов](https://up.htmlacademy.ru/ecmascript/18/user/2103343).
-* Наставник: `Неизвестно`.
+* Наставник: [Alex Elkin](https://htmlacademy.ru/profile/alex_elkin).
 
 ---
 
