@@ -1,11 +1,12 @@
 import { createElement } from '../render.js';
 
-const createFilmListTemplate = () => (`<section class="films-list">
-<h2 class="films-list__title">There are no movies in our database</h2></section>`);
+const createFooterTemplate = () => `<section class="footer__statistics">
+  <p>130 291 movies inside</p>
+</section>`;
 
-export default class FilmListView {
+export default class FooterView {
   getTemplate() {
-    return createFilmListTemplate();
+    return createFooterTemplate();
   }
 
   getElement() {
