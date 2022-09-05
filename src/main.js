@@ -4,15 +4,17 @@ import SortingView from './view/sorting-view.js';
 import UserTitleView from './view/user-title-view.js';
 import ContentPresenter from './presenter/content-presenter.js';
 import FooterView from './view/footer-view.js';
+import MoviesModel from './model/movies-model.js';
 
 const siteMainElement = document.querySelector('.main');
 const siteHeaderElement = document.querySelector('.header');
 const siteFooterElement = document.querySelector('.footer');
 const contentPresenter = new ContentPresenter;
+const moviesModel = new MoviesModel();
 
 render(new UserTitleView, siteHeaderElement);
 render(new NavigationView, siteMainElement);
 render(new SortingView, siteMainElement);
 render(new FooterView, siteFooterElement);
 
-contentPresenter.init(siteMainElement);
+contentPresenter.init(siteMainElement, moviesModel);

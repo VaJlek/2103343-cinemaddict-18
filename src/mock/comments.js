@@ -1,11 +1,11 @@
 import { getRandomInteger } from '../utils.js';
 
- const COMMENT_DATA = {
-  commentText: ['Interesting setting and a good cast', 'Booooooooooring', 'Very very old. Meh', 'Almost two hours? Seriously?'];
-  authors: ['Tim', 'Boris', 'John', 'Ivan'];
-  emotions: ['smile', 'sleeping', 'puke', 'angry'];
+const COMMENT_DATA = {
+  commentText: ['Interesting setting and a good cast', 'Booooooooooring', 'Very very old. Meh', 'Almost two hours? Seriously?'],
+  authors: ['Tim', 'Boris', 'John', 'Ivan'],
+  emotions: ['smile', 'sleeping', 'puke', 'angry'],
 
-  const
+
 };
 
 const countIdNumber = () => {
@@ -21,7 +21,7 @@ const getIdNumber = countIdNumber();
 export const generateComment = () => {
   const randomAuthor = COMMENT_DATA.authors[getRandomInteger(0, COMMENT_DATA.authors.length - 1)];
   const randomCommentText = COMMENT_DATA.commentText[getRandomInteger(0, COMMENT_DATA.commentText.length - 1)];
-  const randomEmotion = COMMENT_DATA.emotions[getRandomInteger(0, COMMENT_DATA.emotions.length -1)];
+  const randomEmotion = COMMENT_DATA.emotions[getRandomInteger(0, COMMENT_DATA.emotions.length - 1)];
 
   return {
     'id': getIdNumber(),
@@ -30,7 +30,7 @@ export const generateComment = () => {
     'date': 'Today',
     'emotion': randomEmotion,
 
-  }
+  };
 };
 
 
