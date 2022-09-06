@@ -10,7 +10,7 @@ const siteMainElement = document.querySelector('.main');
 const siteHeaderElement = document.querySelector('.header');
 const siteFooterElement = document.querySelector('.footer');
 const contentPresenter = new ContentPresenter;
-const moviesModel = new MoviesModel();
+const moviesModel = new MoviesModel;
 
 render(new UserTitleView, siteHeaderElement);
 render(new NavigationView, siteMainElement);

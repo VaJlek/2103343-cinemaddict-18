@@ -9,7 +9,6 @@ import FilmCommentView from '../view/film-detalis-comment-view.js';
 
 export default class PopupPresenter {
   init(contentContainer, film) {
-
     this.controlsComponent = new FilmControlsView;
     this.addCommentComponent = new AddFilmCommentView;
     this.filmInfoComponent = new FilmInfoView;
@@ -20,7 +19,7 @@ export default class PopupPresenter {
     render(this.filmDetailsComponent, contentContainer);
     render(this.filmInfoComponent, this.filmDetailsComponent.getElement());
 
-    render(new FilmDetailsView(film), this.filmInfoComponent.getElement() );
+    render(new FilmInfoView(film), this.filmDetailsComponent.getElement() );
 
     render(this.controlsComponent, this.filmInfoComponent.getElement());
 
