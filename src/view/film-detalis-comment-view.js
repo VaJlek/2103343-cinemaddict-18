@@ -19,7 +19,7 @@ const createFilmCommentsTemplate = (userComment) => {
   </li>`;
 };
 
-export default class FilmCommentView {
+export default class FilmDetailsCommentView {
   constructor (comment) {
     this.comment = comment;
   }

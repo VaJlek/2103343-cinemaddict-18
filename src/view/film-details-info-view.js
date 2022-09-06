@@ -62,7 +62,7 @@ const createFilmInfoTemplate = (film) => {
 </div>`;
 };
 
-export default class FilmInfoView {
+export default class FilmDetailsInfoView {
   constructor (film) {
     this.film = film;
   }

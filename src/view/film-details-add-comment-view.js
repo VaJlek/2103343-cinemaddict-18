@@ -40,7 +40,7 @@ const createAddFilmCommentsTemplate = () => `
 </section>
 </div>`;
 
-export default class AddFilmCommentView {
+export default class FilmDetailsAddCommentView {
   getTemplate() {
     return createAddFilmCommentsTemplate();
   }
