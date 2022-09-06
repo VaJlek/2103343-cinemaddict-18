@@ -1,19 +1,18 @@
 import { render } from '../render.js';
+
 import FilmCardView from '../view/film-card-view.js';
 import FilmListContainerView from '../view/film-list-container-view.js';
 import FilmListView from '../view/film-list-view.js';
-import ContentView from '../view/films-view.js';
+import FilmsView from '../view/films-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 
-import CommentsModel from '../model/comments-model.js';
 import PopupPresenter from './popup-presenter.js';
 
 export default class ContentPresenter {
-  contentComponent = new ContentView;
+  contentComponent = new FilmsView;
   filmListComponent = new FilmListView;
   filmListContainerComponent = new FilmListContainerView;
   showMoreButtonComponent = new ShowMoreButtonView;
-  commentsModel = new CommentsModel;
 
   init = (contentContainer, moviesModel) => {
     this.contentContainer = contentContainer;
