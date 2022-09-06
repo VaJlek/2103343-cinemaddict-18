@@ -8,7 +8,8 @@ import FilmDetailsView from '../view/film-details-view.js';
 import FilmCommentView from '../view/film-detalis-comment-view.js';
 
 export default class PopupPresenter {
-  init(contentContainer, films) {
+  init(contentContainer, film) {
+
     this.controlsComponent = new FilmControlsView;
     this.addCommentComponent = new AddFilmCommentView;
     this.filmInfoComponent = new FilmInfoView;
@@ -19,13 +20,9 @@ export default class PopupPresenter {
     render(this.filmDetailsComponent, contentContainer);
     render(this.filmInfoComponent, this.filmDetailsComponent.getElement());
 
-    this.filmFormComponent.getElement().children[0].children[0].addEventListener('click', () => {
-      const currentPopup = contentContainer.querySelector('.film-details');
-      currentPopup.remove();
-    });
-    render(new FilmInfoView(films), this.filmFormComponent.getElement() );
+    render(new FilmDetailsView(film), this.filmInfoComponent.getElement() );
 
-    render(this.controlsComponent, this.filmFormComponent.getElement());
+    render(this.controlsComponent, this.filmInfoComponent.getElement());
 
   }
 }
