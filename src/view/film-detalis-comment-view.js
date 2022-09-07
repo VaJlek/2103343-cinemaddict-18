@@ -2,7 +2,7 @@ import { createElement } from '../render.js';
 
 const createFilmCommentsTemplate = (userComment) => {
 
-  const {author, comment, commentDate, emotion } = userComment;
+  const {author, comment, date, emotion } = userComment;
 
   return `<li class="film-details__comment">
   <span class="film-details__comment-emoji">
@@ -12,7 +12,7 @@ const createFilmCommentsTemplate = (userComment) => {
     <p class="film-details__comment-text">${comment}</p>
     <p class="film-details__comment-info">
       <span class="film-details__comment-author">${author}</span>
-      <span class="film-details__comment-day">${commentDate}</span>
+      <span class="film-details__comment-day">${date}</span>
       <button class="film-details__comment-delete">Delete</button>
     </p>
   </div>

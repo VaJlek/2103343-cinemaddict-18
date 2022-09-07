@@ -34,8 +34,8 @@ export default class PopupPresenter {
     render(this.filmDetailsCommentContainerComponent, this.filmFormComponent.getElement());
     render(this.filmDetailsCommentListComponent, this.filmDetailsCommentContainerComponent.getElement());
     render(this.filmDetailsAddCommentComponent, this.filmDetailsCommentContainerComponent.getElement());
-    for (let i = 1; i < 5; i++) {
-      render(new FilmDetailsCommentView(comments[i]), this.filmDetailsCommentListComponent.getElement());
-    }
+
+    render(new FilmDetailsCommentView(comments[film.comments]), this.filmDetailsCommentListComponent.getElement());
+
   }
 }

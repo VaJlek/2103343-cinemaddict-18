@@ -17,6 +17,8 @@ const MOVIE_DATA = {
 
 };
 
+const generateId = () => getRandomInteger(0, 4);
+
 const generateMovieTitle = (movieTitle) => {
   const titles = Object.keys(movieTitle);
 
@@ -30,7 +32,7 @@ export const generateMovie = () => {
 
   return {
     'id': '0',
-    'comments': [1],
+    'comments': generateId(),
     'movie_info' : {
       'title': randomTitle,
       'rating': 7,

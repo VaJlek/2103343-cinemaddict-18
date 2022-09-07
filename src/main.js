@@ -21,3 +21,5 @@ render(new SortingView, siteMainElement);
 render(new FooterView, siteFooterElement);
 
 contentPresenter.init(siteMainElement, moviesModel, commentsModel);
+console.log(commentsModel);
+console.log(moviesModel);

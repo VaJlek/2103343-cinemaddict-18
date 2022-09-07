@@ -24,7 +24,7 @@ export default class ContentPresenter {
     render(this.filmListContainerComponent, this.filmListComponent.getElement());
     render(this.showMoreButtonComponent, this.filmListComponent.getElement());
 
-    for (let i = 1; i < this.films.length; i++) {
+    for (let i = 0; i < this.films.length; i++) {
       render(new FilmCardView(this.films[i]), this.filmListContainerComponent.getElement());
 
       this.filmListContainerComponent.getElement().lastChild.addEventListener('click', () => {
