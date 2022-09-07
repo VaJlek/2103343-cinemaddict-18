@@ -13,7 +13,7 @@ const siteHeaderElement = document.querySelector('.header');
 const siteFooterElement = document.querySelector('.footer');
 const contentPresenter = new ContentPresenter;
 const moviesModel = new MoviesModel;
-const commentsModel = new CommentsModel;//(moviesModel);
+const commentsModel = new CommentsModel;
 
 render(new UserTitleView, siteHeaderElement);
 render(new NavigationView, siteMainElement);

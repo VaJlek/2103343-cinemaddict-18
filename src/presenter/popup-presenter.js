@@ -13,13 +13,13 @@ import FilmDetailsAddCommentView from '../view/film-details-add-comment-view.js'
 
 export default class PopupPresenter {
   init(contentContainer, film, comments) {
-
     this.controlsComponent = new FilmDetailsControlsView;
-
+    //this.filmInfoComponent = new FilmDetailsInfoView;
     this.filmFormComponent = new FilmDetailsFormView;
     this.filmDetailsComponent = new FilmDetailsView;
     this.filmDetailsContentComponent = new FilmDetailsContentView;
 
+    //this.filmDetailsCommentsComponent = new FilmDetailsCommentView;
     this.filmDetailsCommentContainerComponent = new FilmDetailsCommentContainerView;
     this.filmDetailsCommentListComponent = new FilmDetailsCommentListView;
     this.filmDetailsAddCommentComponent = new FilmDetailsAddCommentView;
@@ -36,7 +36,6 @@ export default class PopupPresenter {
     render(this.filmDetailsCommentContainerComponent, this.filmFormComponent.getElement());
     render(this.filmDetailsCommentListComponent, this.filmDetailsCommentContainerComponent.getElement());
     render(this.filmDetailsAddCommentComponent, this.filmDetailsCommentContainerComponent.getElement());
-
     render(new FilmDetailsCommentView(comments[0]), this.filmDetailsCommentListComponent.getElement());
   }
 }

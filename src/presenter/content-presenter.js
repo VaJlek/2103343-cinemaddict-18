@@ -27,7 +27,7 @@ export default class ContentPresenter {
       render(new FilmCardView(this.films[i]), this.filmListContainerComponent.getElement());
 
       this.filmListContainerComponent.getElement().lastChild.addEventListener('click', () => {
-        new PopupPresenter().init(contentContainer.parentNode, this.films[i], this.commentsModel.comments);
+        new PopupPresenter().init(contentContainer.parentNode, this.films[i]);//, this.commentsModel.comments);
       });
     }
   };
