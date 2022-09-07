@@ -30,7 +30,7 @@ export const generateMovie = () => {
 
   return {
     'id': '0',
-    'comments': '1',
+    'comments': [1],
     'movie_info' : {
       'title': randomTitle,
       'rating': 7,

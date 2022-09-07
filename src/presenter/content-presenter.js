@@ -14,9 +14,10 @@ export default class ContentPresenter {
   filmListContainerComponent = new FilmListContainerView;
   showMoreButtonComponent = new ShowMoreButtonView;
 
-  init = (contentContainer, moviesModel) => {
+  init = (contentContainer, moviesModel, commentsModel) => {
     this.contentContainer = contentContainer;
     this.films = moviesModel.films;
+    this.comments = commentsModel.comments;
 
     render(this.contentComponent, this.contentContainer);
     render(this.filmListComponent, this.contentComponent.getElement());
@@ -27,7 +28,7 @@ export default class ContentPresenter {
       render(new FilmCardView(this.films[i]), this.filmListContainerComponent.getElement());
 
       this.filmListContainerComponent.getElement().lastChild.addEventListener('click', () => {
-        new PopupPresenter().init(contentContainer.parentNode, this.films[i]);//, this.commentsModel.comments);
+        new PopupPresenter().init(contentContainer.parentNode, this.films[i], this.comments);
       });
     }
   };

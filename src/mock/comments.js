@@ -7,7 +7,7 @@ const COMMENT_DATA = {
 
 
 };
-
+/*
 const countIdNumber = () => {
   let counter = 0;
   return function () {
@@ -17,14 +17,14 @@ const countIdNumber = () => {
 
 };
 const getIdNumber = countIdNumber();
-
+*/
 export const generateComment = () => {
   const randomAuthor = COMMENT_DATA.authors[getRandomInteger(0, COMMENT_DATA.authors.length - 1)];
   const randomCommentText = COMMENT_DATA.commentText[getRandomInteger(0, COMMENT_DATA.commentText.length - 1)];
   const randomEmotion = COMMENT_DATA.emotions[getRandomInteger(0, COMMENT_DATA.emotions.length - 1)];
 
   return {
-    'id': getIdNumber(),
+    'id': '1',
     'author': randomAuthor,
     'comment': randomCommentText,
     'date': 'Today',
