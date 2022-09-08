@@ -1,12 +1,5 @@
 import { createElement } from '../render.js';
-const createFilmCommentsTemplate = () => `
-<div class="film-details__bottom-container">
-<section class="film-details__comments-wrap">
-  <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">0</span></h3>
-
-  <ul class="film-details__comments-list"></ul>
-
-  <form class="film-details__new-comment" action="" method="get">
+const createAddFilmCommentsTemplate = () => `<form class="film-details__new-comment" action="" method="get">
     <div class="film-details__add-emoji-label">
       <img src="images/emoji/smile.png" width="55" height="55" alt="emoji-smile">
     </div>
@@ -36,13 +29,11 @@ const createFilmCommentsTemplate = () => `
         <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
       </label>
     </div>
-  </form>
-</section>
-</div>`;
+  </form>`;
 
-export default class FilmCommentView {
+export default class FilmDetailsAddCommentView {
   getTemplate() {
-    return createFilmCommentsTemplate();
+    return createAddFilmCommentsTemplate();
   }
 
   getElement() {
