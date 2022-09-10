@@ -2,7 +2,7 @@ import { createElement } from '../render.js';
 
 const createFilmInfoTemplate = (film) => {
 
-  const {title, totalRating, poster, ageRating, director, writers, actors, releaseDate, runtime, country, genre, description } = film.film_info;
+  const {title, totalRating, poster, ageRating, director, writers, actors, release: {date, releaseCountry}, runtime, genre, description } = film.filmInfo;
   return `<div class="film-details__info-wrap">
 <div class="film-details__poster">
   <img class="film-details__poster-img" src="${poster}" alt="">
@@ -37,7 +37,7 @@ const createFilmInfoTemplate = (film) => {
     </tr>
     <tr class="film-details__row">
       <td class="film-details__term">Release Date</td>
-      <td class="film-details__cell">${releaseDate}</td>
+      <td class="film-details__cell">${date}</td>
     </tr>
     <tr class="film-details__row">
       <td class="film-details__term">Runtime</td>
@@ -45,7 +45,7 @@ const createFilmInfoTemplate = (film) => {
     </tr>
     <tr class="film-details__row">
       <td class="film-details__term">Country</td>
-      <td class="film-details__cell">${country}</td>
+      <td class="film-details__cell">${releaseCountry}</td>
     </tr>
     <tr class="film-details__row">
       <td class="film-details__term">Genres</td>

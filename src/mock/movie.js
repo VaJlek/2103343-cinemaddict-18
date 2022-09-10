@@ -31,30 +31,30 @@ export const generateMovie = () => {
   const randomDescription = MOVIE_DATA.descriptions[getRandomInteger(0, MOVIE_DATA.descriptions.length - 1)];
 
   return {
-    'id': '0',
-    'comments': generateId(),
-    'film_info' : {
-      'title': randomTitle,
-      'alternative_title': 'Laziness Who Sold Themselves',
-      'totalRating': 7,
-      'poster': posterLink,
-      'age_rating': 0,
-      'director': 'Nolan',
-      'writers': 'Camerron',
-      'actors': 'Christian Bail',
-      'release':{
-        'date': '22-22-2222',
-        'release_country': 'Finland'
+    id: '0',
+    comments: generateId(),
+    filmInfo : {
+      title: randomTitle,
+      alternativeTitle: 'Laziness Who Sold Themselves',
+      totalRating: 7,
+      poster: posterLink,
+      ageRating: 0,
+      director: 'Tom Ford',
+      writers: 'Takeshi Kitano',
+      actors: 'Christian Bail',
+      release:{
+        date: '1988',
+        releaseCountry: 'Finland'
       },
-      'runtime': 1313,
-      'genre':'horror',
-      'description': randomDescription,
+      runtime: 1313,
+      genre:'horror',
+      description: randomDescription,
     },
-    'user_details': {
-      'watchlist': false,
-      'already_watched': true,
-      'watching_date': '2019-04-12T16:12:32.554Z',
-      'favorite': false
+    userDetails: {
+      watchlist: false,
+      alreadyWatched: true,
+      watchingDate: '2019-04-12T16:12:32.554Z',
+      favorite: false
     }
   };
 
