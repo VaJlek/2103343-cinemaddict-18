@@ -33,21 +33,28 @@ export const generateMovie = () => {
   return {
     'id': '0',
     'comments': generateId(),
-    'movie_info' : {
+    'film_info' : {
       'title': randomTitle,
-      'rating': 7,
+      'alternative_title': 'Laziness Who Sold Themselves',
+      'totalRating': 7,
       'poster': posterLink,
-      'ageRating': 0,
+      'age_rating': 0,
       'director': 'Nolan',
       'writers': 'Camerron',
       'actors': 'Christian Bail',
-      'releaseDate': '22-22-2222',
-      'country': 'UK',
+      'release':{
+        'date': '22-22-2222',
+        'release_country': 'Finland'
+      },
       'runtime': 1313,
       'genre':'horror',
       'description': randomDescription,
-
-
+    },
+    'user_details': {
+      'watchlist': false,
+      'already_watched': true,
+      'watching_date': '2019-04-12T16:12:32.554Z',
+      'favorite': false
     }
   };
 

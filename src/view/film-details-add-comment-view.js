@@ -32,19 +32,21 @@ const createAddFilmCommentsTemplate = () => `<form class="film-details__new-comm
   </form>`;
 
 export default class FilmDetailsAddCommentView {
-  getTemplate() {
+  #element = null;
+
+  get template() {
     return createAddFilmCommentsTemplate();
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }

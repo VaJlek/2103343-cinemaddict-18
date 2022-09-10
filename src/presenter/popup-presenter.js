@@ -12,30 +12,71 @@ import FilmDetailsAddCommentView from '../view/film-details-add-comment-view.js'
 
 
 export default class PopupPresenter {
-  init(contentContainer, film, comments) {
-    this.controlsComponent = new FilmDetailsControlsView;
-    this.filmFormComponent = new FilmDetailsFormView;
-    this.filmDetailsComponent = new FilmDetailsView;
-    this.filmDetailsContentComponent = new FilmDetailsContentView;
 
-    this.filmDetailsCommentContainerComponent = new FilmDetailsCommentContainerView;
-    this.filmDetailsCommentListComponent = new FilmDetailsCommentListView;
-    this.filmDetailsAddCommentComponent = new FilmDetailsAddCommentView;
+  #contentContainer = null;
 
-    render(this.filmDetailsComponent, contentContainer);
-    render(this.filmDetailsContentComponent, this.filmDetailsComponent.getElement());
-    render(this.filmFormComponent, this.filmDetailsContentComponent.getElement());
+  #film = null;
+  #comments = [];
 
+  #controlsComponent = new FilmDetailsControlsView();
+  #filmFormComponent = new FilmDetailsFormView();
+  #filmDetailsComponent = new FilmDetailsView();
+  #filmDetailsContentComponent = new FilmDetailsContentView();
 
-    render(new FilmDetailsInfoView(film), this.filmFormComponent.getElement() );
+  #filmDetailsCommentContainerComponent = new FilmDetailsCommentContainerView();
+  #filmDetailsCommentListComponent = new FilmDetailsCommentListView();
+  #filmDetailsAddCommentComponent = new FilmDetailsAddCommentView();
 
-    render(this.controlsComponent, this.filmFormComponent.getElement());
+  #onFilmDetailsClosePopupButton = () => {
 
-    render(this.filmDetailsCommentContainerComponent, this.filmFormComponent.getElement());
-    render(this.filmDetailsCommentListComponent, this.filmDetailsCommentContainerComponent.getElement());
-    render(this.filmDetailsAddCommentComponent, this.filmDetailsCommentContainerComponent.getElement());
+    this.#contentContainer.removeChild(this.#filmDetailsComponent.element);
+    this.#contentContainer.classList.remove('hide-overflow');
 
-    render(new FilmDetailsCommentView(comments[film.comments]), this.filmDetailsCommentListComponent.getElement());
+  };
 
+  #onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      this.#onFilmDetailsClosePopupButton();
+      document.removeEventListener('keydown', this.#onEscKeyDown);
+    }
+  };
+
+  #hideOverflow() {
+    if (!(this.#contentContainer.classList.contains('hide-overflow'))) {
+      this.#contentContainer.classList.add('hide-overflow');
+    }
   }
+
+  init(contentContainer, film, comments) {
+
+    this.#contentContainer = contentContainer;
+    this.#film = film;
+    this.#comments = comments;
+
+    this.#hideOverflow();
+
+    render(this.#filmDetailsComponent, this.#contentContainer);
+    render(this.#filmDetailsContentComponent, this.#filmDetailsComponent.element);
+    render(this.#filmFormComponent, this.#filmDetailsContentComponent.element);
+
+
+    render(new FilmDetailsInfoView(this.#film), this.#filmFormComponent.element);
+
+    render(this.#controlsComponent, this.#filmFormComponent.element);
+
+    render(this.#filmDetailsCommentContainerComponent, this.#filmFormComponent.element);
+    render(this.#filmDetailsCommentListComponent, this.#filmDetailsCommentContainerComponent.element);
+    render(this.#filmDetailsAddCommentComponent, this.#filmDetailsCommentContainerComponent.element);
+
+    render(new FilmDetailsCommentView(this.#comments[this.#film.comments]), this.#filmDetailsCommentListComponent.element);
+    document.addEventListener('keydown', this.#onEscKeyDown);
+    this.#filmDetailsComponent.element.querySelector('.film-details__close-btn').addEventListener('click', () => {
+      this.#onFilmDetailsClosePopupButton();
+
+    }
+    );
+  }
+
+
 }

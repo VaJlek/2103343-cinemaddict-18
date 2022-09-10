@@ -2,7 +2,7 @@ import { createElement } from '../render.js';
 
 const createFilmInfoTemplate = (film) => {
 
-  const {title, rating, poster, ageRating, director, writers, actors, releaseDate, runtime, country, genre, description } = film.movie_info;
+  const {title, totalRating, poster, ageRating, director, writers, actors, releaseDate, runtime, country, genre, description } = film.film_info;
   return `<div class="film-details__info-wrap">
 <div class="film-details__poster">
   <img class="film-details__poster-img" src="${poster}" alt="">
@@ -18,7 +18,7 @@ const createFilmInfoTemplate = (film) => {
     </div>
 
     <div class="film-details__rating">
-      <p class="film-details__total-rating">${rating}</p>
+      <p class="film-details__total-rating">${totalRating}</p>
     </div>
   </div>
 
@@ -63,23 +63,26 @@ const createFilmInfoTemplate = (film) => {
 };
 
 export default class FilmDetailsInfoView {
+  #element = null;
+  #film = null;
+
   constructor (film) {
-    this.film = film;
+    this.#film = film;
   }
 
-  getTemplate() {
-    return createFilmInfoTemplate(this.film);
+  get template() {
+    return createFilmInfoTemplate(this.#film);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }
