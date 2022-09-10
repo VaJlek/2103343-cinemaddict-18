@@ -7,20 +7,21 @@ const createFilmDetailsCommentContainerTemplate = () => `<div class="film-detail
 </div>`;
 
 export default class FilmDetailsCommentContainerView {
+  #element = null;
 
-  getTemplate() {
+  get template() {
     return createFilmDetailsCommentContainerTemplate();
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }

@@ -8,30 +8,86 @@ import ShowMoreButtonView from '../view/show-more-button-view.js';
 
 import PopupPresenter from './popup-presenter.js';
 
+const FILMS_COUNT_PER_STEP = 5;
+
 export default class ContentPresenter {
-  contentComponent = new FilmsView;
-  filmListComponent = new FilmListView;
-  filmListContainerComponent = new FilmListContainerView;
-  showMoreButtonComponent = new ShowMoreButtonView;
+
+  #contentContainer = null;
+
+  #moviesModel = null;
+  #films = [];
+  #renderedFilmsCount = FILMS_COUNT_PER_STEP;
+
+  #commentsModel = null;
+  #comments = [];
+
+  #contentComponent = new FilmsView();
+  #filmListComponent = new FilmListView();
+  #filmListContainerComponent = new FilmListContainerView();
+  #showMoreButtonComponent = new ShowMoreButtonView();
 
   init = (contentContainer, moviesModel, commentsModel) => {
-    this.contentContainer = contentContainer;
-    this.films = moviesModel.films;
-    this.comments = commentsModel.comments;
+    this.#contentContainer = contentContainer;
 
-    render(this.contentComponent, this.contentContainer);
-    render(this.filmListComponent, this.contentComponent.getElement());
-    render(this.filmListContainerComponent, this.filmListComponent.getElement());
-    render(this.showMoreButtonComponent, this.filmListComponent.getElement());
+    this.#moviesModel = moviesModel;
+    this.#films = [...this.#moviesModel.films];
 
-    for (let i = 0; i < this.films.length; i++) {
-      render(new FilmCardView(this.films[i]), this.filmListContainerComponent.getElement());
+    this.#commentsModel = commentsModel;
+    this.#comments = [...this.#commentsModel.comments];
 
-      this.filmListContainerComponent.getElement().lastChild.addEventListener('click', () => {
-        new PopupPresenter().init(contentContainer.parentNode, this.films[i], this.comments);
-      });
+    render(this.#contentComponent, this.#contentContainer);
+    render(this.#filmListComponent, this.#contentComponent.element);
+
+    if (this.#films.length === 0) {
+      render(this.#showEmptyListTitle());
+    } else {
+
+      render(this.#filmListContainerComponent, this.#filmListComponent.element);
+
+      for (let i = 0; i < Math.min(this.#films.length, FILMS_COUNT_PER_STEP); i++) {
+        this.#renderFilmCard(this.#films[i]);
+      }
+      if (this.#films.length > FILMS_COUNT_PER_STEP) {
+        render(this.#showMoreButtonComponent, this.#filmListComponent.element);
+
+        this.#showMoreButtonComponent.element.addEventListener('click', this.#handleShowMoreButtonClick);
+      }
+    }
+  };
+
+  #renderFilmCard = (film) => {
+    const filmCardComponent = new FilmCardView(film);
+
+    render(filmCardComponent, this.#filmListContainerComponent.element);
+    this.#addPopup(filmCardComponent, film);
+
+  };
+
+  #addPopup = (filmCard, filmData) => {
+    filmCard.element.addEventListener('click', () => {
+      new PopupPresenter().init(this.#contentContainer.parentNode, filmData, this.#comments);
+    });
+  };
+
+  #showEmptyListTitle() {
+    const emptyListTitleElement = this.#filmListComponent.element.querySelector('.films-list__title');
+
+    emptyListTitleElement.textContent = 'There are no movies in our database';
+    emptyListTitleElement.classList.remove('visually-hidden');
+  }
+
+  #handleShowMoreButtonClick = (evt) => {
+    evt.preventDefault();
+    this.#films
+      .slice(this.#renderedFilmsCount, this.#renderedFilmsCount + FILMS_COUNT_PER_STEP)
+      .forEach((film) => this.#renderFilmCard(film));
+
+    this.#renderedFilmsCount += FILMS_COUNT_PER_STEP;
+
+    if (this.#renderedFilmsCount >= this.#films.length) {
+      this.#showMoreButtonComponent.element.remove();
+      this.#showMoreButtonComponent.removeElement();
     }
   };
 
 }
-
