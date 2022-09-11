@@ -48,6 +48,12 @@ export default class PopupPresenter {
     }
   }
 
+  #removePreviousPopup() {
+    if (this.#contentContainer.querySelector('.film-details')) {
+      this.#contentContainer.querySelector('.film-details').remove();
+    }
+  }
+
   init(contentContainer, film, comments) {
 
     this.#contentContainer = contentContainer;
@@ -55,7 +61,7 @@ export default class PopupPresenter {
     this.#comments = comments;
 
     this.#hideOverflow();
-
+    this.#removePreviousPopup();
     render(this.#filmDetailsComponent, this.#contentContainer);
     render(this.#filmDetailsContentComponent, this.#filmDetailsComponent.element);
     render(this.#filmFormComponent, this.#filmDetailsContentComponent.element);

@@ -2,13 +2,13 @@ import {createElement} from '../render.js';
 
 const createFilmCardTemplate = (film) => {
 
-  const {title, totalRating, poster, releaseDate, runtime, genre, description } = film.film_info;
+  const {title, totalRating, poster, release: {date}, runtime, genre, description } = film.filmInfo;
   return `<article class="film-card">
 <a class="film-card__link">
   <h3 class="film-card__title">${title}</h3>
   <p class="film-card__rating">${totalRating}</p>
   <p class="film-card__info">
-    <span class="film-card__year">${releaseDate}</span>
+    <span class="film-card__year">${date}</span>
     <span class="film-card__duration">${runtime}</span>
     <span class="film-card__genre">${genre}</span>
   </p>

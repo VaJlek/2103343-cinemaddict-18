@@ -24,11 +24,11 @@ export const generateComment = () => {
   const randomEmotion = COMMENT_DATA.emotions[getRandomInteger(0, COMMENT_DATA.emotions.length - 1)];
 
   return {
-    'id': getIdNumber(),
-    'author': randomAuthor,
-    'comment': randomCommentText,
-    'date': 22,
-    'emotion': randomEmotion,
+    id: getIdNumber(),
+    author: randomAuthor,
+    comment: randomCommentText,
+    date: 22,
+    emotion: randomEmotion,
 
   };
 };
