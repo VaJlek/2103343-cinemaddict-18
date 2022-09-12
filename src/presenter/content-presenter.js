@@ -1,4 +1,4 @@
-import { render } from '../render.js';
+import { render } from '../framework/render.js';
 
 import FilmCardView from '../view/film-card-view.js';
 import FilmListContainerView from '../view/film-list-container-view.js';
@@ -50,7 +50,7 @@ export default class ContentPresenter {
       if (this.#films.length > FILMS_COUNT_PER_STEP) {
         render(this.#showMoreButtonComponent, this.#filmListComponent.element);
 
-        this.#showMoreButtonComponent.element.addEventListener('click', this.#handleShowMoreButtonClick);
+        this.#showMoreButtonComponent.setClickHandler(this.#handleShowMoreButtonClick);
       }
     }
   };
@@ -64,7 +64,7 @@ export default class ContentPresenter {
   };
 
   #addPopup = (filmCard, filmData) => {
-    filmCard.element.addEventListener('click', () => {
+    filmCard.setClickHandler(() => {
       new PopupPresenter().init(this.#contentContainer.parentNode, filmData, this.#comments);
     });
   };
@@ -76,8 +76,7 @@ export default class ContentPresenter {
     emptyListTitleElement.classList.remove('visually-hidden');
   }
 
-  #handleShowMoreButtonClick = (evt) => {
-    evt.preventDefault();
+  #handleShowMoreButtonClick = () => {
     this.#films
       .slice(this.#renderedFilmsCount, this.#renderedFilmsCount + FILMS_COUNT_PER_STEP)
       .forEach((film) => this.#renderFilmCard(film));

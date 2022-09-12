@@ -1,23 +1,20 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 const createFilmDetailsTemplate = () => '<section class="film-details"></section>';//<div class="film-details__inner"> </div>
 
-export default class FilmDetailsView {
-  #element = null;
+export default class FilmDetailsView extends AbstractView{
 
   get template() {
     return createFilmDetailsTemplate();
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
+  setCloseClickHandler = (callback) => {
+    this._callback.closeClick = callback;
+    this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#closeClickHandler);
+  };
 
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
-  }
+  #closeClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.closeClick();
+  };
 }
