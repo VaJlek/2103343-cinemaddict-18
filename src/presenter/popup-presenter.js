@@ -1,4 +1,4 @@
-import { render } from '../render.js';
+import { render } from '../framework/render.js';
 
 import FilmDetailsInfoView from '../view/film-details-info-view.js';
 import FilmDetailsControlsView from '../view/film-details-controls-view.js';
@@ -77,7 +77,7 @@ export default class PopupPresenter {
 
     render(new FilmDetailsCommentView(this.#comments[this.#film.comments]), this.#filmDetailsCommentListComponent.element);
     document.addEventListener('keydown', this.#onEscKeyDown);
-    this.#filmDetailsComponent.element.querySelector('.film-details__close-btn').addEventListener('click', () => {
+    this.#filmDetailsComponent.setCloseClickHandler(() => {
       this.#onFilmDetailsClosePopupButton();
 
     }
