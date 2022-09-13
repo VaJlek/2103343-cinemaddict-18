@@ -7,6 +7,7 @@ import FooterView from './view/footer-view.js';
 
 import MoviesModel from './model/movies-model.js';
 import CommentsModel from './model/comments-model.js';
+import { generateFilter } from './mock/filter.js';
 
 const siteMainElement = document.querySelector('.main');
 const siteHeaderElement = document.querySelector('.header');
@@ -15,8 +16,9 @@ const contentPresenter = new ContentPresenter;
 const moviesModel = new MoviesModel;
 const commentsModel = new CommentsModel;
 
+const filters = generateFilter(moviesModel.films);
 render(new UserTitleView, siteHeaderElement);
-render(new NavigationView, siteMainElement);
+render(new NavigationView(filters), siteMainElement);
 render(new SortingView, siteMainElement);
 render(new FooterView, siteFooterElement);
 
