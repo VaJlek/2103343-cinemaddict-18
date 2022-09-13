@@ -1,4 +1,4 @@
-import { getRandomInteger } from '../utils.js';
+import { getRandomInteger, getRandomBoolean } from '../utils/utils.js';
 
 const MOVIE_DATA = {
   posters: {
@@ -51,12 +51,13 @@ export const generateMovie = () => {
       description: randomDescription,
     },
     userDetails: {
-      watchlist: false,
-      alreadyWatched: true,
+      watchlist: getRandomBoolean(),
+      alreadyWatched: getRandomBoolean(),
       watchingDate: '2019-04-12T16:12:32.554Z',
-      favorite: false
+      favorite: getRandomBoolean()
     }
   };
 
 };
+
 
