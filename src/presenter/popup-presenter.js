@@ -1,4 +1,4 @@
-import { render } from '../framework/render.js';
+import { remove, render } from '../framework/render.js';
 
 import FilmDetailsInfoView from '../view/film-details-info-view.js';
 import FilmDetailsControlsView from '../view/film-details-controls-view.js';
@@ -10,13 +10,21 @@ import FilmDetailsCommentContainerView from '../view/film-details-comment-contai
 import FilmDetailsCommentListView from '../view/film-details-comment-list-view.js';
 import FilmDetailsAddCommentView from '../view/film-details-add-comment-view.js';
 
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  POPUP: 'POPUP',
+};
 
 export default class PopupPresenter {
 
   #contentContainer = null;
+  #filmCardComponent = null;
+  #changeData = null;
+  #changeMode = null;
 
   #film = null;
   #comments = [];
+  #commentsModel = null;
 
   #controlsComponent = new FilmDetailsControlsView();
   #filmFormComponent = new FilmDetailsFormView();
@@ -27,9 +35,51 @@ export default class PopupPresenter {
   #filmDetailsCommentListComponent = new FilmDetailsCommentListView();
   #filmDetailsAddCommentComponent = new FilmDetailsAddCommentView();
 
+  #mode = Mode.DEFAULT;
+
+  constructor(commentsModel, changeData, changeMode) {
+    this.#commentsModel = commentsModel;
+    this.#changeData = changeData;
+    this.#changeMode = changeMode;
+  }
+
+  init(contentContainer, film) {
+
+    this.#contentContainer = contentContainer;
+    this.#film = film;
+
+    //const prevFilmCardComponent = this.#filmCardComponent;
+
+    this.#filmCardComponent = new FilmDetailsInfoView(this.#film);
+
+
+    //
+    this.#hideOverflow();
+    this.#removePreviousPopup();
+    render(this.#filmDetailsComponent, this.#contentContainer);
+    render(this.#filmDetailsContentComponent, this.#filmDetailsComponent.element);
+    render(this.#filmFormComponent, this.#filmDetailsContentComponent.element);
+
+
+    render(new FilmDetailsInfoView(this.#film), this.#filmFormComponent.element);
+
+    render(this.#controlsComponent, this.#filmFormComponent.element);
+
+    render(this.#filmDetailsCommentContainerComponent, this.#filmFormComponent.element);
+    render(this.#filmDetailsCommentListComponent, this.#filmDetailsCommentContainerComponent.element);
+    render(this.#filmDetailsAddCommentComponent, this.#filmDetailsCommentContainerComponent.element);
+
+    render(new FilmDetailsCommentView(this.#comments[this.#film.comments]), this.#filmDetailsCommentListComponent.element);
+    document.addEventListener('keydown', this.#onEscKeyDown);
+    this.#filmDetailsComponent.setCloseClickHandler(() => {
+      this.#onFilmDetailsClosePopupButton();
+    }
+    );
+  }
+
   #onFilmDetailsClosePopupButton = () => {
 
-    this.#contentContainer.removeChild(this.#filmDetailsComponent.element);
+    remove (this.#filmDetailsComponent);
     this.#contentContainer.classList.remove('hide-overflow');
 
   };
@@ -53,36 +103,5 @@ export default class PopupPresenter {
       this.#contentContainer.querySelector('.film-details').remove();
     }
   }
-
-  init(contentContainer, film, comments) {
-
-    this.#contentContainer = contentContainer;
-    this.#film = film;
-    this.#comments = comments;
-
-    this.#hideOverflow();
-    this.#removePreviousPopup();
-    render(this.#filmDetailsComponent, this.#contentContainer);
-    render(this.#filmDetailsContentComponent, this.#filmDetailsComponent.element);
-    render(this.#filmFormComponent, this.#filmDetailsContentComponent.element);
-
-
-    render(new FilmDetailsInfoView(this.#film), this.#filmFormComponent.element);
-
-    render(this.#controlsComponent, this.#filmFormComponent.element);
-
-    render(this.#filmDetailsCommentContainerComponent, this.#filmFormComponent.element);
-    render(this.#filmDetailsCommentListComponent, this.#filmDetailsCommentContainerComponent.element);
-    render(this.#filmDetailsAddCommentComponent, this.#filmDetailsCommentContainerComponent.element);
-
-    render(new FilmDetailsCommentView(this.#comments[this.#film.comments]), this.#filmDetailsCommentListComponent.element);
-    document.addEventListener('keydown', this.#onEscKeyDown);
-    this.#filmDetailsComponent.setCloseClickHandler(() => {
-      this.#onFilmDetailsClosePopupButton();
-
-    }
-    );
-  }
-
 
 }

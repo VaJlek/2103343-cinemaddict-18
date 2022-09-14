@@ -1,4 +1,5 @@
 import { getRandomInteger, getRandomBoolean } from '../utils/utils.js';
+import { nanoid } from 'nanoid';
 
 const MOVIE_DATA = {
   posters: {
@@ -31,14 +32,14 @@ export const generateMovie = () => {
   const randomDescription = MOVIE_DATA.descriptions[getRandomInteger(0, MOVIE_DATA.descriptions.length - 1)];
 
   return {
-    id: '0',
+    id: nanoid(),
     comments: generateId(),
     filmInfo : {
       title: randomTitle,
       alternativeTitle: 'Laziness Who Sold Themselves',
       totalRating: 7,
       poster: posterLink,
-      ageRating: 0,
+      ageRating: '18+',
       director: 'Tom Ford',
       writers: 'Takeshi Kitano',
       actors: 'Christian Bail',
