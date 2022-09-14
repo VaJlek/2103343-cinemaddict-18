@@ -1,13 +1,15 @@
-import { remove, render } from '../framework/render.js';
+import { remove, render, replace } from '../framework/render.js';
 
+import FilmCardView from '../view/film-card-view.js';
 import FilmDetailsInfoView from '../view/film-details-info-view.js';
 import FilmDetailsControlsView from '../view/film-details-controls-view.js';
 import FilmDetailsFormView from '../view/film-details-form-view.js';
 import FilmDetailsView from '../view/film-details-view.js';
 import FilmDetailsContentView from '../view/film-details-content-view.js';
+
 import FilmDetailsCommentView from '../view/film-detalis-comment-view.js';
-import FilmDetailsCommentContainerView from '../view/film-details-comment-container-view.js';
-import FilmDetailsCommentListView from '../view/film-details-comment-list-view.js';
+//import FilmDetailsCommentContainerView from '../view/film-details-comment-container-view.js';
+//import FilmDetailsCommentListView from '../view/film-details-comment-list-view.js';
 import FilmDetailsAddCommentView from '../view/film-details-add-comment-view.js';
 
 const Mode = {
@@ -15,10 +17,13 @@ const Mode = {
   POPUP: 'POPUP',
 };
 
-export default class PopupPresenter {
+export default class FilmCardPresenter {
 
+  #container = null;
   #contentContainer = null;
   #filmCardComponent = null;
+  #filmDetailsInfoComponent = null;
+  //#filmDetailsComponent = null;
   #changeData = null;
   #changeMode = null;
 
@@ -26,16 +31,15 @@ export default class PopupPresenter {
   #comments = [];
   #commentsModel = null;
 
+  #mode = Mode.DEFAULT;
+
   #controlsComponent = new FilmDetailsControlsView();
   #filmFormComponent = new FilmDetailsFormView();
   #filmDetailsComponent = new FilmDetailsView();
   #filmDetailsContentComponent = new FilmDetailsContentView();
 
-  #filmDetailsCommentContainerComponent = new FilmDetailsCommentContainerView();
-  #filmDetailsCommentListComponent = new FilmDetailsCommentListView();
-  #filmDetailsAddCommentComponent = new FilmDetailsAddCommentView();
 
-  #mode = Mode.DEFAULT;
+
 
   constructor(commentsModel, changeData, changeMode) {
     this.#commentsModel = commentsModel;
@@ -43,17 +47,25 @@ export default class PopupPresenter {
     this.#changeMode = changeMode;
   }
 
-  init(contentContainer, film) {
+  init(film, container) {
 
-    this.#contentContainer = contentContainer;
+    this.#container = container;
     this.#film = film;
 
     //const prevFilmCardComponent = this.#filmCardComponent;
 
-    this.#filmCardComponent = new FilmDetailsInfoView(this.#film);
+    this.#filmCardComponent = new FilmCardView(this.#film);
+    this.#filmDetailsInfoComponent = new FilmDetailsInfoView(this.#film);
 
-
-    //
+    //this.#filmCardComponent.setClickHandler(this.#handleFilmCardLinkClick);
+/*
+    if(prevFilmCardComponent === null) {
+      render(this.#filmCardComponent, this.#container);
+    } else {
+      replace(this.#filmCardComponent, prevFilmCardComponent);
+    }
+    remove(prevFilmCardComponent);
+/*
     this.#hideOverflow();
     this.#removePreviousPopup();
     render(this.#filmDetailsComponent, this.#contentContainer);
@@ -70,17 +82,23 @@ export default class PopupPresenter {
     render(this.#filmDetailsAddCommentComponent, this.#filmDetailsCommentContainerComponent.element);
 
     render(new FilmDetailsCommentView(this.#comments[this.#film.comments]), this.#filmDetailsCommentListComponent.element);
-    document.addEventListener('keydown', this.#onEscKeyDown);
+
     this.#filmDetailsComponent.setCloseClickHandler(() => {
       this.#onFilmDetailsClosePopupButton();
     }
     );
+    */
   }
+
+  destroy = () => {
+    remove(this.#filmCardComponent);
+    remove(this.#filmDetailsInfoComponent);
+  };
 
   #onFilmDetailsClosePopupButton = () => {
 
     remove (this.#filmDetailsComponent);
-    this.#contentContainer.classList.remove('hide-overflow');
+    this.#container.classList.remove('hide-overflow');
 
   };
 
@@ -103,5 +121,25 @@ export default class PopupPresenter {
       this.#contentContainer.querySelector('.film-details').remove();
     }
   }
+
+  #renderFilmDetails = () =>{
+    this.#hideOverflow();
+    render(this.#filmDetailsComponent);
+    this.#filmDetailsComponent.setClickHandler(this.#onFilmDetailsClosePopupButton);
+    document.addEventListener('keydown', this.#onEscKeyDown);
+  };
+
+  #renderFilmComments = () => {
+    //#filmDetailsCommentContainerComponent = new FilmDetailsCommentContainerView();
+    //#filmDetailsCommentListComponent = new FilmDetailsCommentListView();
+    //#filmDetailsAddCommentComponent = new FilmDetailsAddCommentView();
+
+  };
+
+  #handleFilmCardLinkClick = () => {
+    this.#changeMode();
+    this.#mode = Mode.POPUP;
+    this.#renderFilmDetails();
+  };
 
 }

@@ -1,13 +1,15 @@
-import { render, remove } from '../framework/render.js';
+import { render, remove, RenderPosition } from '../framework/render.js';
 
-import FilmCardView from '../view/film-card-view.js';
 import FilmListContainerView from '../view/film-list-container-view.js';
 import FilmListView from '../view/film-list-view.js';
 import FilmsView from '../view/films-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
+import SortingView from '../view/sorting-view.js';
 
-import PopupPresenter from './popup-presenter.js';
-import {updateItem} from '../utils/utils.js';
+
+import FilmCardPresenter from './film-card-presenter.js';
+//import {updateItem} from '../utils/utils.js';
+
 
 const FILMS_COUNT_PER_STEP = 5;
 
@@ -19,14 +21,14 @@ export default class ContentPresenter {
 
   #contentComponent = new FilmsView();
   #filmListComponent = new FilmListView();
+  #sortComponent = new SortingView();
   #filmListContainerComponent = new FilmListContainerView();
   #showMoreButtonComponent = new ShowMoreButtonView();
-
 
   #films = [];
   #renderedFilmsCount = FILMS_COUNT_PER_STEP;
   #comments = [];
-  #popupPresenter = new Map();
+  #filmCardPresenter = new Map();
 
   constructor(contentContainer, moviesModel, commentsModel){
     this.#contentContainer = contentContainer;
@@ -43,11 +45,13 @@ export default class ContentPresenter {
     this.#renderContent();
   };
 
-  #renderFilmCard = (film) => {
-    const filmCardComponent = new FilmCardView(film);
+  #renderFilmCard = (film, container) => {
+    const filmCardPresenter = new FilmCardPresenter(this.#filmListContainerComponent.element);
+    filmCardPresenter.init(film, container);
+    this.#filmCardPresenter.set(film.id, filmCardPresenter);
 
-    render(filmCardComponent, this.#filmListContainerComponent.element);
-    this.#addPopup(filmCardComponent, film);
+    //render(filmCardComponent, this.#filmListContainerComponent.element);
+    // this.#addPopup(filmCardComponent, film);
 
   };
 
@@ -71,12 +75,13 @@ export default class ContentPresenter {
     render(this.#showMoreButtonComponent, this.#filmListComponent.element);
     this.#showMoreButtonComponent.setClickHandler(this.#handleShowMoreButtonClick);
   };
-
+  /*
   #addPopup = (filmCard, filmData) => {
     filmCard.setClickHandler(() => {
       new PopupPresenter().init(this.#contentContainer.parentNode, filmData, this.#comments);
     });
   };
+ */
 
   #showEmptyListTitle() {
     const emptyListTitleElement = this.#filmListComponent.element.querySelector('.films-list__title');
