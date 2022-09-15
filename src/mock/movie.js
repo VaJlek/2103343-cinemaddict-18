@@ -22,16 +22,11 @@ const MOVIE_DATA = {
 const generateId = () => getRandomInteger(0, 4);
 
 const generateDate = () => {
-  const isDate = Boolean(getRandomInteger(0, 1));
 
-  if (!isDate) {
-    return null;
-  }
+  const maxYearGap = 10;
+  const yearGap = getRandomInteger(-maxYearGap, maxYearGap);
 
-  const maxDaysGap = 7;
-  const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
-
-  return dayjs().add(daysGap, 'day').toDate();
+  return dayjs().add(yearGap, 'year').toDate();
 };
 
 const generateMovieTitle = (movieTitle) => {

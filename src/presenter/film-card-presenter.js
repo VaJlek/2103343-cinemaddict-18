@@ -1,6 +1,7 @@
-import { remove, render, replace } from '../framework/render.js';
+import { remove, render, replace, RenderPosition } from '../framework/render.js';
 
 import FilmCardView from '../view/film-card-view.js';
+
 import FilmDetailsInfoView from '../view/film-details-info-view.js';
 import FilmDetailsControlsView from '../view/film-details-controls-view.js';
 import FilmDetailsFormView from '../view/film-details-form-view.js';
@@ -37,9 +38,9 @@ export default class FilmCardPresenter {
   #filmDetailsComponent = new FilmDetailsView();
   #filmDetailsContentComponent = new FilmDetailsContentView();
 
-  constructor(filmListContainer, changeData, changeMode) {
+  constructor(filmListContainer, changeData, changeMode, contentContainer) {
     this.#filmListContainer = filmListContainer;
-    //this.#commentsModel = commentsModel;
+    this.#contentContainer = contentContainer;
     this.#changeData = changeData;
     this.#changeMode = changeMode;
   }
@@ -56,11 +57,14 @@ export default class FilmCardPresenter {
 
     render(this.#filmCardComponent, this.#filmListContainer);
 
+    this.#filmCardComponent.setClickHandler(this.#handleFilmCardLinkClick);
+
     if(prevFilmCardComponent === null) {
       render(this.#filmCardComponent, this.#filmListContainer);
     } else {
       replace(this.#filmCardComponent, prevFilmCardComponent);
     }
+    remove(prevFilmCardComponent);
   }
 
   /*
@@ -121,10 +125,10 @@ export default class FilmCardPresenter {
 
   #renderFilmDetails = () =>{
 
-    render(this.#filmDetailsInfoComponent, this.#filmListContainer);
+    render(this.#filmDetailsComponent, this.#contentContainer, RenderPosition.AFTEREND);
+    render(this.#filmDetailsContentComponent, this.#filmDetailsComponent.element);
     render(this.#filmFormComponent, this.#filmDetailsContentComponent.element);
     render(this.#filmDetailsInfoComponent, this.#filmFormComponent.element);
-
     this.#filmDetailsComponent.setClickHandler(this.#onFilmDetailsClosePopupButton);
     document.addEventListener('keydown', this.#onEscKeyDown);
   };

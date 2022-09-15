@@ -27,7 +27,7 @@ const updateItem = (items, update) => {
   ];
 };
 
-const humanizeTaskDueDate = (dueDate) => dayjs(dueDate).format('D MMMM');
+const humanizeTaskDueDate = (dueDate) => dayjs(dueDate).format('YYYY');
 
 const getWeightForNullDate = (dateA, dateB) => {
   if (dateA === null && dateB === null) {
