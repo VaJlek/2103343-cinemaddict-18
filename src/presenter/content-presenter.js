@@ -5,6 +5,7 @@ import FilmListView from '../view/film-list-view.js';
 import FilmsView from '../view/films-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import SortingView from '../view/sorting-view.js';
+import FooterView from '../view/footer-view.js';
 
 import FilmCardPresenter from './film-card-presenter.js';
 import {updateItem, sortDate, sortRating} from '../utils/utils.js';
@@ -16,11 +17,13 @@ const FILMS_COUNT_PER_STEP = 5;
 export default class ContentPresenter {
 
   #contentContainer = null;
+  #footerContainer = null;
   #moviesModel = null;
   #commentsModel = null;
   #sortComponent = new SortingView();
   #contentComponent = new FilmsView();
   #filmListComponent = new FilmListView();
+  #footerComponent = new FooterView();
 
   #filmListContainerComponent = new FilmListContainerView();
   #showMoreButtonComponent = new ShowMoreButtonView();
@@ -32,10 +35,11 @@ export default class ContentPresenter {
   #currentSortType = SortType.DEFAULT;
   #sourcedFilms = [];
 
-  constructor(contentContainer, moviesModel, commentsModel){
+  constructor(contentContainer, moviesModel, commentsModel, footer){
     this.#contentContainer = contentContainer;
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
+    this.#footerContainer = footer;
 
   }
 
@@ -46,6 +50,8 @@ export default class ContentPresenter {
 
     this.#sourcedFilms = [...this.#moviesModel.films];
     this.#renderContent();
+    this.#renderFooter();
+
   };
 
   #handleModeChange = () => {
@@ -143,6 +149,9 @@ export default class ContentPresenter {
     }
   };
 
+  #renderFooter = () => {
+    render(this.#footerComponent, this.#footerContainer);
+  };
 
   #renderContent = () => {
 
