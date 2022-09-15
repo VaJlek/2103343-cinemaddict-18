@@ -1,5 +1,6 @@
 import { getRandomInteger, getRandomBoolean } from '../utils/utils.js';
 import { nanoid } from 'nanoid';
+import dayjs from 'dayjs';
 
 const MOVIE_DATA = {
   posters: {
@@ -19,6 +20,19 @@ const MOVIE_DATA = {
 };
 
 const generateId = () => getRandomInteger(0, 4);
+
+const generateDate = () => {
+  const isDate = Boolean(getRandomInteger(0, 1));
+
+  if (!isDate) {
+    return null;
+  }
+
+  const maxDaysGap = 7;
+  const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
+
+  return dayjs().add(daysGap, 'day').toDate();
+};
 
 const generateMovieTitle = (movieTitle) => {
   const titles = Object.keys(movieTitle);
@@ -44,7 +58,7 @@ export const generateMovie = () => {
       writers: 'Takeshi Kitano',
       actors: 'Christian Bail',
       release:{
-        date: '1988',
+        date: generateDate(),
         releaseCountry: 'Finland'
       },
       runtime: '1h13m',

@@ -1,14 +1,17 @@
 import AbstractView from '../framework/view/abstract-view.js';
-
+import { humanizeTaskDueDate } from '../utils/utils.js';
 const createFilmCardTemplate = (film) => {
 
   const {title, totalRating, poster, release: {date}, runtime, genre, description } = film.filmInfo;
+
+  const normDate = humanizeTaskDueDate(date);
+
   return `<article class="film-card">
 <a class="film-card__link">
   <h3 class="film-card__title">${title}</h3>
   <p class="film-card__rating">${totalRating}</p>
   <p class="film-card__info">
-    <span class="film-card__year">${date}</span>
+    <span class="film-card__year">${normDate}</span>
     <span class="film-card__duration">${runtime}</span>
     <span class="film-card__genre">${genre}</span>
   </p>
