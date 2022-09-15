@@ -8,8 +8,8 @@ import FilmDetailsView from '../view/film-details-view.js';
 import FilmDetailsContentView from '../view/film-details-content-view.js';
 
 import FilmDetailsCommentView from '../view/film-detalis-comment-view.js';
-//import FilmDetailsCommentContainerView from '../view/film-details-comment-container-view.js';
-//import FilmDetailsCommentListView from '../view/film-details-comment-list-view.js';
+import FilmDetailsCommentContainerView from '../view/film-details-comment-container-view.js';
+import FilmDetailsCommentListView from '../view/film-details-comment-list-view.js';
 import FilmDetailsAddCommentView from '../view/film-details-add-comment-view.js';
 
 const Mode = {
@@ -19,15 +19,14 @@ const Mode = {
 
 export default class FilmCardPresenter {
 
-  #container = null;
+  #filmListContainer = null;
   #contentContainer = null;
   #filmCardComponent = null;
   #filmDetailsInfoComponent = null;
-  //#filmDetailsComponent = null;
   #changeData = null;
   #changeMode = null;
-
-  #film = null;
+  #filmDetailsCommentContainer = null;
+  #film = [];
   #comments = [];
   #commentsModel = null;
 
@@ -38,34 +37,33 @@ export default class FilmCardPresenter {
   #filmDetailsComponent = new FilmDetailsView();
   #filmDetailsContentComponent = new FilmDetailsContentView();
 
-
-
-
-  constructor(commentsModel, changeData, changeMode) {
-    this.#commentsModel = commentsModel;
+  constructor(filmListContainer, changeData, changeMode) {
+    this.#filmListContainer = filmListContainer;
+    //this.#commentsModel = commentsModel;
     this.#changeData = changeData;
     this.#changeMode = changeMode;
   }
 
-  init(film, container) {
+  init(film) {
 
-    this.#container = container;
     this.#film = film;
 
-    //const prevFilmCardComponent = this.#filmCardComponent;
+    const prevFilmCardComponent = this.#filmCardComponent;
 
-    this.#filmCardComponent = new FilmCardView(this.#film);
-    this.#filmDetailsInfoComponent = new FilmDetailsInfoView(this.#film);
+    this.#filmCardComponent = new FilmCardView(film);
 
-    //this.#filmCardComponent.setClickHandler(this.#handleFilmCardLinkClick);
-/*
+    this.#filmDetailsInfoComponent = new FilmDetailsInfoView(film);
+
+    render(this.#filmCardComponent, this.#filmListContainer);
+
     if(prevFilmCardComponent === null) {
-      render(this.#filmCardComponent, this.#container);
+      render(this.#filmCardComponent, this.#filmListContainer);
     } else {
       replace(this.#filmCardComponent, prevFilmCardComponent);
     }
-    remove(prevFilmCardComponent);
-/*
+  }
+
+  /*
     this.#hideOverflow();
     this.#removePreviousPopup();
     render(this.#filmDetailsComponent, this.#contentContainer);
@@ -77,28 +75,26 @@ export default class FilmCardPresenter {
 
     render(this.#controlsComponent, this.#filmFormComponent.element);
 
-    render(this.#filmDetailsCommentContainerComponent, this.#filmFormComponent.element);
-    render(this.#filmDetailsCommentListComponent, this.#filmDetailsCommentContainerComponent.element);
-    render(this.#filmDetailsAddCommentComponent, this.#filmDetailsCommentContainerComponent.element);
-
-    render(new FilmDetailsCommentView(this.#comments[this.#film.comments]), this.#filmDetailsCommentListComponent.element);
-
     this.#filmDetailsComponent.setCloseClickHandler(() => {
       this.#onFilmDetailsClosePopupButton();
     }
-    );
-    */
-  }
+    ); */
 
   destroy = () => {
     remove(this.#filmCardComponent);
     remove(this.#filmDetailsInfoComponent);
   };
 
+  resetView = () => {
+    if (this.#mode !== Mode.DEFAULT) {
+      remove (this.#filmDetailsInfoComponent);
+    }
+  };
+
   #onFilmDetailsClosePopupButton = () => {
 
     remove (this.#filmDetailsComponent);
-    this.#container.classList.remove('hide-overflow');
+    this.#filmListContainer.classList.remove('hide-overflow');
 
   };
 
@@ -121,20 +117,29 @@ export default class FilmCardPresenter {
       this.#contentContainer.querySelector('.film-details').remove();
     }
   }
+  //this.#addPopup(filmCardComponent, film);
 
   #renderFilmDetails = () =>{
-    this.#hideOverflow();
-    render(this.#filmDetailsComponent);
+
+    render(this.#filmDetailsInfoComponent, this.#filmListContainer);
+    render(this.#filmFormComponent, this.#filmDetailsContentComponent.element);
+    render(this.#filmDetailsInfoComponent, this.#filmFormComponent.element);
+
     this.#filmDetailsComponent.setClickHandler(this.#onFilmDetailsClosePopupButton);
     document.addEventListener('keydown', this.#onEscKeyDown);
   };
-
+/*
   #renderFilmComments = () => {
-    //#filmDetailsCommentContainerComponent = new FilmDetailsCommentContainerView();
-    //#filmDetailsCommentListComponent = new FilmDetailsCommentListView();
-    //#filmDetailsAddCommentComponent = new FilmDetailsAddCommentView();
 
+    this.#filmDetailsCommentContainerComponent = new FilmDetailsCommentContainerView();
+    this.#filmDetailsCommentListComponent = new FilmDetailsCommentListView();
+    this.#filmDetailsAddCommentComponent = new FilmDetailsAddCommentView();
+    render(this.#filmDetailsCommentContainerComponent, this.#filmFormComponent.element);
+    render(this.#filmDetailsCommentListComponent, this.#filmDetailsCommentContainerComponent.element);
+    render(this.#filmDetailsAddCommentComponent, this.#filmDetailsCommentContainerComponent.element);
+    render(new FilmDetailsCommentView(this.#comments[this.#film.comments]), this.#filmDetailsCommentListComponent.element);
   };
+*/
 
   #handleFilmCardLinkClick = () => {
     this.#changeMode();

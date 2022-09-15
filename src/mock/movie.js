@@ -30,16 +30,16 @@ export const generateMovie = () => {
   const randomTitle = generateMovieTitle(MOVIE_DATA.posters);
   const posterLink = MOVIE_DATA.posters[randomTitle];
   const randomDescription = MOVIE_DATA.descriptions[getRandomInteger(0, MOVIE_DATA.descriptions.length - 1)];
-
+  const randomRating = () => getRandomInteger(1, 10);
   return {
     id: nanoid(),
     comments: generateId(),
     filmInfo : {
       title: randomTitle,
       alternativeTitle: 'Laziness Who Sold Themselves',
-      totalRating: 7,
+      totalRating: randomRating(),
       poster: posterLink,
-      ageRating: '18+',
+      ageRating: randomRating(),
       director: 'Tom Ford',
       writers: 'Takeshi Kitano',
       actors: 'Christian Bail',
@@ -47,7 +47,7 @@ export const generateMovie = () => {
         date: '1988',
         releaseCountry: 'Finland'
       },
-      runtime: 1313,
+      runtime: '1h13m',
       genre:'horror',
       description: randomDescription,
     },
