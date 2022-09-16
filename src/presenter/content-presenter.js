@@ -7,6 +7,9 @@ import ShowMoreButtonView from '../view/show-more-button-view.js';
 import SortingView from '../view/sorting-view.js';
 import FooterView from '../view/footer-view.js';
 
+import FilmsListTopRatedView from '../view/films-list-top-rated-view.js';
+import FilmsListMostCommentedView from '../view/films-list-most-commented-view.js';
+
 import FilmCardPresenter from './film-card-presenter.js';
 import {updateItem, sortDate, sortRating} from '../utils/utils.js';
 import { SortType } from '../const.js';
@@ -26,12 +29,20 @@ export default class ContentPresenter {
   #footerComponent = new FooterView();
 
   #filmListContainerComponent = new FilmListContainerView();
+  #filmsListTopRatedContainerComponent = new FilmListContainerView();
+  #filmsListMostCommentedContainerComponent = new FilmListContainerView();
+  #filmsListTopRatedComponent = new FilmsListTopRatedView();
+  #filmsListMostCommentedComponent = new FilmsListMostCommentedView();
   #showMoreButtonComponent = new ShowMoreButtonView();
 
   #films = [];
   #renderedFilmsCount = FILMS_COUNT_PER_STEP;
   #comments = [];
   #filmCardPresenter = new Map();
+
+  #filmCardTopRatedPresenter = new Map();
+  #filmCardMostCommentedPresenter = new Map();
+
   #currentSortType = SortType.DEFAULT;
   #sourcedFilms = [];
 
@@ -58,9 +69,24 @@ export default class ContentPresenter {
   };
 
   #handleFilmChange = (updatedFilm) => {
+
     this.#films = updateItem(this.#films, updatedFilm);
     this.#sourcedFilms = updateItem(this.#sourcedFilms, updatedFilm);
     this.#filmCardPresenter.get(updatedFilm.id).init(updatedFilm);
+
+    if (this.#filmCardTopRatedPresenter.get(updatedFilm.id)) {
+      this.#filmCardTopRatedPresenter.get(updatedFilm.id).init(updatedFilm);
+    }
+    if (this.#filmCardMostCommentedPresenter.get(updatedFilm.id)) {
+      this.#filmCardMostCommentedPresenter.get(updatedFilm.id).init(updatedFilm);
+    }
+  };
+
+  #renderFilmsListTopRated = () => {
+
+    render(this.#filmsListTopRatedComponent, this.#contentComponent.element);
+
+    this.#renderFilmCard(0, 2);
   };
 
   #sortFilms = (sortType) => {
@@ -102,7 +128,7 @@ export default class ContentPresenter {
     remove(this.#showMoreButtonComponent);
   };
 
-  #renderFilmCard = (film) => {
+  #renderFilmCard = (film, container) => {
     const filmCardPresenter = new FilmCardPresenter(
       this.#filmListContainerComponent.element,
       this.#handleFilmChange,
@@ -110,7 +136,16 @@ export default class ContentPresenter {
       this.#contentContainer,
       this.#comments);
     filmCardPresenter.init(film);
-    this.#filmCardPresenter.set(film.id, filmCardPresenter);
+    switch (container) {
+      case this.#filmsListTopRatedContainerComponent.element:
+        this.#filmCardTopRatedPresenter.set(film.id, filmCardPresenter);
+        break;
+      case this.#filmsListMostCommentedContainerComponent.element:
+        this.#filmCardMostCommentedPresenter.set(film.id, filmCardPresenter);
+        break;
+      default:
+        this.#filmCardPresenter.set(film.id, filmCardPresenter);
+    }
 
   };
 
