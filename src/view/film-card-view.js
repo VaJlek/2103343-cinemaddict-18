@@ -16,6 +16,8 @@ const createFilmCardTemplate = (film) => {
     userDetails: { watchlist, alreadyWatched, favorite},
   } = film;
 
+  const commentsCount = [comments].length;
+
   const normDate = humanizeTaskDueDate(date);
 
   const watchlistClassName = watchlist
@@ -39,7 +41,7 @@ const createFilmCardTemplate = (film) => {
   </p>
   <img src=${poster} alt="" class="film-card__poster">
   <p class="film-card__description">${description}</p>
-  <span class="film-card__comments">${comments.length} comments</span>
+  <span class="film-card__comments">${commentsCount}</span>
 </a>
 <div class="film-card__controls">
   <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${watchlistClassName}" type="button">Add to watchlist</button>

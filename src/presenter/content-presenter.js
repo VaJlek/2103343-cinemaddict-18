@@ -47,7 +47,6 @@ export default class ContentPresenter {
   init = () => {
     this.#films = [...this.#moviesModel.films];
     this.#comments = [...this.#commentsModel.comments];
-
     this.#sourcedFilms = [...this.#moviesModel.films];
     this.#renderContent();
     //this.#renderFooter();
@@ -104,7 +103,12 @@ export default class ContentPresenter {
   };
 
   #renderFilmCard = (film) => {
-    const filmCardPresenter = new FilmCardPresenter(this.#filmListContainerComponent.element, this.#handleFilmChange, this.#handleModeChange, this.#contentContainer);
+    const filmCardPresenter = new FilmCardPresenter(
+      this.#filmListContainerComponent.element,
+      this.#handleFilmChange,
+      this.#handleModeChange,
+      this.#contentContainer,
+      this.#comments);
     filmCardPresenter.init(film);
     this.#filmCardPresenter.set(film.id, filmCardPresenter);
 

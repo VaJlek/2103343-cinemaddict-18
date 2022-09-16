@@ -7,7 +7,7 @@ import FilmDetailsView from '../view/film-details-view.js';
 
 import FilmDetailsCommentView from '../view/film-detalis-comment-view.js';
 import FilmDetailsCommentContainerView from '../view/film-details-comment-container-view.js';
-
+import FilmDetailsAddCommentView from '../view/film-details-add-comment-view.js';
 const Mode = {
   DEFAULT: 'DEFAULT',
   POPUP: 'POPUP',
@@ -19,38 +19,35 @@ export default class FilmCardPresenter {
   #contentContainer = null;
   #filmCardComponent = null;
   #filmDetailsInfoComponent = null;
-  #filmDetailsCommentComponent = null;
+  #filmDetailsCommentContainerComponent = null;
+  #filmDetailsAddCommentComponent = null;
   #changeData = null;
   #changeMode = null;
 
   #film = [];
   #comments = [];
-  #commentsModel = null;
-
   #mode = Mode.DEFAULT;
 
-
   #filmDetailsComponent = new FilmDetailsView();
-  #filmDetailsCommentContainerComponent = new FilmDetailsCommentContainerView();
 
-  constructor(filmListContainer, changeData, changeMode, contentContainer) {
+  constructor(filmListContainer, changeData, changeMode, contentContainer, comments) {
     this.#filmListContainer = filmListContainer;
     this.#contentContainer = contentContainer;
     this.#changeData = changeData;
     this.#changeMode = changeMode;
+    this.#comments = comments;
   }
 
   init(film) {
 
     this.#film = film;
 
+
     const prevFilmCardComponent = this.#filmCardComponent;
 
     this.#filmCardComponent = new FilmCardView(film);
 
     this.#filmDetailsInfoComponent = new FilmDetailsInfoView(film);
-
-    this.#filmDetailsCommentComponent = new FilmDetailsCommentView(film);
 
     render(this.#filmCardComponent, this.#filmListContainer);
 
@@ -143,13 +140,6 @@ export default class FilmCardPresenter {
       this.#contentContainer.classList.add('hide-overflow');
     }
   }
-  /*
-  #removePreviousPopup() {
-    if (this.#contentContainer.querySelector('.film-details')) {
-      this.#contentContainer.querySelector('.film-details').remove();
-    }
-  }
-  */
 
   #renderFilmDetails = () =>{
     this.#hideOverflow();
@@ -169,10 +159,20 @@ export default class FilmCardPresenter {
 
   #renderFilmComments = () => {
 
-    render(this.#filmDetailsCommentContainerComponent, this.#contentContainer);
-    render(this.#filmDetailsCommentComponent, this.#filmDetailsCommentContainerComponent.element);
+    this.#filmDetailsCommentContainerComponent = new FilmDetailsCommentContainerView();
+    this.#filmDetailsAddCommentComponent = new FilmDetailsAddCommentView();
+    this.#renderFilmComment();
+    render(this.#filmDetailsCommentContainerComponent, this.#filmDetailsInfoComponent.element, RenderPosition.BEFOREEND);
+
+    render(this.#filmDetailsAddCommentComponent, this.#filmDetailsCommentContainerComponent.element);
+
   };
 
+  #renderFilmComment = () => {
+
+    const comment = this.#comments[this.#film.comments];
+    render(new FilmDetailsCommentView(comment), this.#filmDetailsCommentContainerComponent.element);
+  };
 
   #handleFilmCardLinkClick = () => {
     this.#changeMode();
