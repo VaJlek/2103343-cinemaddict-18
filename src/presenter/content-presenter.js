@@ -1,5 +1,6 @@
-import { render, remove, RenderPosition } from '../framework/render.js';
+import { render, remove, RenderPosition, replace } from '../framework/render.js';
 
+import NavigationView from '../view/navigation-view.js';
 import FilmListContainerView from '../view/film-list-container-view.js';
 import FilmListView from '../view/film-list-view.js';
 import FilmsView from '../view/films-view.js';
@@ -13,6 +14,8 @@ import FilmsListMostCommentedView from '../view/films-list-most-commented-view.j
 import FilmCardPresenter from './film-card-presenter.js';
 import {updateItem, sortDate, sortRating} from '../utils/utils.js';
 import { SortType } from '../const.js';
+import { generateFilter } from '../mock/filter.js';
+
 
 
 const FILMS_COUNT_PER_STEP = 5;
@@ -23,6 +26,8 @@ export default class ContentPresenter {
   #footerContainer = null;
   #moviesModel = null;
   #commentsModel = null;
+  #filters = null;
+  #mainNavigationComponent = null;
   #sortComponent = new SortingView();
   #contentComponent = new FilmsView();
   #filmListComponent = new FilmListView();
@@ -51,7 +56,8 @@ export default class ContentPresenter {
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
     this.#footerContainer = footer;
-
+    this.#filters = generateFilter(moviesModel.films);
+    this.#mainNavigationComponent = new NavigationView(this.#filters);
   }
 
 
@@ -59,8 +65,9 @@ export default class ContentPresenter {
     this.#films = [...this.#moviesModel.films];
     this.#comments = [...this.#commentsModel.comments];
     this.#sourcedFilms = [...this.#moviesModel.films];
+    render(this.#mainNavigationComponent, this.#contentContainer);
     this.#renderContent();
-    //this.#renderFooter();
+    this.#renderFooter();
 
   };
 
@@ -69,6 +76,8 @@ export default class ContentPresenter {
   };
 
   #handleFilmChange = (updatedFilm) => {
+
+    const prevMainNavigationComponent = this.#mainNavigationComponent;
 
     this.#films = updateItem(this.#films, updatedFilm);
     this.#sourcedFilms = updateItem(this.#sourcedFilms, updatedFilm);
@@ -80,13 +89,26 @@ export default class ContentPresenter {
     if (this.#filmCardMostCommentedPresenter.get(updatedFilm.id)) {
       this.#filmCardMostCommentedPresenter.get(updatedFilm.id).init(updatedFilm);
     }
+    this.#filters = generateFilter(this.#films);
+    this.#mainNavigationComponent = new NavigationView(this.#filters);
+
+    replace(this.#mainNavigationComponent, prevMainNavigationComponent);
+
   };
 
   #renderFilmsListTopRated = () => {
 
     render(this.#filmsListTopRatedComponent, this.#contentComponent.element);
+    render(this.#filmsListTopRatedContainerComponent, this.#filmsListTopRatedComponent.element);
+    this.#renderFilms(0, 1);
+  };
 
-    this.#renderFilmCard(0, 2);
+  #renderFilmsListMostCommented = () => {
+
+    render(this.#filmsListMostCommentedComponent, this.#contentComponent.element);
+    render(this.#filmsListMostCommentedContainerComponent, this.#filmsListMostCommentedComponent.element);
+    this.#renderFilms(0, 1);
+
   };
 
   #sortFilms = (sortType) => {
@@ -150,9 +172,7 @@ export default class ContentPresenter {
   };
 
   #renderFilms = (from, to) => {
-    this.#films
-      .slice(from, to)
-      .forEach((film) => this.#renderFilmCard(film));
+    this.#films.slice(from, to).forEach((film) => this.#renderFilmCard(film));
   };
 
   #renderFilmsList = () => {
@@ -204,6 +224,8 @@ export default class ContentPresenter {
     } else {
 
       this.#renderFilmsList();
+      this.#renderFilmsListTopRated();
+      this.#renderFilmsListMostCommented();
 
     }
   };
