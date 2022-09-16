@@ -50,7 +50,7 @@ export default class ContentPresenter {
 
     this.#sourcedFilms = [...this.#moviesModel.films];
     this.#renderContent();
-    this.#renderFooter();
+    //this.#renderFooter();
 
   };
 
@@ -156,9 +156,7 @@ export default class ContentPresenter {
   #renderContent = () => {
 
     this.#renderSort();
-
     render(this.#contentComponent, this.#contentContainer);
-
     render(this.#filmListComponent, this.#contentComponent.element);
 
     if (this.#films.length === 0) {
