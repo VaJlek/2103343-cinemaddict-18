@@ -16,8 +16,6 @@ import {updateItem, sortDate, sortRating} from '../utils/utils.js';
 import { SortType } from '../const.js';
 import { generateFilter } from '../mock/filter.js';
 
-
-
 const FILMS_COUNT_PER_STEP = 5;
 
 export default class ContentPresenter {
