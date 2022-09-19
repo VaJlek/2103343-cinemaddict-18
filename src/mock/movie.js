@@ -1,4 +1,6 @@
 import { getRandomInteger, getRandomBoolean } from '../utils/utils.js';
+import { nanoid } from 'nanoid';
+import dayjs from 'dayjs';
 
 const MOVIE_DATA = {
   posters: {
@@ -19,6 +21,14 @@ const MOVIE_DATA = {
 
 const generateId = () => getRandomInteger(0, 4);
 
+const generateDate = () => {
+
+  const maxYearGap = 10;
+  const yearGap = getRandomInteger(-maxYearGap, maxYearGap);
+
+  return dayjs().add(yearGap, 'year').toDate();
+};
+
 const generateMovieTitle = (movieTitle) => {
   const titles = Object.keys(movieTitle);
 
@@ -29,24 +39,24 @@ export const generateMovie = () => {
   const randomTitle = generateMovieTitle(MOVIE_DATA.posters);
   const posterLink = MOVIE_DATA.posters[randomTitle];
   const randomDescription = MOVIE_DATA.descriptions[getRandomInteger(0, MOVIE_DATA.descriptions.length - 1)];
-
+  const randomRating = () => getRandomInteger(1, 10);
   return {
-    id: '0',
+    id: nanoid(),
     comments: generateId(),
     filmInfo : {
       title: randomTitle,
       alternativeTitle: 'Laziness Who Sold Themselves',
-      totalRating: 7,
+      totalRating: randomRating(),
       poster: posterLink,
-      ageRating: 0,
+      ageRating: randomRating(),
       director: 'Tom Ford',
       writers: 'Takeshi Kitano',
       actors: 'Christian Bail',
       release:{
-        date: '1988',
+        date: generateDate(),
         releaseCountry: 'Finland'
       },
-      runtime: 1313,
+      runtime: '1h13m',
       genre:'horror',
       description: randomDescription,
     },

@@ -1,9 +1,43 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import { humanizeTaskDueDate } from '../utils/utils.js';
 
-const createFilmInfoTemplate = (film) => {
+const createFilmDetailsTemplate = (film) => {
 
-  const {title, totalRating, poster, ageRating, director, writers, actors, release: {date, releaseCountry}, runtime, genre, description } = film.filmInfo;
-  return `<div class="film-details__info-wrap">
+  const {
+    filmInfo: {
+      title,
+      totalRating,
+      poster,
+      ageRating,
+      director,
+      writers,
+      actors,
+      release: { date, releaseCountry},
+      runtime,
+      genre,
+      description
+    },
+    userDetails: { watchlist, alreadyWatched, favorite}
+  } = film;
+
+  const normDate = humanizeTaskDueDate(date);
+
+  const detailsWatchlistClassName = watchlist
+    ? 'film-details__control-button--active'
+    : '';
+  const detailsWatchedClassName = alreadyWatched
+    ? 'film-details__control-button--active'
+    : '';
+  const detailsFavoriteClassName = favorite
+    ? 'film-details__control-button--active'
+    : '';
+
+  return `<div class="film-details__inner">
+      <div class="film-details__top-container">
+        <div class="film-details__close">
+          <button class="film-details__close-btn" type="button">close</button>
+        </div>
+  <div class="film-details__info-wrap">
 <div class="film-details__poster">
   <img class="film-details__poster-img" src="${poster}" alt="">
 
@@ -37,7 +71,7 @@ const createFilmInfoTemplate = (film) => {
     </tr>
     <tr class="film-details__row">
       <td class="film-details__term">Release Date</td>
-      <td class="film-details__cell">${date}</td>
+      <td class="film-details__cell">${normDate}</td>
     </tr>
     <tr class="film-details__row">
       <td class="film-details__term">Runtime</td>
@@ -59,7 +93,14 @@ const createFilmInfoTemplate = (film) => {
   ${description}
   </p>
 </div>
-</div>`;
+</div>
+<section class="film-details__controls">
+          <button type="button" class="film-details__control-button film-details__control-button--watchlist ${detailsWatchlistClassName}" id="watchlist" name="watchlist">Add to watchlist</button>
+          <button type="button" class="film-details__control-button film-details__control-button--watched  ${detailsWatchedClassName}" id="watched" name="watched">Already watched</button>
+          <button type="button" class="film-details__control-button film-details__control-button--favorite ${detailsFavoriteClassName}" id="favorite" name="favorite">Add to favorites</button>
+        </section>
+      </div>
+    </div>`;
 };
 
 export default class FilmDetailsInfoView extends AbstractView{
@@ -72,7 +113,7 @@ export default class FilmDetailsInfoView extends AbstractView{
   }
 
   get template() {
-    return createFilmInfoTemplate(this.#film);
+    return createFilmDetailsTemplate(this.#film);
   }
 
 }
