@@ -11,7 +11,7 @@ const createSortingTemplate = (sortType) => {
   const ratingClassName = sortType === SortType.RATING
     ? 'sort__button--active'
     : '';
-    console.log(sortType);
+
   return `<ul class="sort">
 <li><a href="#" class="sort__button ${defaultClassName}" data-sort-type="${SortType.DEFAULT}">Sort by default</a></li>
 <li><a href="#" class="sort__button ${dateClassName}" data-sort-type="${SortType.DATE}">Sort by date</a></li>
