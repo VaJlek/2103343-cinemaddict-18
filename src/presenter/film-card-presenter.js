@@ -23,6 +23,7 @@ export default class FilmCardPresenter {
   #filmDetailsAddCommentComponent = null;
   #changeData = null;
   #changeMode = null;
+  #container = null;
 
   #film = [];
   #comments = [];
@@ -38,10 +39,10 @@ export default class FilmCardPresenter {
     this.#comments = comments;
   }
 
-  init(film) {
+  init(film, container) {
 
     this.#film = film;
-
+    this.#container = container;
 
     const prevFilmCardComponent = this.#filmCardComponent;
 
@@ -58,7 +59,7 @@ export default class FilmCardPresenter {
 
     if(prevFilmCardComponent === null) {
 
-      render(this.#filmCardComponent, this.#filmListContainer);
+      render(this.#filmCardComponent, this.#container);
 
     } else {
 
@@ -81,26 +82,26 @@ export default class FilmCardPresenter {
   #handleWatchlistClick = () => {
     this.#changeData({
       ...this.#film, userDetails: { ...this.#film.userDetails, watchlist: !this.#film.userDetails.watchlist },
-    }, this.#filmListContainer,);
+    }, this.#container,);
   };
 
   #handleAlreadyWatchedClick = () => {
     this.#changeData({
       ...this.#film, userDetails: { ...this.#film.userDetails, alreadyWatched: !this.#film.userDetails.alreadyWatched },
-    }, this.#filmListContainer,);
+    }, this.#container,);
   };
 
   #handleFavoriteClick = () => {
     this.#changeData({
       ...this.#film, userDetails: { ...this.#film.userDetails, favorite: !this.#film.userDetails.favorite },
-    }, this.#filmListContainer,);
+    }, this.#container,);
   };
 
   #handleDetailWatchlistClick = () => {
     remove(this.#filmDetailsComponent);
     this.#changeData({
       ...this.#film, userDetails: { ...this.#film.userDetails, watchlist: !this.#film.userDetails.watchlist },
-    }, this.#filmListContainer,);
+    }, this.#container,);
     this.#renderFilmDetails();
   };
 
@@ -108,7 +109,7 @@ export default class FilmCardPresenter {
     remove(this.#filmDetailsComponent);
     this.#changeData({
       ...this.#film, userDetails: { ...this.#film.userDetails, alreadyWatched: !this.#film.userDetails.alreadyWatched },
-    }, this.#filmListContainer,);
+    }, this.#container,);
     this.#renderFilmDetails();
   };
 
@@ -116,7 +117,7 @@ export default class FilmCardPresenter {
     remove(this.#filmDetailsComponent);
     this.#changeData({
       ...this.#film, userDetails: { ...this.#film.userDetails, favorite: !this.#film.userDetails.favorite },
-    }, this.#filmListContainer,);
+    }, this.#container,);
     this.#renderFilmDetails();
   };
 
