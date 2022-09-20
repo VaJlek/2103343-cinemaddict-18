@@ -2,7 +2,6 @@ import AbstractView from '../framework/view/abstract-view.js';
 import { SortType } from '../const.js';
 
 const createSortingTemplate = (sortType) => {
-
   const defaultClassName = sortType === SortType.DEFAULT
     ? 'sort__button--active'
     : '';
