@@ -63,7 +63,7 @@ export default class ContentPresenter {
     this.#films = [...this.#moviesModel.films];
     this.#comments = [...this.#commentsModel.comments];
     this.#sourcedFilms = [...this.#moviesModel.films];
-    render(this.#mainNavigationComponent, this.#contentContainer);
+    render(this.#mainNavigationComponent, this.#contentContainer, RenderPosition.BEFOREBEGIN);
     this.#renderContent();
     this.#renderFooter();
 
@@ -98,14 +98,14 @@ export default class ContentPresenter {
 
     render(this.#filmsListTopRatedComponent, this.#contentComponent.element);
     render(this.#filmsListTopRatedContainerComponent, this.#filmsListTopRatedComponent.element);
-    this.#renderFilms(0, 1, this.#filmsListTopRatedContainerComponent.element );
+    this.#renderFilms(0, 2, this.#filmsListTopRatedContainerComponent.element );
   };
 
   #renderFilmsListMostCommented = () => {
 
     render(this.#filmsListMostCommentedComponent, this.#contentComponent.element);
     render(this.#filmsListMostCommentedContainerComponent, this.#filmsListMostCommentedComponent.element);
-    this.#renderFilms(0, 1, this.#filmsListMostCommentedContainerComponent.element);
+    this.#renderFilms(0, 2, this.#filmsListMostCommentedContainerComponent.element);
 
   };
 
@@ -119,7 +119,6 @@ export default class ContentPresenter {
         this.#films.sort(sortRating);
         break;
       default:
-
         this.#films = [...this.#sourcedFilms];
     }
 
@@ -139,17 +138,15 @@ export default class ContentPresenter {
 
   #renderSort = () => {
 
-    const prevSortComponent = this.#sortComponent;
-
     if(this.#sortComponent) {
-
+      const prevSortComponent = this.#sortComponent;
       this.#sortComponent = new SortingView(this.#currentSortType);
       this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
       replace(this.#sortComponent, prevSortComponent);
 
     } else {
       this.#sortComponent = new SortingView(this.#currentSortType);
-      render( this.#sortComponent, this.#contentContainer, RenderPosition.BEFOREEND);
+      render( this.#sortComponent, this.#contentContainer, RenderPosition.AFTERBEGIN);
       this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
     }
   };
@@ -187,7 +184,7 @@ export default class ContentPresenter {
   };
 
   #renderFilmsList = () => {
-
+    this.#renderSort();
     render(this.#filmListContainerComponent, this.#filmListComponent.element);
     this.#renderFilms(0, Math.min(this.#films.length, FILMS_COUNT_PER_STEP), this.#filmListContainerComponent.element);
 
@@ -225,7 +222,7 @@ export default class ContentPresenter {
 
   #renderContent = () => {
 
-    this.#renderSort();
+
     render(this.#contentComponent, this.#contentContainer);
     render(this.#filmListComponent, this.#contentComponent.element);
 
