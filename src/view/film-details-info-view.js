@@ -1,4 +1,4 @@
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatrfulView from '../framework/view/abstract-stateful-view.js';
 import { humanizeTaskDueDate } from '../utils/utils.js';
 
 const createFilmDetailsTemplate = (film) => {
@@ -103,17 +103,17 @@ const createFilmDetailsTemplate = (film) => {
     </div>`;
 };
 
-export default class FilmDetailsInfoView extends AbstractView{
-
-  #film = null;
+export default class FilmDetailsInfoView extends AbstractStatrfulView{
 
   constructor (film) {
     super();
-    this.#film = film;
+    this._state = FilmDetailsInfoView.parseFilmToState(film);
   }
 
   get template() {
-    return createFilmDetailsTemplate(this.#film);
+    return createFilmDetailsTemplate(this._state);
   }
 
+  static parseFilmToState = (film) => ({ ...film });
+  static parseStateToFilm = (state) => ({ ...state });
 }

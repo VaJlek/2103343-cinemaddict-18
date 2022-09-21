@@ -45,9 +45,9 @@ export default class FilmCardPresenter {
 
     const prevFilmCardComponent = this.#filmCardComponent;
 
-    this.#filmCardComponent = new FilmCardView(film);
+    this.#filmCardComponent = new FilmCardView(this.#film);
 
-    this.#filmDetailsInfoComponent = new FilmDetailsInfoView(film);
+    this.#filmDetailsInfoComponent = new FilmDetailsInfoView(this.#film);
 
     render(this.#filmCardComponent, this.#container);
 
@@ -75,6 +75,7 @@ export default class FilmCardPresenter {
   resetView = () => {
     if (this.#mode !== Mode.DEFAULT) {
       remove (this.#filmDetailsInfoComponent);
+      this.#mode = Mode.DEFAULT;
     }
   };
 
@@ -124,6 +125,7 @@ export default class FilmCardPresenter {
 
     remove (this.#filmDetailsComponent);
     this.#container.classList.remove('hide-overflow');
+    document.removeEventListener('keydown', this.#onEscKeyDown);
 
   };
 
