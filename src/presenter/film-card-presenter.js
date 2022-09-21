@@ -15,7 +15,6 @@ const Mode = {
 
 export default class FilmCardPresenter {
 
-  #filmListContainer = null;
   #contentContainer = null;
   #filmCardComponent = null;
   #filmDetailsInfoComponent = null;
@@ -31,8 +30,8 @@ export default class FilmCardPresenter {
 
   #filmDetailsComponent = new FilmDetailsView();
 
-  constructor(filmListContainer, changeData, changeMode, contentContainer, comments) {
-    this.#filmListContainer = filmListContainer;
+  constructor( changeData, changeMode, contentContainer, comments) {
+
     this.#contentContainer = contentContainer;
     this.#changeData = changeData;
     this.#changeMode = changeMode;
@@ -50,7 +49,7 @@ export default class FilmCardPresenter {
 
     this.#filmDetailsInfoComponent = new FilmDetailsInfoView(film);
 
-    render(this.#filmCardComponent, this.#filmListContainer);
+    render(this.#filmCardComponent, this.#container);
 
     this.#filmCardComponent.setClickHandler(this.#handleFilmCardLinkClick);
     this.#filmCardComponent.setWatchlistClickHandler(this.#handleWatchlistClick);
@@ -124,7 +123,7 @@ export default class FilmCardPresenter {
   #onFilmDetailsClosePopupButton = () => {
 
     remove (this.#filmDetailsComponent);
-    this.#filmListContainer.classList.remove('hide-overflow');
+    this.#container.classList.remove('hide-overflow');
 
   };
 
