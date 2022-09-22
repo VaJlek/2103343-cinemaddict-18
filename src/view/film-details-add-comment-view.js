@@ -1,9 +1,8 @@
-import AbstractStatrfulView from '../framework/view/abstract-view.js';
+import AbstractStatrfulView from '../framework/view/abstract-stateful-view.js';
 
+const createAddFilmCommentsTemplate = (state) => {
 
-const createAddFilmCommentsTemplate = (data) => {
-
-  const {selectedEmoji} = data;
+  const {selectedEmoji} = state;
 
   const showSelectedEmoji = (emoji) =>
     emoji
@@ -22,19 +21,19 @@ const createAddFilmCommentsTemplate = (data) => {
     <div class="film-details__emoji-list">
       <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" ${isCheckedEmoji(selectedEmoji, 'smile',)}>
       <label class="film-details__emoji-label" for="emoji-smile">
-        <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
+        <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji" data-emotion="smile">
       </label>
       <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping" ${isCheckedEmoji(selectedEmoji, 'sleeping',)}>
       <label class="film-details__emoji-label" for="emoji-sleeping">
-        <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
+        <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji" data-emotion="sleeping">
       </label>
       <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke" ${isCheckedEmoji(selectedEmoji, 'puke',)}>
       <label class="film-details__emoji-label" for="emoji-puke">
-        <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
+        <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji" data-emotion="puke">
       </label>
       <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry" ${isCheckedEmoji(selectedEmoji, 'angry',)}>
       <label class="film-details__emoji-label" for="emoji-angry">
-        <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
+        <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji" data-emotion="angry">
       </label>
     </div>
   </form>`;
@@ -43,9 +42,9 @@ const createAddFilmCommentsTemplate = (data) => {
 
 export default class FilmDetailsAddCommentView extends AbstractStatrfulView{
 
-  constructor(comment) {
+  constructor(comments) {
     super();
-    this._state = FilmDetailsAddCommentView.parseCommentToState(comment);
+    this._state = FilmDetailsAddCommentView.parseCommentToState(comments);
     this.#setHandlers();
   }
 
@@ -54,16 +53,17 @@ export default class FilmDetailsAddCommentView extends AbstractStatrfulView{
   }
 
   #emojiClickHandler = (evt) => {
-    evt.preventDefault();
-    if (evt.target.matches('img')) {
-      const inputId = evt.target.closest('label').getAttribute('for');
-      const input = this.element.querySelector(`#${inputId}`);
-      const inputValue = input.value;
 
+    if (evt.target.tagName !== 'IMG') {
+      return;
+    }
+    evt.preventDefault();
+    const selectedEmoji = evt.target.dataset.emotion;
+
+    if (this._state.selectedEmoji !== selectedEmoji) {
       this.updateElement({
-        selectedEmoji: inputValue});
-      this.element.querySelector('.film-details__comment-input').value = this._state.currentComment;
-      this.element.scrollTop = this._state.scrollTop;
+        selectedEmoji: evt.target.dataset.emotion
+      });
     }
   };
 

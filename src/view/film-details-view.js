@@ -56,4 +56,6 @@ export default class FilmDetailsView extends AbstractView{
     evt.preventDefault();
     this._callback.favoriteClick();
   };
+
+
 }

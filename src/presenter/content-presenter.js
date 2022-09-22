@@ -29,7 +29,7 @@ export default class ContentPresenter {
   #sortComponent = null;
   #contentComponent = new FilmsView();
   #filmListComponent = new FilmListView();
-  #footerComponent = new FooterView();
+  #footerComponent = null;
 
   #filmListContainerComponent = new FilmListContainerView();
   #filmsListTopRatedContainerComponent = new FilmListContainerView();
@@ -222,6 +222,7 @@ export default class ContentPresenter {
   };
 
   #renderFooter = () => {
+    this.#footerComponent = new FooterView(this.#films.length);
     render(this.#footerComponent, this.#footerContainer);
   };
 

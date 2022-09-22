@@ -23,7 +23,7 @@ export default class FilmCardPresenter {
   #changeData = null;
   #changeMode = null;
   #container = null;
-  //#tempComment = null;
+
 
   #film = [];
   #comments = [];
@@ -163,7 +163,7 @@ export default class FilmCardPresenter {
   #renderFilmComments = () => {
 
     this.#filmDetailsCommentContainerComponent = new FilmDetailsCommentContainerView(this.#film.comments.length);
-    this.#filmDetailsAddCommentComponent = new FilmDetailsAddCommentView();
+    this.#filmDetailsAddCommentComponent = new FilmDetailsAddCommentView(this.#film.comments);
     this.#renderFilmComment();
     render(this.#filmDetailsCommentContainerComponent, this.#filmDetailsInfoComponent.element, RenderPosition.BEFOREEND);
 

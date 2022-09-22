@@ -1,4 +1,8 @@
 import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+
+dayjs.extend(duration);
+
 // Функция из интернета по генерации случайного числа из диапазона
 // Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
 const getRandomInteger = (a = 0, b = 1) => {
@@ -27,7 +31,13 @@ const updateItem = (items, update) => {
   ];
 };
 
-const humanizeTaskDueDate = (dueDate) => dayjs(dueDate).format('YYYY');
+const humanizeToYear = (dueDate) => dayjs(dueDate).format('YYYY');
+
+const humanizeToDate = (dueDate) => dayjs(dueDate).format('DD MMMM YYYY');
+
+const humanizeToDateWithTime = (dueDate) => dayjs(dueDate).format('YYYY.MM.DD HH:MM');
+
+const formatDuration = (minutes) => dayjs.duration(minutes, 'minutes').format('H[h] mm[m]');
 
 const getWeightForNullDate = (dateA, dateB) => {
   if (dateA === null && dateB === null) {
@@ -57,4 +67,4 @@ const sortRating = (filmA, filmB) => {
   return weight ?? dayjs(filmB.filmInfo.totalRating).diff(dayjs(filmA.filmInfo.totalRating));
 };
 
-export {getRandomInteger, getRandomBoolean, getFilteredFilmsCount, updateItem, sortDate, sortRating, humanizeTaskDueDate};
+export {getRandomInteger, getRandomBoolean, getFilteredFilmsCount, updateItem, sortDate, sortRating, humanizeToYear,humanizeToDate,humanizeToDateWithTime, formatDuration,};

@@ -1,5 +1,5 @@
 import AbstractStatrfulView from '../framework/view/abstract-stateful-view.js';
-import { humanizeTaskDueDate } from '../utils/utils.js';
+import { humanizeToDate, formatDuration } from '../utils/utils.js';
 
 const createFilmDetailsTemplate = (data) => {
 
@@ -20,7 +20,8 @@ const createFilmDetailsTemplate = (data) => {
     userDetails: { watchlist, alreadyWatched, favorite}
   } = data;
 
-  const normDate = humanizeTaskDueDate(date);
+  const normDate = humanizeToDate(date);
+  const duration = formatDuration(runtime);
 
   const detailsWatchlistClassName = watchlist
     ? 'film-details__control-button--active'
@@ -75,7 +76,7 @@ const createFilmDetailsTemplate = (data) => {
     </tr>
     <tr class="film-details__row">
       <td class="film-details__term">Runtime</td>
-      <td class="film-details__cell">${runtime}</td>
+      <td class="film-details__cell">${duration}</td>
     </tr>
     <tr class="film-details__row">
       <td class="film-details__term">Country</td>
@@ -105,9 +106,9 @@ const createFilmDetailsTemplate = (data) => {
 
 export default class FilmDetailsInfoView extends AbstractStatrfulView{
 
-  constructor (film) {
+  constructor (film, comments) {
     super();
-    this._state = FilmDetailsInfoView.parseFilmToState(film);
+    this._state = FilmDetailsInfoView.parseFilmToState(film, comments);
   }
 
   get template() {

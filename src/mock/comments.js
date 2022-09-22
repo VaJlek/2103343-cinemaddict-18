@@ -27,7 +27,7 @@ export const generateComment = () => {
     id: getIdNumber(),
     author: randomAuthor,
     comment: randomCommentText,
-    date: 22,
+    date: '2019-05-11T16:12:32.554Z',
     emotion: randomEmotion,
 
   };

@@ -56,7 +56,7 @@ export const generateMovie = () => {
         date: generateDate(),
         releaseCountry: 'Finland'
       },
-      runtime: '1h13m',
+      runtime: 100,
       genre:'horror',
       description: randomDescription,
     },
