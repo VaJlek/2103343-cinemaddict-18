@@ -23,6 +23,7 @@ export default class FilmCardPresenter {
   #changeData = null;
   #changeMode = null;
   #container = null;
+  //#tempComment = null;
 
   #film = [];
   #comments = [];
@@ -161,7 +162,7 @@ export default class FilmCardPresenter {
 
   #renderFilmComments = () => {
 
-    this.#filmDetailsCommentContainerComponent = new FilmDetailsCommentContainerView();
+    this.#filmDetailsCommentContainerComponent = new FilmDetailsCommentContainerView(this.#film.comments.length);
     this.#filmDetailsAddCommentComponent = new FilmDetailsAddCommentView();
     this.#renderFilmComment();
     render(this.#filmDetailsCommentContainerComponent, this.#filmDetailsInfoComponent.element, RenderPosition.BEFOREEND);
@@ -172,8 +173,10 @@ export default class FilmCardPresenter {
 
   #renderFilmComment = () => {
 
-    const comment = this.#comments[this.#film.comments];
-    render(new FilmDetailsCommentView(comment), this.#filmDetailsCommentContainerComponent.element);
+    for (let i = 0; i < this.#film.comments.length; i++ ) {
+      const comment = this.#comments[this.#film.comments[i]];
+      render(new FilmDetailsCommentView(comment), this.#filmDetailsCommentContainerComponent.element);
+    }
   };
 
   #handleFilmCardLinkClick = () => {

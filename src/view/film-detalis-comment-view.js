@@ -1,8 +1,8 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
-const createFilmCommentsTemplate = (userComment) => {
+const createFilmCommentsTemplate = (userCommentData) => {
 
-  const {author, comment, date, emotion } = userComment;
+  const {author, comment, date, emotion } = userCommentData;
 
   return `<li class="film-details__comment">
   <span class="film-details__comment-emoji">
@@ -17,6 +17,7 @@ const createFilmCommentsTemplate = (userComment) => {
     </p>
   </div>
   </li>`;
+
 };
 
 export default class FilmDetailsCommentView extends AbstractView{

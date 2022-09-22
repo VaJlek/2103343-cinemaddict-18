@@ -42,7 +42,7 @@ export const generateMovie = () => {
   const randomRating = () => getRandomInteger(1, 10);
   return {
     id: nanoid(),
-    comments: generateId(),
+    comments: [generateId(), generateId()],
     filmInfo : {
       title: randomTitle,
       alternativeTitle: 'Laziness Who Sold Themselves',
