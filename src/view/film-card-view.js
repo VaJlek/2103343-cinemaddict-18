@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { humanizeTaskDueDate } from '../utils/utils.js';
+import { humanizeToYear, formatDuration } from '../utils/utils.js';
 const createFilmCardTemplate = (film) => {
 
   const {
@@ -16,9 +16,10 @@ const createFilmCardTemplate = (film) => {
     userDetails: { watchlist, alreadyWatched, favorite},
   } = film;
 
-  const commentsCount = [comments].length;
+  const commentsCount = comments.length;
 
-  const normDate = humanizeTaskDueDate(date);
+  const normDate = humanizeToYear(date);
+  const duration = formatDuration(runtime);
 
   const watchlistClassName = watchlist
     ? 'film-card__controls-item--active'
@@ -36,7 +37,7 @@ const createFilmCardTemplate = (film) => {
   <p class="film-card__rating">${totalRating}</p>
   <p class="film-card__info">
     <span class="film-card__year">${normDate}</span>
-    <span class="film-card__duration">${runtime}</span>
+    <span class="film-card__duration">${duration}</span>
     <span class="film-card__genre">${genre}</span>
   </p>
   <img src=${poster} alt="" class="film-card__poster">

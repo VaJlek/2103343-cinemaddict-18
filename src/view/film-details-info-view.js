@@ -1,7 +1,7 @@
-import AbstractView from '../framework/view/abstract-view.js';
-import { humanizeTaskDueDate } from '../utils/utils.js';
+import AbstractStatrfulView from '../framework/view/abstract-stateful-view.js';
+import { humanizeToDate, formatDuration } from '../utils/utils.js';
 
-const createFilmDetailsTemplate = (film) => {
+const createFilmDetailsTemplate = (data) => {
 
   const {
     filmInfo: {
@@ -18,9 +18,10 @@ const createFilmDetailsTemplate = (film) => {
       description
     },
     userDetails: { watchlist, alreadyWatched, favorite}
-  } = film;
+  } = data;
 
-  const normDate = humanizeTaskDueDate(date);
+  const normDate = humanizeToDate(date);
+  const duration = formatDuration(runtime);
 
   const detailsWatchlistClassName = watchlist
     ? 'film-details__control-button--active'
@@ -75,7 +76,7 @@ const createFilmDetailsTemplate = (film) => {
     </tr>
     <tr class="film-details__row">
       <td class="film-details__term">Runtime</td>
-      <td class="film-details__cell">${runtime}</td>
+      <td class="film-details__cell">${duration}</td>
     </tr>
     <tr class="film-details__row">
       <td class="film-details__term">Country</td>
@@ -103,17 +104,17 @@ const createFilmDetailsTemplate = (film) => {
     </div>`;
 };
 
-export default class FilmDetailsInfoView extends AbstractView{
+export default class FilmDetailsInfoView extends AbstractStatrfulView{
 
-  #film = null;
-
-  constructor (film) {
+  constructor (film, comments) {
     super();
-    this.#film = film;
+    this._state = FilmDetailsInfoView.parseFilmToState(film, comments);
   }
 
   get template() {
-    return createFilmDetailsTemplate(this.#film);
+    return createFilmDetailsTemplate(this._state);
   }
 
+  static parseFilmToState = (film) => ({ ...film });
+  static parseStateToFilm = (state) => ({ ...state });
 }

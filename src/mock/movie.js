@@ -42,7 +42,7 @@ export const generateMovie = () => {
   const randomRating = () => getRandomInteger(1, 10);
   return {
     id: nanoid(),
-    comments: generateId(),
+    comments: [generateId(), generateId()],
     filmInfo : {
       title: randomTitle,
       alternativeTitle: 'Laziness Who Sold Themselves',
@@ -56,7 +56,7 @@ export const generateMovie = () => {
         date: generateDate(),
         releaseCountry: 'Finland'
       },
-      runtime: '1h13m',
+      runtime: 100,
       genre:'horror',
       description: randomDescription,
     },
