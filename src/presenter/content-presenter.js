@@ -12,7 +12,7 @@ import FilmsListTopRatedView from '../view/films-list-top-rated-view.js';
 import FilmsListMostCommentedView from '../view/films-list-most-commented-view.js';
 
 import FilmCardPresenter from './film-card-presenter.js';
-import {updateItem, sortDate, sortRating} from '../utils/utils.js';
+import { sortDate, sortRating} from '../utils/utils.js'; //updateItem,
 import { SortType } from '../const.js';
 import { generateFilter } from '../mock/filter.js';
 
@@ -38,7 +38,7 @@ export default class ContentPresenter {
   #filmsListMostCommentedComponent = new FilmsListMostCommentedView();
   #showMoreButtonComponent = new ShowMoreButtonView();
 
-  #films = [];
+  //#films = [];
   #renderedFilmsCount = FILMS_COUNT_PER_STEP;
   #comments = [];
   #filmCardPresenter = new Map();
@@ -47,7 +47,7 @@ export default class ContentPresenter {
   #filmCardMostCommentedPresenter = new Map();
 
   #currentSortType = SortType.DEFAULT;
-  #sourcedFilms = [];
+  //#sourcedFilms = [];
 
   constructor(contentContainer, moviesModel, commentsModel, footer){
     this.#contentContainer = contentContainer;
@@ -58,11 +58,20 @@ export default class ContentPresenter {
     this.#mainNavigationComponent = new NavigationView(this.#filters);
   }
 
+  get films() {
+    switch (this.#currentSortType) {
+      case SortType.DATE:
+        return [...this.#moviesModel.films].sort(sortDate);
+      case SortType.RATING:
+        return [...this.#moviesModel.films].sort(sortRating);
+    }
+    return this.#moviesModel.films;
+  }
 
   init = () => {
-    this.#films = [...this.#moviesModel.films];
+    //this.#films = [...this.#moviesModel.films];
     this.#comments = [...this.#commentsModel.comments];
-    this.#sourcedFilms = [...this.#moviesModel.films];
+    //this.#sourcedFilms = [...this.#moviesModel.films];
     render(this.#mainNavigationComponent, this.#contentContainer, RenderPosition.BEFOREBEGIN);
     this.#renderContent();
     this.#renderFooter();
@@ -79,8 +88,9 @@ export default class ContentPresenter {
 
     const prevMainNavigationComponent = this.#mainNavigationComponent;
 
-    this.#films = updateItem(this.#films, updatedFilm);
-    this.#sourcedFilms = updateItem(this.#sourcedFilms, updatedFilm);
+    //this.#films = updateItem(this.#films, updatedFilm);
+    //this.#sourcedFilms = updateItem(this.#sourcedFilms, updatedFilm);
+
     this.#filmCardPresenter.get(updatedFilm.id).init(updatedFilm, container);
 
     if (this.#filmCardTopRatedPresenter.get(updatedFilm.id)) {
@@ -89,7 +99,7 @@ export default class ContentPresenter {
     if (this.#filmCardMostCommentedPresenter.get(updatedFilm.id)) {
       this.#filmCardMostCommentedPresenter.get(updatedFilm.id).init(updatedFilm, container);
     }
-    this.#filters = generateFilter(this.#films);
+    this.#filters = generateFilter(this.films); //this.#films
     this.#mainNavigationComponent = new NavigationView(this.#filters);
 
     replace(this.#mainNavigationComponent, prevMainNavigationComponent);
@@ -111,6 +121,7 @@ export default class ContentPresenter {
 
   };
 
+  /*
   #sortFilms = (sortType) => {
 
     switch (sortType) {
@@ -126,6 +137,7 @@ export default class ContentPresenter {
 
     this.#currentSortType = sortType;
   };
+*/
 
   #handleSortTypeChange = (sortType) => {
 
@@ -133,7 +145,8 @@ export default class ContentPresenter {
       return;
     }
 
-    this.#sortFilms(sortType);
+    //this.#sortFilms(sortType);
+    this.#currentSortType = sortType;
     this.#clearFilmsList();
     this.#renderContent();
   };
@@ -184,16 +197,24 @@ export default class ContentPresenter {
 
   };
 
+  /*
   #renderFilms = (from, to, container) => {
     this.#films.slice(from, to).forEach((film) => this.#renderFilmCard(film, container));
   };
+  */
+
+  #renderFilms = (films, container) => {
+    films.forEach((film) => this.#renderFilmCard(film, container));
+  };
 
   #renderFilmsList = () => {
+    const filmCount = this.films.length;
+    const films = this.films.slice(0, Math.min(filmCount, FILMS_COUNT_PER_STEP));
 
     render(this.#filmListContainerComponent, this.#filmListComponent.element);
-    this.#renderFilms(0, Math.min(this.#films.length, FILMS_COUNT_PER_STEP), this.#filmListContainerComponent.element);
-
-    if (this.#films.length > FILMS_COUNT_PER_STEP) {
+    this.#renderFilms(films);
+    //this.#renderFilms(0, Math.min(this.#films.length, FILMS_COUNT_PER_STEP), this.#filmListContainerComponent.element);
+    if (filmCount > FILMS_COUNT_PER_STEP) { //this.#films.length
       this.#renderShowMoreButton();
     }
   };
@@ -211,18 +232,22 @@ export default class ContentPresenter {
   }
 
   #handleShowMoreButtonClick = () => {
+    //this.#renderFilms(this.#renderedFilmsCount, this.#renderedFilmsCount + FILMS_COUNT_PER_STEP, this.#filmListContainerComponent.element );
+    //this.#renderedFilmsCount += FILMS_COUNT_PER_STEP;
+    const filmCount = this.films.length;
+    const newRenderedFilmsCount = Math.min(filmCount, this.#renderedFilmsCount + FILMS_COUNT_PER_STEP);
+    const films = this.films.slice(this.#renderedFilmsCount, newRenderedFilmsCount);
 
-    this.#renderFilms(this.#renderedFilmsCount, this.#renderedFilmsCount + FILMS_COUNT_PER_STEP, this.#filmListContainerComponent.element );
+    this.#renderFilms(films);
+    this.#renderedFilmsCount = newRenderedFilmsCount;
 
-    this.#renderedFilmsCount += FILMS_COUNT_PER_STEP;
-
-    if (this.#renderedFilmsCount >= this.#films.length) {
+    if (this.#renderedFilmsCount >= films) {
       remove (this.#showMoreButtonComponent);
     }
   };
 
   #renderFooter = () => {
-    this.#footerComponent = new FooterView(this.#films.length);
+    this.#footerComponent = new FooterView(this.films.length); //this.#films.length
     render(this.#footerComponent, this.#footerContainer);
   };
 
@@ -232,7 +257,7 @@ export default class ContentPresenter {
     render(this.#contentComponent, this.#contentContainer);
     render(this.#filmListComponent, this.#contentComponent.element);
 
-    if (this.#films.length === 0) {
+    if (this.films.length === 0) {
       render(this.#showEmptyListTitle());
 
     } else {

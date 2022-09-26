@@ -67,4 +67,15 @@ const sortRating = (filmA, filmB) => {
   return weight ?? dayjs(filmB.filmInfo.totalRating).diff(dayjs(filmA.filmInfo.totalRating));
 };
 
-export {getRandomInteger, getRandomBoolean, getFilteredFilmsCount, updateItem, sortDate, sortRating, humanizeToYear,humanizeToDate,humanizeToDateWithTime, formatDuration,};
+export {
+  getRandomInteger,
+  getRandomBoolean,
+  getFilteredFilmsCount,
+  updateItem,
+  sortDate,
+  sortRating,
+  humanizeToYear,
+  humanizeToDate,
+  humanizeToDateWithTime,
+  formatDuration,
+};
