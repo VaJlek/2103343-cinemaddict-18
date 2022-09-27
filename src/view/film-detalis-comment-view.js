@@ -3,7 +3,7 @@ import { humanizeToDateWithTime } from '../utils/utils.js';
 
 const createFilmCommentsTemplate = (userCommentData) => {
 
-  const {author, comment, date, emotion } = userCommentData;
+  const {id ,author, comment, date, emotion } = userCommentData;
   const normDate = humanizeToDateWithTime(date);
 
   return `<li class="film-details__comment">
@@ -15,7 +15,7 @@ const createFilmCommentsTemplate = (userCommentData) => {
     <p class="film-details__comment-info">
       <span class="film-details__comment-author">${author}</span>
       <span class="film-details__comment-day">${normDate}</span>
-      <button class="film-details__comment-delete">Delete</button>
+      <button id=${id} class="film-details__comment-delete">Delete</button>
     </p>
   </div>
   </li>`;

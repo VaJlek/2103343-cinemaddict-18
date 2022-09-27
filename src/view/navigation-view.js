@@ -21,15 +21,28 @@ const createNavigationTemplate = (filters) => `<nav class="main-navigation">
 export default class NavigationView extends AbstractView{
   #filters = null;
 
+
   constructor(filters) {
     super();
     this.#filters = filters;
+
   }
 
   get template() {
     return createNavigationTemplate(this.#filters);
   }
 
+  setFilterTypeChangeHandler = (callback) => {
+    this._callback.filterTypeChange = callback;
+    this.element.addEventListener('click', this.#filterTypeChangeHandler);
+  };
+
+  #filterTypeChangeHandler = (evt) => {
+    evt.preventDefault();
+    if (evt.target.tagName === 'A') {
+      this._callback.filterTypeChange(evt.target.id);
+    }
+  };
 }
 
 

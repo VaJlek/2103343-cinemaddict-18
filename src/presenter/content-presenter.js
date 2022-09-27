@@ -13,7 +13,7 @@ import FilmsListMostCommentedView from '../view/films-list-most-commented-view.j
 
 import FilmCardPresenter from './film-card-presenter.js';
 import { sortDate, sortRating} from '../utils/utils.js'; //updateItem,
-import { SortType } from '../const.js';
+import { SortType, FilterType } from '../const.js';
 import { generateFilter } from '../mock/filter.js';
 
 const FILMS_COUNT_PER_STEP = 5;
@@ -24,6 +24,7 @@ export default class ContentPresenter {
   #footerContainer = null;
   #moviesModel = null;
   #commentsModel = null;
+  #filtersModel = null;
   #filters = null;
   #mainNavigationComponent = null;
   #sortComponent = null;
@@ -47,18 +48,26 @@ export default class ContentPresenter {
   #filmCardMostCommentedPresenter = new Map();
 
   #currentSortType = SortType.DEFAULT;
+  #currentFilterType = FilterType.ALL;
   //#sourcedFilms = [];
 
-  constructor(contentContainer, moviesModel, commentsModel, footer){
+  constructor(contentContainer, moviesModel, commentsModel, filtersModel, footer){
     this.#contentContainer = contentContainer;
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
+    this.#filtersModel = filtersModel;
     this.#footerContainer = footer;
     this.#filters = generateFilter(moviesModel.films);
     this.#mainNavigationComponent = new NavigationView(this.#filters);
+
+    this.moviesModel.addObserver(this.#modelMovieEventHandler);
+    this.commentsModel.addObserver(this.#modelCommentEventHandler);
+    this.filtersModel.addObserver(this.#modelMovieEventHandler);
   }
 
   get films() {
+    this.#currentFilterType = this.#filtersModel.filter;
+
     switch (this.#currentSortType) {
       case SortType.DATE:
         return [...this.#moviesModel.films].sort(sortDate);
