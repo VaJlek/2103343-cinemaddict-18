@@ -13,7 +13,8 @@ const SortType = {
 
 const UserAction = {
   UPDATE_FILM: 'UPDATE_FILM',
-  SORT_FILM: 'SORT_FILM',
+  ADD: 'ADD',
+  DELETE: 'DELETE',
 };
 
 const UpdateType = {
