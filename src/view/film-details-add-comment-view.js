@@ -1,8 +1,10 @@
 import AbstractStatrfulView from '../framework/view/abstract-stateful-view.js';
+import he from 'he';
+import { nanoid } from 'nanoid';
 
 const createAddFilmCommentsTemplate = (state) => {
 
-  const {selectedEmoji} = state;
+  const {selectedEmoji, currentComment} = state;
 
   const showSelectedEmoji = (emoji) =>
     emoji
@@ -16,7 +18,7 @@ const createAddFilmCommentsTemplate = (state) => {
     ${showSelectedEmoji(selectedEmoji)}
     </div>
     <label class="film-details__comment-label">
-      <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">Great movie!</textarea>
+      <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">Great movie!${he.encode(currentComment)}</textarea>
     </label>
     <div class="film-details__emoji-list">
       <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" ${isCheckedEmoji(selectedEmoji, 'smile',)}>
@@ -86,6 +88,47 @@ export default class FilmDetailsAddCommentView extends AbstractStatrfulView{
     this.element
       .querySelector('.film-details__comment-input')
       .addEventListener('input', this.#inputHandler);
+    this.element
+      .querySelector('.film-details__comments-list')
+      .addEventListener('click', this.#deleteCommentHandler);
+    this.element
+      .addEventListener('keydown', this.#addCommentHandler);
+  };
+
+  setAddCommentHandler = (callback) => {
+    this._callback.addComment = callback;
+  };
+
+  #addCommentHandler = (evt) => {
+    if (!evt.ctrlKey || evt.key !== 'Enter') {
+      return;
+    }
+
+    evt.preventDefault();
+    const currentComment = this._state.currentComment;
+    const emotion = this._state.selectedEmoji;
+
+    const comment = {
+      'id': nanoid(),
+      'author': 'Random',
+      'comment': currentComment,
+      'date': new Date,
+      emotion
+    };
+    this._callback.addComment(comment);
+  };
+
+
+  setDeleteCommentHandler = (callback) => {
+    this._callback.deleteComment = callback;
+  };
+
+  #deleteCommentHandler = (evt) => {
+    if (evt.target.tagName !== 'BUTTON') {
+      return;
+    }
+    evt.preventDefault();
+    this._callback.deleteComment(Number(evt.target.dataset.id));
   };
 
   _restoreHandlers = () => {

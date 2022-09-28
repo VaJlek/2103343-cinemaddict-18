@@ -5,6 +5,13 @@ const FilterType = {
   FAVORITES: 'favorites',
 };
 
+const filterTypeToText = {
+  [FilterType.ALL]: 'All movies',
+  [FilterType.WATCHLIST]: 'Watchlist',
+  [FilterType.HISTORY]: 'History',
+  [FilterType.FAVORITES]: 'Favorites'
+};
+
 const SortType = {
   DEFAULT: 'default',
   DATE: 'date',
@@ -13,8 +20,8 @@ const SortType = {
 
 const UserAction = {
   UPDATE_FILM: 'UPDATE_FILM',
-  ADD: 'ADD',
-  DELETE: 'DELETE',
+  ADD: 'ADD_COMMENT',
+  DELETE: 'DELETE_COMMENT',
 };
 
 const UpdateType = {
@@ -25,6 +32,7 @@ const UpdateType = {
 
 export {
   FilterType,
+  filterTypeToText,
   SortType,
   UserAction,
   UpdateType
