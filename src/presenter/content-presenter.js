@@ -184,11 +184,11 @@ export default class ContentPresenter {
 
   #renderFilmCard = (film, container) => {
     const filmCardPresenter = new FilmCardPresenter(
+      film,
       this.#handleViewAction,
       this.#handleModeChange,
       this.#contentContainer,
       this.#commentsModel,
-      this.#filterModel
     );
     filmCardPresenter.init(film, container);
     switch (container) {

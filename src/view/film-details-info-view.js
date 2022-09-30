@@ -115,6 +115,17 @@ export default class FilmDetailsInfoView extends AbstractStatrfulView{
     return createFilmDetailsTemplate(this._state);
   }
 
+  setSortTypeChangeHandler = (callback) => {
+    this._callback.scrollTop = callback;
+    this.element.addEventListener('scroll', this.#scrollHandler);
+  };
+
+  #scrollHandler = () => {
+    this._setState({
+      scroll: this.element.scrollTop
+    });
+  };
+
   static parseFilmToState = (film) => ({ ...film });
   static parseStateToFilm = (state) => ({ ...state });
 }
