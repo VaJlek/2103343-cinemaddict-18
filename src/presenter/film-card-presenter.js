@@ -6,9 +6,9 @@ import FilmCardView from '../view/film-card-view.js';
 import FilmDetailsInfoView from '../view/film-details-info-view.js';
 import FilmDetailsView from '../view/film-details-view.js';
 
-import FilmDetailsCommentView from '../view/film-detalis-comment-view.js';
-import FilmDetailsCommentContainerView from '../view/film-details-comment-container-view.js';
-import FilmDetailsAddCommentView from '../view/film-details-add-comment-view.js';
+import FilmDetailsCommentView from '../view/film-details-comment-view1.js';
+//import FilmDetailsCommentContainerView from '../view/film-details-comment-container-view.js';
+//import FilmDetailsAddCommentView from '../view/film-details-add-comment-view.js';
 const Mode = {
   DEFAULT: 'DEFAULT',
   POPUP: 'POPUP',
@@ -19,8 +19,8 @@ export default class FilmCardPresenter {
   #contentContainer = null;
   #filmCardComponent = null;
   #filmDetailsInfoComponent = null;
-  #filmDetailsCommentContainerComponent = null;
-  #filmDetailsAddCommentComponent = null;
+  #filmDetailsComments = null;
+  // #filmDetailsAddCommentComponent = null;
   #changeData = null;
   #changeMode = null;
   #container = null;
@@ -170,7 +170,7 @@ export default class FilmCardPresenter {
     render(this.#filmDetailsComponent, this.#contentContainer, RenderPosition.AFTEREND);
     render(this.#filmDetailsInfoComponent, this.#filmDetailsComponent.element);
 
-    this.#renderFilmComments();
+    this.#filmDetailsComments = new FilmDetailsCommentView(this.#commentsModel.comments);
 
     this.#filmDetailsComponent.setClickHandler(this.#onFilmDetailsClosePopupButton);
     this.#filmDetailsComponent.setWatchlistClickHandler(this.#handleDetailWatchlistClick);
@@ -181,7 +181,7 @@ export default class FilmCardPresenter {
 
     document.addEventListener('keydown', this.#onEscKeyDown);
   };
-
+  /*
   #renderFilmComments = () => {
 
     this.#filmDetailsCommentContainerComponent = new FilmDetailsCommentContainerView(this.#film.comments.length);
@@ -193,13 +193,14 @@ export default class FilmCardPresenter {
 
   };
 
-  #renderFilmComment = () => {
-
+  #renderFilmComments = () => {
+    this.#filmDetailsComments = new FilmDetailsCommentView(comment);
     for (let i = 0; i < this.#film.comments.length; i++ ) {
       const comment = this.#commentsModel.comments[this.#film.comments[i]];
       render(new FilmDetailsCommentView(comment), this.#filmDetailsCommentContainerComponent.element);
     }
   };
+  */
 
   #handleFilmCardLinkClick = () => {
     this.#changeMode();

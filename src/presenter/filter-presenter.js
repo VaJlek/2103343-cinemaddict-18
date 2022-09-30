@@ -5,18 +5,18 @@ import {filter} from '../utils/filter.js';
 
 export default class FilterPresenter {
   #filterContainer = null;
-  #filtersModel = null;
+  #filterModel = null;
   #moviesModel = null;
 
   #filterComponent = null;
 
-  constructor(contentContainer, filtersModel, moviesModel) {
+  constructor(contentContainer, filterModel, moviesModel) {
     this.#filterContainer = contentContainer;
-    this.#filtersModel = filtersModel;
+    this.#filterModel = filterModel;
     this.#moviesModel = moviesModel;
 
     this.#moviesModel.addObserver(this.#handleModelEvent);
-    this.#filtersModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
   get filters() {
@@ -50,7 +50,7 @@ export default class FilterPresenter {
     const filters = this.filters;
     const prevFilterComponent = this.#filterComponent;
 
-    this.#filterComponent = new NavigationView(filters, this.#filtersModel.filter);
+    this.#filterComponent = new NavigationView(filters, this.#filterModel.filter);
     this.#filterComponent.setFilterTypeChangeHandler(this.#filterTypeChangeHandler);
 
     if (prevFilterComponent === null) {
@@ -67,9 +67,9 @@ export default class FilterPresenter {
   };
 
   #filterTypeChangeHandler = (filterType) => {
-    if (this.#filtersModel.filter === filterType) {
+    if (this.#filterModel.filter === filterType) {
       return;
     }
-    this.#filtersModel.setFilter(UpdateType.MAJOR, filterType);
+    this.#filterModel.setFilter(UpdateType.MAJOR, filterType);
   };
 }
