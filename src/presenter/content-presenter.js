@@ -64,14 +64,15 @@ export default class ContentPresenter {
   get films() {
 
     this.#filterType = this.#filterModel.filter;
+    console.log(this.#filterType);
     const films = this.#moviesModel.films;
     const filteredFilms = filter[this.#filterType](films);
 
     switch (this.#currentSortType) {
       case SortType.DATE:
-        return [...filteredFilms].sort(sortDate);
+        return filteredFilms.sort(sortDate);
       case SortType.RATING:
-        return [...filteredFilms].sort(sortRating);
+        return filteredFilms.sort(sortRating);
     }
 
     return filteredFilms;
