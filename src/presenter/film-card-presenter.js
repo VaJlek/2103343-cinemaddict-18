@@ -28,7 +28,7 @@ export default class FilmCardPresenter {
 
   #mode = Mode.DEFAULT;
 
-  #filmDetailsComponent = new FilmDetailsView();
+  #filmDetailsComponent = null;//new FilmDetailsView();
 
   constructor(film, changeData, changeMode,contentContainer, commentsModel) {
     this.#film = film;
@@ -162,7 +162,9 @@ export default class FilmCardPresenter {
 
   #renderFilmDetails = () =>{
     this.#hideOverflow();
+    this.resetView();
 
+    this.#filmDetailsComponent = new FilmDetailsView();
     render(this.#filmDetailsComponent, this.#contentContainer, RenderPosition.AFTEREND);
     render(this.#filmDetailsInfoComponent, this.#filmDetailsComponent.element);
 

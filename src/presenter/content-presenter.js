@@ -64,7 +64,6 @@ export default class ContentPresenter {
   get films() {
 
     this.#filterType = this.#filterModel.filter;
-    console.log(this.#filterType);
     const films = this.#moviesModel.films;
     const filteredFilms = filter[this.#filterType](films);
 
