@@ -85,8 +85,8 @@ export default class ContentPresenter {
 
   #handleModeChange = () => {
     this.#filmCardPresenter.forEach((presenter) => presenter.resetView());
-    //this.#filmCardTopRatedPresenter.forEach((presenter) => presenter.resetView());
-    //this.#filmCardMostCommentedPresenter.forEach((presenter) => presenter.resetView());
+    this.#filmCardTopRatedPresenter.forEach((presenter) => presenter.resetView());
+    this.#filmCardMostCommentedPresenter.forEach((presenter) => presenter.resetView());
   };
 
   #handleViewAction = (actionType, updateType, update) => {
@@ -109,7 +109,7 @@ export default class ContentPresenter {
   #handleModelEvent = (updateType, data) => {
     switch (updateType) {
       case UpdateType.PATCH:
-        this.#filmCardPresenter.get(data.id).init(data);
+        this.#filmCardPresenter.get(data.id).init(data, this.#contentContainer);
         break;
       case UpdateType.MINOR:
         this.#clearFilmsList();
@@ -152,7 +152,7 @@ export default class ContentPresenter {
   #renderSort = () => {
 
     this.#sortComponent = new SortingView(this.#currentSortType);
-    render( this.#sortComponent, this.#contentContainer, RenderPosition.AFTERBEGIN);
+    render( this.#sortComponent, this.#contentContainer, RenderPosition.BEFOREEND);
     this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
 
   };
@@ -166,6 +166,7 @@ export default class ContentPresenter {
     this.#filmCardTopRatedPresenter.clear();
     this.#filmCardMostCommentedPresenter.forEach((presenter) => presenter.destroy());
     this.#filmCardMostCommentedPresenter.clear();
+    remove(this.#contentComponent);
     remove(this.#filmListComponent);
     remove(this.#sortComponent);
     remove(this.#showMoreButtonComponent);

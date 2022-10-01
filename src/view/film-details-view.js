@@ -1,23 +1,34 @@
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 
 const createFilmDetailsTemplate = () => '<section class="film-details"></section>';
 
-export default class FilmDetailsView extends AbstractView{
+export default class FilmDetailsView extends AbstractStatefulView{
 
-  get template() {
-    return createFilmDetailsTemplate();
+  constructor(film, comments) {
+    super();
+    this._state.comments = FilmDetailsView.parseFilmToState(film, comments);
+    this.#setHandlers();
+
   }
 
-  setClickHandler = (callback) => {
-    this._callback.click = callback;
-    this.element
-      .querySelector('.film-details__close-btn')
-      .addEventListener('click', this.#clickHandler);
+  get template() {
+    return createFilmDetailsTemplate(this._state);
+  }
+
+  #restoreScrollPosition = () => {
+    document.querySelector('.film-details').scrollTop = this._state.scrollTop;
   };
 
-  #clickHandler = (evt) => {
+  setCloseButtonClickHandler = (callback) => {
+    this._callback.closeButtonClick = callback;
+    this.element
+      .querySelector('.film-details__close-btn')
+      .addEventListener('click', this.#clickCloseButtonHandler);
+  };
+
+  #clickCloseButtonHandler = (evt) => {
     evt.preventDefault();
-    this._callback.click();
+    this._callback.closeButtonClick();
   };
 
 
@@ -32,6 +43,7 @@ export default class FilmDetailsView extends AbstractView{
     evt.preventDefault();
     console.log('## click: ', this._callback.watchlistClick);
     this._callback.watchlistClick();
+    this.#restoreScrollPosition();
   };
 
   setAlreadyWatchedClickHandler = (callback) => {
@@ -44,6 +56,7 @@ export default class FilmDetailsView extends AbstractView{
   #alreadyWatchedClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.alreadyWatchedClick();
+    this.#restoreScrollPosition();
   };
 
   setFavoriteClickHandler = (callback) => {
@@ -56,7 +69,29 @@ export default class FilmDetailsView extends AbstractView{
   #favoriteClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.favoriteClick();
+    this.#restoreScrollPosition();
   };
 
+  #scrollHandler = (evt) => {
+    evt.preventDefault();
+    this._setState({ scrollTop: evt.target.scrollTop });
+  };
+
+  #setHandlers = () => {
+    this.element
+      .addEventListener('scroll', this.#scrollHandler);
+  };
+
+  _restoreHandlers = () => {
+    this.#setHandlers();
+    this.setWatchlistClickHandler(this._callback.watchlistClick);
+    this.setAlreadyWatchedClickHandler(this._callback.alreadyWatchedClick);
+    this.setFavoriteClickHandler(this._callback.favoriteClick);
+  };
+
+  static parseFilmToState = (film) => ({...film, scrollTop: 0,}
+  );
+
+  static parseStateToFilm = (state) => ({ ...state });
 
 }
