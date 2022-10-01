@@ -10,6 +10,10 @@ export default class CommentsModel extends Observable{
 
   }
 
+  set comments(comments) {
+    this.#comments = comments;
+  }
+
   addComment = (updateType, update) => {
     this.#comments = [
       update,
@@ -30,7 +34,6 @@ export default class CommentsModel extends Observable{
       ...this.#comments.slice(0, index),
       ...this.#comments.slice(index + 1),
     ];
-
     this._notify(updateType, update);
   };
 }

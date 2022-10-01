@@ -159,6 +159,7 @@ export default class FilmCardPresenter {
         this.#mode = Mode.POPUP;
       } else {
         replace(this.#filmDetailsComponent, prevFilmDetailsComponent);
+        this.#updateDetailsComponent();
       }
     }
   };
@@ -174,6 +175,17 @@ export default class FilmCardPresenter {
 
   };
   */
+
+  #updateDetailsComponent = () => {
+    if (this.#mode === Mode.POPUP) {
+      this.#filmDetailsComponent.updateElement({
+        movie: this.#film,
+        listComments: this.#commentsModel.comments,
+        emotion: null,
+        message: null
+      });
+    }
+  };
 
   #handleFilmCardLinkClick = () => {
     this.#resetAllView();

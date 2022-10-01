@@ -20,6 +20,7 @@ const createComment = (message) => message ?
   </li>` : '';
 
 const createComments = (comments, listComments) => {
+  listComments = listComments.filter(Boolean);
   const template = comments.length
     ? comments.map((index) => createComment(listComments.find(
       ({ id }) => id === index)))
@@ -144,7 +145,7 @@ export default class FilmDetailsCommentsView extends AbstractStatrfulView{
       return;
     }
     evt.preventDefault();
-    this._callback.deleteComment(Number(evt.target.dataset.id));
+    this._callback.deleteComment(evt.target.dataset.id);
   };
 
   _restoreHandlers = () => {
