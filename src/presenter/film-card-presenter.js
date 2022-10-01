@@ -20,7 +20,7 @@ export default class FilmCardPresenter {
   #filmDetailsCommentsComponent = null;
 
   #changeData = null;
-  #changeMode = null;
+  #resetAllView = null;
   #container = null;
 
   #commentsModel = null;
@@ -30,11 +30,11 @@ export default class FilmCardPresenter {
 
   #filmDetailsComponent = null;
 
-  constructor(film, changeData, changeMode, contentContainer, commentsModel) {
+  constructor(film, changeData, resetAllView, contentContainer, commentsModel) {
     this.#film = film;
     this.#contentContainer = contentContainer;
     this.#changeData = changeData;
-    this.#changeMode = changeMode;
+    this.#resetAllView = resetAllView;
     this.#commentsModel = commentsModel;
   }
 
@@ -131,7 +131,7 @@ export default class FilmCardPresenter {
       const prevFilmDetailsComponent = this.#filmDetailsComponent;
       this.#hideOverflow();
 
-      this.#changeMode();
+      this.#resetAllView();
 
       this.#filmDetailsComponent = new FilmDetailsView();
       this.#filmDetailsInfoComponent = new FilmDetailsInfoView(this.#film);
@@ -176,7 +176,7 @@ export default class FilmCardPresenter {
   */
 
   #handleFilmCardLinkClick = () => {
-    this.#changeMode();
+    this.#resetAllView();
     this.#mode = Mode.POPUP;
     this.#renderFilmDetails();
   };

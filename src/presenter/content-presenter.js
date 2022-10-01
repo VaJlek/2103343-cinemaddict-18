@@ -83,7 +83,7 @@ export default class ContentPresenter {
 
   };
 
-  #handleModeChange = () => {
+  #handleResetView = () => {
     this.#filmCardPresenter.forEach((presenter) => presenter.resetView());
     this.#filmCardTopRatedPresenter.forEach((presenter) => presenter.resetView());
     this.#filmCardMostCommentedPresenter.forEach((presenter) => presenter.resetView());
@@ -186,11 +186,12 @@ export default class ContentPresenter {
     const filmCardPresenter = new FilmCardPresenter(
       film,
       this.#handleViewAction,
-      this.#handleModeChange,
+      this.#handleResetView,
       this.#contentContainer,
       this.#commentsModel,
     );
     filmCardPresenter.init(film, container);
+
     switch (container) {
       case this.#filmsListTopRatedContainerComponent.element:
         this.#filmCardTopRatedPresenter.set(film.id, filmCardPresenter);
