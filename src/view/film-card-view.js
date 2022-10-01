@@ -16,7 +16,7 @@ const createFilmCardTemplate = (film) => {
     userDetails: { watchlist, alreadyWatched, favorite},
   } = film;
 
-  const commentsCount = comments.length;
+  const commentsCount = comments.length ? `${comments.length} comments` : 'No comments yet';
 
   const normDate = humanizeToYear(date);
   const duration = formatDuration(runtime);

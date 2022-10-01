@@ -20,12 +20,11 @@ const createComment = (message) => message ?
   </li>` : '';
 
 const createComments = (comments, listComments) => {
-  const template = comments.length ? comments.map(
-    (index) => createComment(listComments.find(
-      ({ id }) => id === index)
-    )
-  )
-    .join('') : '';
+  const template = comments.length
+    ? comments.map((index) => createComment(listComments.find(
+      ({ id }) => id === index)))
+      .join('')
+    : '';
   return `<ul class="film-details__comments-list">${template}</ul>`;
 };
 

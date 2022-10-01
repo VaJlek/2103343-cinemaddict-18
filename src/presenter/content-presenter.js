@@ -1,6 +1,5 @@
 import { render, remove, RenderPosition } from '../framework/render.js';
 
-//import NavigationView from '../view/navigation-view.js';
 import FilmListContainerView from '../view/film-list-container-view.js';
 import FilmListView from '../view/film-list-view.js';
 import FilmsView from '../view/films-view.js';
@@ -86,8 +85,8 @@ export default class ContentPresenter {
 
   #handleModeChange = () => {
     this.#filmCardPresenter.forEach((presenter) => presenter.resetView());
-    this.#filmCardTopRatedPresenter.forEach((presenter) => presenter.resetView());
-    this.#filmCardMostCommentedPresenter.forEach((presenter) => presenter.resetView());
+    //this.#filmCardTopRatedPresenter.forEach((presenter) => presenter.resetView());
+    //this.#filmCardMostCommentedPresenter.forEach((presenter) => presenter.resetView());
   };
 
   #handleViewAction = (actionType, updateType, update) => {
