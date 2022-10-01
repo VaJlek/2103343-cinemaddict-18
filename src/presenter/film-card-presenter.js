@@ -84,7 +84,7 @@ export default class FilmCardPresenter {
     this.#film.userDetails.watchlist = !this.#film.userDetails.watchlist;
     this.#changeData(
       UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
+      UpdateType.PATCH,
       this.#film,);
   };
 
@@ -129,7 +129,6 @@ export default class FilmCardPresenter {
 
   #renderFilmDetails = () => {
     if (this.#mode !== Mode.DEFAULT) {
-      remove(this.#filmDetailsComponent);
 
       this.#hideOverflow();
 
