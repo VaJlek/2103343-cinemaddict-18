@@ -74,7 +74,6 @@ export default class FilmCardView extends AbstractView{
 
   #clickHandler = (evt) => {
     evt.preventDefault();
-    console.log('## click3: ', this._callback.click);
     this._callback.click();
   };
 
@@ -87,7 +86,6 @@ export default class FilmCardView extends AbstractView{
 
   #watchlistClickHandler = (evt) => {
     evt.preventDefault();
-    console.log('## click: ', this._callback.watchlistClick);
     this._callback.watchlistClick();
   };
 

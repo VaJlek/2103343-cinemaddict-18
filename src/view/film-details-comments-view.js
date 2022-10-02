@@ -33,8 +33,8 @@ const createCountComments = (count) => `<h3 class="film-details__comments-title"
 ${count ? count : 0}</span></h3>`;
 
 const createFilmCommentsTemplate = (state) => {
-  const {listComments, emotion, message} = state.comments;
-  const {comments} = state.comments.film;
+  const {listComments, emotion, message} = state;
+  const {comments} = state.film;
   const isChecked = (current, type) => (current === type ? 'checked' : '');
   const emojiLabelTemplate = emotion ? `<img src="images/emoji/${emotion}.png" width="55" height="55" alt="emoji-smile">` : '';
 
@@ -76,7 +76,7 @@ export default class FilmDetailsCommentsView extends AbstractStatrfulView{
 
   constructor(film, comments) {
     super();
-    this._state.comments = FilmDetailsCommentsView.parseCommentToState(film, comments);
+    this._state = FilmDetailsCommentsView.parseCommentToState(film, comments);
     this._restoreHandlers();
   }
 
@@ -90,7 +90,7 @@ export default class FilmDetailsCommentsView extends AbstractStatrfulView{
       return;
     }
     evt.preventDefault();
-    this._state.comments.emotion = evt.target.dataset.emotion;
+    this._state.emotion = evt.target.dataset.emotion;
     this.updateElement({ emotion: evt.target.dataset.emotion});
 
   };
@@ -160,6 +160,6 @@ export default class FilmDetailsCommentsView extends AbstractStatrfulView{
 
   static parseStateToComment = (state) => ({
     'film': state.film,
-    'comments': state.comments.message
+    'comments': state.message
   });
 }
