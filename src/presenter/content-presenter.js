@@ -11,6 +11,7 @@ import FooterView from '../view/footer-view.js';
 //import FilmsListMostCommentedView from '../view/films-list-most-commented-view.js';
 
 import FilmCardPresenter from './film-card-presenter.js';
+import FilmDetailsPresenter from './film-details-presenter.js';
 import { sortDate, sortRating} from '../utils/utils.js';
 import { SortType, UpdateType, UserAction, FilterType } from '../const.js';
 import { filter } from '../utils/filter.js';
@@ -42,6 +43,7 @@ export default class ContentPresenter {
   #renderedFilmsCount = FILMS_COUNT_PER_STEP;
 
   #filmCardPresenter = new Map();
+  #filmDetailsPresenter = null;
 
   //#filmCardTopRatedPresenter = new Map();
   //#filmCardMostCommentedPresenter = new Map();
@@ -56,6 +58,10 @@ export default class ContentPresenter {
     this.#filterModel = filterModel;
     this.#footerContainer = footer;
 
+    this.#filmDetailsPresenter = new FilmDetailsPresenter(
+      this.#commentsModel,
+      this.#handleViewAction,
+    );
     this.#moviesModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
   }
@@ -92,6 +98,10 @@ export default class ContentPresenter {
   #handleViewAction = (actionType, updateType, update) => {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
+        this.#moviesModel.updateFilm(updateType, update);
+        break;
+      case UserAction.UPDATE_FILM_DETAILS:
+        this.#filmDetailsPresenter.init(update);
         this.#moviesModel.updateFilm(updateType, update);
         break;
       case UserAction.ADD_COMMENT:
@@ -186,9 +196,8 @@ export default class ContentPresenter {
   #renderFilmCard = (film) => {
     const filmCardPresenter = new FilmCardPresenter(
       this.#handleViewAction,
-      this.#handleResetView,
-      this.#filmListContainerComponent.element,//this.#contentContainer,
-      this.#commentsModel,
+      this.#filmListContainerComponent.element,
+      this.#filmDetailsPresenter,
     );
     filmCardPresenter.init(film); //, container);
     /*

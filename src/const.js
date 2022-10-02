@@ -20,6 +20,7 @@ const SortType = {
 
 const UserAction = {
   UPDATE_FILM: 'UPDATE_FILM',
+  UPDATE_FILM_DETAILS: 'UPDATE_FILM_DETAILS',
   ADD: 'ADD_COMMENT',
   DELETE: 'DELETE_COMMENT',
 };
@@ -30,10 +31,16 @@ const UpdateType = {
   MAJOR: 'MAJOR',
 };
 
+const Mode = {
+  DEFAULT: 'default',
+  POPUP: 'popup',
+};
+
 export {
   FilterType,
   filterTypeToText,
   SortType,
   UserAction,
-  UpdateType
+  UpdateType,
+  Mode
 };
