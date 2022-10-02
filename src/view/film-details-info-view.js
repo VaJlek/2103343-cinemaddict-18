@@ -1,7 +1,7 @@
 import AbstractStatrfulView from '../framework/view/abstract-stateful-view.js';
 import { humanizeToDate, formatDuration } from '../utils/utils.js';
 
-const createFilmDetailsTemplate = (data) => {
+const createFilmDetailsTemplate = (state) => {
 
   const {
     filmInfo: {
@@ -18,7 +18,7 @@ const createFilmDetailsTemplate = (data) => {
       description
     },
     userDetails: { watchlist, alreadyWatched, favorite}
-  } = data;
+  } = state;
 
   const normDate = humanizeToDate(date);
   const duration = formatDuration(runtime);

@@ -35,7 +35,7 @@ ${count ? count : 0}</span></h3>`;
 const createFilmCommentsTemplate = (state) => {
   const {listComments, emotion, message} = state.comments;
   const {comments} = state.comments.film;
-
+  const isChecked = (current, type) => (current === type ? 'checked' : '');
   const emojiLabelTemplate = emotion ? `<img src="images/emoji/${emotion}.png" width="55" height="55" alt="emoji-smile">` : '';
 
   return `<div class="film-details__bottom-container">
@@ -49,21 +49,21 @@ const createFilmCommentsTemplate = (state) => {
       <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${message ? he.encode(message) : ''}</textarea>
     </label>
     <div class="film-details__emoji-list">
-      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
+      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" ${isChecked(emotion, 'smile',)}>
       <label class="film-details__emoji-label" for="emoji-smile">
-        <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
+        <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji" data-emotion="smile">
       </label>
-      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
+      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping"  ${isChecked(emotion, 'sleeping',)}>
       <label class="film-details__emoji-label" for="emoji-sleeping">
-        <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
+        <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji" data-emotion="sleeping">
       </label>
-      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
+      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke" ${isChecked(emotion, 'puke',)}>
       <label class="film-details__emoji-label" for="emoji-puke">
-        <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
+        <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji" data-emotion="puke">
       </label>
-      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
+      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry" ${isChecked(emotion, 'angry',)}>
       <label class="film-details__emoji-label" for="emoji-angry">
-        <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
+        <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji" data-emotion="angry">
       </label>
     </div>
     </form>
@@ -86,10 +86,13 @@ export default class FilmDetailsCommentsView extends AbstractStatrfulView{
 
 
   #emojiClickHandler = (evt) => {
-    if (evt.target.classList.contains('film-details__emoji-item')) {
-      this._state.comments.emotion = evt.target.value;
-      this.updateElement({...this._state.comments.emotion, emotion: evt.target.value});
+    if (evt.target.tagName !== 'IMG') {
+      return;
     }
+    evt.preventDefault();
+    this._state.comments.emotion = evt.target.dataset.emotion;
+    this.updateElement({ emotion: evt.target.dataset.emotion});
+
   };
 
   #inputHandler = (evt) => {

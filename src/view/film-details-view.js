@@ -41,7 +41,6 @@ export default class FilmDetailsView extends AbstractStatefulView{
 
   #watchlistClickHandler = (evt) => {
     evt.preventDefault();
-    console.log('## click: ', this._callback.watchlistClick);
     this._callback.watchlistClick();
     this.#restoreScrollPosition();
   };

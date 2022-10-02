@@ -191,6 +191,7 @@ export default class ContentPresenter {
       this.#commentsModel,
     );
     filmCardPresenter.init(film, container);
+    console.log(film);
 
     switch (container) {
       case this.#filmsListTopRatedContainerComponent.element:
