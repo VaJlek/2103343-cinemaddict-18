@@ -125,7 +125,6 @@ export default class FilmDetailsInfoView extends AbstractView{
 
   #watchlistClickHandler = (evt) => {
     evt.preventDefault();
-    console.log('## click2: ', this._callback.watchlistClick);
     this._callback.watchlistClick();
   };
 

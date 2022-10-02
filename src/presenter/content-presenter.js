@@ -185,7 +185,6 @@ export default class ContentPresenter {
 
   #renderFilmCard = (film) => {
     const filmCardPresenter = new FilmCardPresenter(
-      film,
       this.#handleViewAction,
       this.#handleResetView,
       this.#filmListContainerComponent.element,//this.#contentContainer,

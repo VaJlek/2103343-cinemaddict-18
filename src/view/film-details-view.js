@@ -8,6 +8,11 @@ export default class FilmDetailsView extends AbstractView{
     return createFilmDetailsTemplate();
   }
 
+  closeAllPopups = () => {
+    document.querySelectorAll('.film-details')
+      .forEach((node) => node.remove());
+  };
+
   setCloseButtonClickHandler = (callback) => {
     this._callback.closeButtonClick = callback;
     this.element
