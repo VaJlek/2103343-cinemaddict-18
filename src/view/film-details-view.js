@@ -33,23 +33,23 @@ const createComments = (comments, listComments) => {
 const createCountComments = (count) => `<h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">
 ${count ? count : 0}</span></h3>`;
 
-const createFilmDetailsInfoTemplate = (film) => {
-  const {
-    filmInfo: {
-      title,
-      totalRating,
-      poster,
-      ageRating,
-      director,
-      writers,
-      actors,
-      release: { date, releaseCountry},
-      runtime,
-      genre,
-      description
-    },
-    userDetails: { watchlist, alreadyWatched, favorite}
-  } = film;
+const createFilmDetailsTemplate = ({film, listComments, emotion, message}) => {
+
+  const { comments, filmInfo, userDetails } = film;
+  const { title,
+    totalRating,
+    poster,
+    ageRating,
+    director,
+    writers,
+    actors,
+    release: { date, releaseCountry},
+    runtime,
+    genre,
+    description
+  } = filmInfo;
+  const { watchlist, alreadyWatched, favorite} = userDetails;
+
   const normDate = humanizeToDate(date);
   const duration = formatDuration(runtime);
 
@@ -63,8 +63,13 @@ const createFilmDetailsInfoTemplate = (film) => {
     ? 'film-details__control-button--active'
     : '';
 
-  return `
-        <div class="film-details__top-container">
+  const isChecked = (current, type) => (current === type ? 'checked' : '');
+  const emojiLabelTemplate = emotion ? `<img src="images/emoji/${emotion}.png" width="55" height="55" alt="emoji-smile">` : '';
+
+  return `<section class="film-details">
+          <div class="film-details__inner">
+
+       <div class="film-details__top-container">
         <div class="film-details__close">
           <button class="film-details__close-btn" type="button">close</button>
         </div>
@@ -130,19 +135,8 @@ const createFilmDetailsInfoTemplate = (film) => {
           <button type="button" class="film-details__control-button film-details__control-button--watched  ${detailsWatchedClassName}" id="watched" name="watched">Already watched</button>
           <button type="button" class="film-details__control-button film-details__control-button--favorite ${detailsFavoriteClassName}" id="favorite" name="favorite">Add to favorites</button>
         </section>
-    </div>`;
-};
+    </div>
 
-
-const createFilmDetailsTemplate = (state) => {
-  const {film, listComments, emotion, message} = state;
-  const {comments} = state.film;
-  const isChecked = (current, type) => (current === type ? 'checked' : '');
-  const emojiLabelTemplate = emotion ? `<img src="images/emoji/${emotion}.png" width="55" height="55" alt="emoji-smile">` : '';
-
-  return `<section class="film-details">
-          <div class="film-details__inner">
-          ${createFilmDetailsInfoTemplate(film)}
   <div class="film-details__bottom-container">
   <section class="film-details__comments-wrap">
     ${createCountComments(comments.length)}

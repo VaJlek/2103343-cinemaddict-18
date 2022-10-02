@@ -86,6 +86,8 @@ export default class FilmDetailsPresenter {
 
   #handleAddCommentClick = (comment) => {
     this.#film.comments.push(comment.id);
+
+    this.#moviesModel.updateFilm(UpdateType.PATCH, this.#film);
     this.#commentsModel.addComment(UpdateType.PATCH, comment);
   };
 
@@ -94,15 +96,20 @@ export default class FilmDetailsPresenter {
 
     const index = this.#film.comments.findIndex((commentId) => id === commentId);
     this.#film.comments.splice(index, 1);
+
+    this.#moviesModel.updateFilm(UpdateType.PATCH, this.#film);
     this.#commentsModel.deleteComment(UpdateType.PATCH, id);
 
   };
 
-  #updateDetailsComponent = () => this.#filmDetailsComponent.updateElement(
-    {
-      film: this.#film,
-      comments: this.#commentsModel.comments,
-    });
+  #updateDetailsComponent = () => {
+    this.#filmDetailsComponent.updateElement(
+      {
+        film: this.#film,
+        listComments: this.#commentsModel.comments,
+        emotion: null,
+        message: null
+      });};
 
   #handleModelEvent = (updateType, data) => {
 

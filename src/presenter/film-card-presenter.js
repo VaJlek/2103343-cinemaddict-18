@@ -29,7 +29,6 @@ export default class FilmCardPresenter {
 
     this.#filmCardComponent = new FilmCardView(film);
 
-
     render(this.#filmCardComponent, this.#contentContainer);
 
     this.#filmCardComponent.setClickHandler(this.#handleFilmCardLinkClick);
