@@ -134,13 +134,13 @@ export default class FilmCardPresenter {
   };
 
   #renderFilmDetails = () => {
-
     if (this.#mode !== Mode.DEFAULT) {
-
-      const prevFilmDetailsComponent = this.#filmDetailsComponent;
       this.#hideOverflow();
 
       this.#resetAllView();
+
+      const prevFilmDetailsComponent = this.#filmDetailsComponent;
+
 
       this.#filmDetailsComponent = new FilmDetailsView();
       this.#filmDetailsInfoComponent = new FilmDetailsInfoView(this.#film);
@@ -151,9 +151,9 @@ export default class FilmCardPresenter {
       this.#renderFilmComments();
 
       this.#filmDetailsComponent.setCloseButtonClickHandler(this.#onFilmDetailsClosePopupButton);
-      this.#filmDetailsComponent.setWatchlistClickHandler(this.#handleWatchlistClick);
-      this.#filmDetailsComponent.setAlreadyWatchedClickHandler(this.#handleAlreadyWatchedClick);
-      this.#filmDetailsComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
+      this.#filmDetailsInfoComponent.setWatchlistClickHandler(this.#handleWatchlistClick);
+      this.#filmDetailsInfoComponent.setAlreadyWatchedClickHandler(this.#handleAlreadyWatchedClick);
+      this.#filmDetailsInfoComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
 
 
       document.addEventListener('keydown', this.#onEscKeyDown);
@@ -162,6 +162,7 @@ export default class FilmCardPresenter {
         render(this.#filmDetailsComponent, this.#contentContainer, RenderPosition.AFTEREND);
         render(this.#filmDetailsInfoComponent, this.#filmDetailsComponent.element);
         render(this.#filmDetailsCommentsComponent, this.#filmDetailsInfoComponent.element, RenderPosition.BEFOREEND);
+        this.#renderFilmComments();
         this.#mode = Mode.POPUP;
       } else {
         replace(this.#filmDetailsComponent, prevFilmDetailsComponent);

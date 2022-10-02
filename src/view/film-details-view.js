@@ -16,7 +16,9 @@ export default class FilmDetailsView extends AbstractStatefulView{
   }
 
   #restoreScrollPosition = () => {
-    document.querySelector('.film-details').scrollTop = this._state.scrollTop;
+    this._setState({
+      scroll: this.element.scrollTop
+    });
   };
 
   setCloseButtonClickHandler = (callback) => {
@@ -26,50 +28,10 @@ export default class FilmDetailsView extends AbstractStatefulView{
       .addEventListener('click', this.#clickCloseButtonHandler);
   };
 
-  #clickCloseButtonHandler = (evt) => {
-    evt.preventDefault();
+  #clickCloseButtonHandler = () => {
     this._callback.closeButtonClick();
   };
 
-
-  setWatchlistClickHandler = (callback) => {
-    this._callback.watchlistClick = callback;
-    this.element
-      .querySelector('.film-details__control-button--watchlist')
-      .addEventListener('click', this.#watchlistClickHandler);
-  };
-
-  #watchlistClickHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.watchlistClick();
-    this.#restoreScrollPosition();
-  };
-
-  setAlreadyWatchedClickHandler = (callback) => {
-    this._callback.alreadyWatchedClick = callback;
-    this.element
-      .querySelector('.film-details__control-button--watched')
-      .addEventListener('click', this.#alreadyWatchedClickHandler);
-  };
-
-  #alreadyWatchedClickHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.alreadyWatchedClick();
-    this.#restoreScrollPosition();
-  };
-
-  setFavoriteClickHandler = (callback) => {
-    this._callback.favoriteClick = callback;
-    this.element
-      .querySelector('.film-details__control-button--favorite')
-      .addEventListener('click', this.#favoriteClickHandler);
-  };
-
-  #favoriteClickHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.favoriteClick();
-    this.#restoreScrollPosition();
-  };
 
   #scrollHandler = (evt) => {
     evt.preventDefault();
@@ -83,12 +45,11 @@ export default class FilmDetailsView extends AbstractStatefulView{
 
   _restoreHandlers = () => {
     this.#setHandlers();
-    this.setWatchlistClickHandler(this._callback.watchlistClick);
-    this.setAlreadyWatchedClickHandler(this._callback.alreadyWatchedClick);
-    this.setFavoriteClickHandler(this._callback.favoriteClick);
+    this.element.scrollTop = this._state.scroll;
+    this.element.addEventListener('scroll', this.#restoreScrollPosition);
   };
 
-  static parseFilmToState = (film) => ({...film, scrollTop: 0,}
+  static parseFilmToState = (film) => ({...film, scroll: 0,}
   );
 
   static parseStateToFilm = (state) => ({ ...state });

@@ -77,7 +77,7 @@ export default class FilmDetailsCommentsView extends AbstractStatrfulView{
   constructor(film, comments) {
     super();
     this._state.comments = FilmDetailsCommentsView.parseCommentToState(film, comments);
-    this.#setHandlers();
+    this._restoreHandlers();
   }
 
   get template() {
@@ -102,7 +102,7 @@ export default class FilmDetailsCommentsView extends AbstractStatrfulView{
     });
   };
 
-  #setHandlers = () => {
+  _restoreHandlers = () => {
     this.element
       .querySelector('.film-details__emoji-list')
       .addEventListener('click', this.#emojiClickHandler);
@@ -151,10 +151,6 @@ export default class FilmDetailsCommentsView extends AbstractStatrfulView{
     this._callback.deleteComment(evt.target.dataset.id);
   };
 
-  _restoreHandlers = () => {
-    this.#setHandlers();
-  };
-
   static parseCommentToState = (film, comments) => ({
     film,
     listComments: comments,
@@ -164,6 +160,6 @@ export default class FilmDetailsCommentsView extends AbstractStatrfulView{
 
   static parseStateToComment = (state) => ({
     'film': state.film,
-    'comments': state.comments
+    'comments': state.comments.message
   });
 }
