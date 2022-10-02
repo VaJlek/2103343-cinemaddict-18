@@ -17,20 +17,6 @@ const getRandomBoolean = () => Boolean(getRandomInteger(0, 1));
 const getFilteredFilmsCount = (filters, name) =>
   filters.find((filter) => filter.name === name).count;
 
-const updateItem = (items, update) => {
-  const index = items.findIndex((item) => item.id === update.id);
-
-  if (index === -1) {
-    return items;
-  }
-
-  return [
-    ...items.slice(0, index),
-    update,
-    ...items.slice(index + 1),
-  ];
-};
-
 const humanizeToYear = (dueDate) => dayjs(dueDate).format('YYYY');
 
 const humanizeToDate = (dueDate) => dayjs(dueDate).format('DD MMMM YYYY');
@@ -67,4 +53,14 @@ const sortRating = (filmA, filmB) => {
   return weight ?? dayjs(filmB.filmInfo.totalRating).diff(dayjs(filmA.filmInfo.totalRating));
 };
 
-export {getRandomInteger, getRandomBoolean, getFilteredFilmsCount, updateItem, sortDate, sortRating, humanizeToYear,humanizeToDate,humanizeToDateWithTime, formatDuration,};
+export {
+  getRandomInteger,
+  getRandomBoolean,
+  getFilteredFilmsCount,
+  sortDate,
+  sortRating,
+  humanizeToYear,
+  humanizeToDate,
+  humanizeToDateWithTime,
+  formatDuration,
+};
