@@ -21,7 +21,7 @@ const createComment = (message) => message ?
   </li>` : '';
 
 const createComments = (comments, listComments) => {
-  listComments = listComments.filter(Boolean);
+  //listComments = listComments.filter(Boolean);
   const template = comments.length
     ? comments.map((index) => createComment(listComments.find(
       ({ id }) => id === index)))
@@ -184,7 +184,7 @@ export default class FilmDetailsView extends AbstractStatrfulView{
 
   constructor(film, comments) {
     super();
-    this._state = FilmDetailsView.parseCommentToState(film, comments);
+    this._state = FilmDetailsView.parseFilmsToState(film, comments);
     this._restoreHandlers();
   }
 
@@ -192,6 +192,50 @@ export default class FilmDetailsView extends AbstractStatrfulView{
     return createFilmDetailsTemplate(this._state);
   }
 
+  static parseFilmsToState = (film, comments) => ({
+    film,
+    listComments: comments,
+    emotion: null,
+    scroll: null,
+    message: null
+  });
+
+  static parseStateToFilms = (state) => ({
+    'film': state.film,
+    'comments': state.message
+  });
+
+  _restoreHandlers = () => {
+    this.element
+      .querySelector('.film-details__emoji-list')
+      .addEventListener('click', this.#emojiClickHandler);
+    this.element
+      .querySelector('.film-details__comment-input')
+      .addEventListener('input', this.#inputHandler);
+    this.element
+      .querySelector('.film-details__comments-list')
+      .addEventListener('click', this.#deleteCommentHandler);
+    this.element
+      .addEventListener('keydown', this.#addCommentHandler);
+    this.element
+      .querySelector('.film-details__control-button--watchlist')
+      .addEventListener('click', this.#watchlistClickHandler);
+    this.element
+      .querySelector('.film-details__control-button--watched')
+      .addEventListener('click', this.#alreadyWatchedClickHandler);
+    this.element
+      .querySelector('.film-details__control-button--favorite')
+      .addEventListener('click', this.#favoriteClickHandler);
+    this.element
+      .querySelector('.film-details__close-btn')
+      .addEventListener('click', this.#clickCloseButtonHandler);
+
+
+    this.element.scrollTop = this._state.scroll;
+    this.element
+      .addEventListener('scroll', this.#positionScrollHandler);
+
+  };
 
   #emojiClickHandler = (evt) => {
     if (evt.target.tagName !== 'IMG') {
@@ -208,25 +252,6 @@ export default class FilmDetailsView extends AbstractStatrfulView{
     this._setState({
       message: evt.target.value
     });
-  };
-
-  _restoreHandlers = () => {
-    this.element
-      .querySelector('.film-details__emoji-list')
-      .addEventListener('click', this.#emojiClickHandler);
-    this.element
-      .querySelector('.film-details__comment-input')
-      .addEventListener('input', this.#inputHandler);
-    this.element
-      .querySelector('.film-details__comments-list')
-      .addEventListener('click', this.#deleteCommentHandler);
-    this.element
-      .addEventListener('keydown', this.#addCommentHandler);
-
-    this.element.scrollTop = this._state.scroll;
-    this.element
-      .addEventListener('scroll', this.#positionScrollHandler);
-
   };
 
   setAddCommentHandler = (callback) => {
@@ -265,9 +290,6 @@ export default class FilmDetailsView extends AbstractStatrfulView{
 
   setWatchlistClickHandler = (callback) => {
     this._callback.watchlistClick = callback;
-    this.element
-      .querySelector('.film-details__control-button--watchlist')
-      .addEventListener('click', this.#watchlistClickHandler);
   };
 
   #watchlistClickHandler = (evt) => {
@@ -277,9 +299,6 @@ export default class FilmDetailsView extends AbstractStatrfulView{
 
   setAlreadyWatchedClickHandler = (callback) => {
     this._callback.alreadyWatchedClick = callback;
-    this.element
-      .querySelector('.film-details__control-button--watched')
-      .addEventListener('click', this.#alreadyWatchedClickHandler);
   };
 
   #alreadyWatchedClickHandler = (evt) => {
@@ -289,9 +308,6 @@ export default class FilmDetailsView extends AbstractStatrfulView{
 
   setFavoriteClickHandler = (callback) => {
     this._callback.favoriteClick = callback;
-    this.element
-      .querySelector('.film-details__control-button--favorite')
-      .addEventListener('click', this.#favoriteClickHandler);
   };
 
   #favoriteClickHandler = (evt) => {
@@ -301,9 +317,6 @@ export default class FilmDetailsView extends AbstractStatrfulView{
 
   setCloseButtonClickHandler = (callback) => {
     this._callback.closeButtonClick = callback;
-    this.element
-      .querySelector('.film-details__close-btn')
-      .addEventListener('click', this.#clickCloseButtonHandler);
   };
 
   #clickCloseButtonHandler = () => {
@@ -311,21 +324,7 @@ export default class FilmDetailsView extends AbstractStatrfulView{
   };
 
   #positionScrollHandler = () => {
-    this._setState({
-      scroll: this.element.scrollTop
+    this._setState({ scroll: this.element.scrollTop
     });
   };
-
-  static parseCommentToState = (film, comments) => ({
-    film,
-    listComments: comments,
-    emotion: null,
-    scroll: null,
-    message: null
-  });
-
-  static parseStateToComment = (state) => ({
-    'film': state.film,
-    'comments': state.message
-  });
 }

@@ -59,8 +59,8 @@ export default class ContentPresenter {
     this.#footerContainer = footer;
 
     this.#filmDetailsPresenter = new FilmDetailsPresenter(
+      this.#moviesModel,
       this.#commentsModel,
-      this.#handleViewAction,
     );
     this.#moviesModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
@@ -87,12 +87,6 @@ export default class ContentPresenter {
     this.#renderContent();
     this.#renderFooter();
 
-  };
-
-  #handleResetView = () => {
-    this.#filmCardPresenter.forEach((presenter) => presenter.resetView());
-    //this.#filmCardTopRatedPresenter.forEach((presenter) => presenter.resetView());
-    //this.#filmCardMostCommentedPresenter.forEach((presenter) => presenter.resetView());
   };
 
   #handleViewAction = (actionType, updateType, update) => {

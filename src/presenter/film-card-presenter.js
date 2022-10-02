@@ -24,14 +24,13 @@ export default class FilmCardPresenter {
   init(film) {
 
     this.#film = film;
-    //this.#container = container;
 
     const prevFilmCardComponent = this.#filmCardComponent;
 
     this.#filmCardComponent = new FilmCardView(film);
 
 
-    render(this.#filmCardComponent, this.#contentContainer);//this.#container);
+    render(this.#filmCardComponent, this.#contentContainer);
 
     this.#filmCardComponent.setClickHandler(this.#handleFilmCardLinkClick);
     this.#filmCardComponent.setWatchlistClickHandler(this.#handleWatchlistClick);
@@ -40,7 +39,7 @@ export default class FilmCardPresenter {
 
     if(prevFilmCardComponent === null) {
 
-      render(this.#filmCardComponent, this.#contentContainer);// this.#container);
+      render(this.#filmCardComponent, this.#contentContainer);
       return;
     } else {
       replace(this.#filmCardComponent, prevFilmCardComponent);

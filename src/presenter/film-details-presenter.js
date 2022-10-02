@@ -1,26 +1,23 @@
 import { remove, render, replace } from '../framework/render.js';
-import {UserAction, UpdateType, Mode} from '../const.js';
+import { UpdateType, Mode} from '../const.js';
 
-//import FilmDetailsInfoView from '../view/film-details-info-view.js';
 import FilmDetailsView from '../view/film-details-view.js';
-//import FilmDetailsCommentsView from '../view/film-details-comments-view.js';
+
 
 export default class FilmDetailsPresenter {
   #film = null;
   #filmDetailsComponent = null;
-  //#filmDetailsInfoComponent = null;
-  //#filmDetailsCommentsComponent = null;
-  #changeData = null;
   #commentsModel = null;
+  #moviesModel = null;
 
-  constructor(commentsModel, changeData) {
+  constructor(moviesModel, commentsModel) {
     this.#commentsModel = commentsModel;
-    this.#changeData = changeData;
+    this.#moviesModel = moviesModel;
   }
 
   init = (film) => {
     this.#film = film;
-
+    this.#moviesModel.addObserver(this.#handleModelEvent);
     this.#commentsModel.addObserver(this.#handleModelEvent);
 
     const prevFilmDetailsComponent = this.#filmDetailsComponent;
@@ -72,29 +69,19 @@ export default class FilmDetailsPresenter {
 
   #handleWatchlistClick = () => {
     this.#film.userDetails.watchlist = !this.#film.userDetails.watchlist;
-    this.#changeData(
-      UserAction.UPDATE_FILM_DETAILS,
-      UpdateType.MINOR,
-      this.#film,);
+    this.#moviesModel.updateFilm(UpdateType.MINOR, this.#film);
 
   };
 
   #handleAlreadyWatchedClick = () => {
     this.#film.userDetails.alreadyWatched = !this.#film.userDetails.alreadyWatched;
-    this.#changeData(
-      UserAction.UPDATE_FILM_DETAILS,
-      UpdateType.MINOR,
-      this.#film,);
+    this.#moviesModel.updateFilm(UpdateType.MINOR, this.#film);
 
   };
 
   #handleFavoriteClick = () => {
     this.#film.userDetails.favorite = !this.#film.userDetails.favorite;
-    this.#changeData(
-      UserAction.UPDATE_FILM_DETAILS,
-      UpdateType.MINOR,
-      this.#film,
-    );
+    this.#moviesModel.updateFilm(UpdateType.MINOR, this.#film);
   };
 
   #handleAddCommentClick = (comment) => {
@@ -140,29 +127,3 @@ export default class FilmDetailsPresenter {
 }
 
 
-/*
-
-
-  /*
-  #handleAddCommentClick = (comment) => {
-    this.#film.comments.push(comment.id);
-    const film = this.#film;
-    this.#changeData(
-      UserAction.ADD_COMMENT,
-      UpdateType.PATCH,
-      { comment, film }
-    );
-  };
-
-
-  #handleDeleteCommentClick = (id) => {
-
-    const index = this.#film.comments.findIndex((commentId) => id === commentId);
-    this.#film.comments.splice(index, 1);
-    const film = this.#film;
-    this.#changeData(
-      UserAction.DELETE_COMMENT,
-      UpdateType.MINOR,
-      { id, film }
-    );
-  }; */
