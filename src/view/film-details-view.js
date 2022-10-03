@@ -1,10 +1,9 @@
 import AbstractStatrfulView from '../framework/view/abstract-stateful-view.js';
 import he from 'he';
 import { humanizeToDateWithTime, humanizeToDate, formatDuration } from '../utils/utils.js';
-import { nanoid } from 'nanoid';
 
 
-const createComment = (message) => message ?
+const createComment = (message, deleteId) => message ?
   `<li class="film-details__comment">
     <span class="film-details__comment-emoji">
     <img src="./images/emoji/${message.emotion}.png" width="55" height="55" alt="emoji-${message.emotion}">
@@ -15,16 +14,15 @@ const createComment = (message) => message ?
         <span class="film-details__comment-author">${message.author}</span>
         <span class="film-details__comment-day">${humanizeToDateWithTime(message.date)}</span>
         <button class="film-details__comment-delete"
-        data-id ="${message.id}">Delete</button>
+        data-id ="${message.id}" ${deleteId ? ' disabled' : ''}>${deleteId === message.id ? 'Deleting...' : 'Delete'}</button>
       </p>
     </div>
   </li>` : '';
 
-const createComments = (comments, listComments) => {
-  //listComments = listComments.filter(Boolean);
+const createComments = (comments, listComments, deleteId) => {
   const template = comments.length
-    ? comments.map((index) => createComment(listComments.find(
-      ({ id }) => id === index)))
+    ? comments.map((index) => createComment(listComments?.find(
+      ({ id }) => id === index), deleteId))
       .join('')
     : '';
   return `<ul class="film-details__comments-list">${template}</ul>`;
@@ -33,7 +31,7 @@ const createComments = (comments, listComments) => {
 const createCountComments = (count) => `<h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">
 ${count ? count : 0}</span></h3>`;
 
-const createFilmDetailsTemplate = ({film, listComments, emotion, message}) => {
+const createFilmDetailsTemplate = ({film, comments: listComments, emotion, message, isBlocked, deleteId}) => {
 
   const { comments, filmInfo, userDetails } = film;
   const { title,
@@ -131,36 +129,36 @@ const createFilmDetailsTemplate = ({film, listComments, emotion, message}) => {
 </div>
 </div>
 <section class="film-details__controls">
-          <button type="button" class="film-details__control-button film-details__control-button--watchlist ${detailsWatchlistClassName}" id="watchlist" name="watchlist">Add to watchlist</button>
-          <button type="button" class="film-details__control-button film-details__control-button--watched  ${detailsWatchedClassName}" id="watched" name="watched">Already watched</button>
-          <button type="button" class="film-details__control-button film-details__control-button--favorite ${detailsFavoriteClassName}" id="favorite" name="favorite">Add to favorites</button>
+          <button type="button" class="film-details__control-button film-details__control-button--watchlist ${detailsWatchlistClassName}" id="watchlist" name="watchlist" ${isBlocked ? ' disabled' : ''}>Add to watchlist</button>
+          <button type="button" class="film-details__control-button film-details__control-button--watched  ${detailsWatchedClassName}" id="watched" name="watched" ${isBlocked ? ' disabled' : ''}>Already watched</button>
+          <button type="button" class="film-details__control-button film-details__control-button--favorite ${detailsFavoriteClassName}" id="favorite" name="favorite" ${isBlocked ? ' disabled' : ''}>Add to favorites</button>
         </section>
     </div>
 
   <div class="film-details__bottom-container">
   <section class="film-details__comments-wrap">
     ${createCountComments(comments.length)}
-    ${createComments(comments, listComments)}
+    ${createComments(comments, listComments, deleteId)}
     <form class="film-details__new-comment" action="" method="get">
 
     <div class="film-details__add-emoji-label">${emojiLabelTemplate}</div>
     <label class="film-details__comment-label">
-      <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${message ? he.encode(message) : ''}</textarea>
+      <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" ${isBlocked ? 'disabled' : ''}>${message ? he.encode(message) : ''}</textarea>
     </label>
     <div class="film-details__emoji-list">
-      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" ${isChecked(emotion, 'smile',)}>
+      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" ${isChecked(emotion, 'smile',)}  ${isBlocked ? 'disabled' : ''}>
       <label class="film-details__emoji-label" for="emoji-smile">
         <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji" data-emotion="smile">
       </label>
-      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping"  ${isChecked(emotion, 'sleeping',)}>
+      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping"  ${isChecked(emotion, 'sleeping',)}  ${isBlocked ? 'disabled' : ''}>
       <label class="film-details__emoji-label" for="emoji-sleeping">
         <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji" data-emotion="sleeping">
       </label>
-      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke" ${isChecked(emotion, 'puke',)}>
+      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke" ${isChecked(emotion, 'puke',)}  ${isBlocked ? 'disabled' : ''}>
       <label class="film-details__emoji-label" for="emoji-puke">
         <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji" data-emotion="puke">
       </label>
-      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry" ${isChecked(emotion, 'angry',)}>
+      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry" ${isChecked(emotion, 'angry',)}  ${isBlocked ? 'disabled' : ''}>
       <label class="film-details__emoji-label" for="emoji-angry">
         <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji" data-emotion="angry">
       </label>
@@ -176,9 +174,9 @@ const createFilmDetailsTemplate = ({film, listComments, emotion, message}) => {
 
 export default class FilmDetailsView extends AbstractStatrfulView{
 
-  constructor(film, comments) {
+  constructor(film) {
     super();
-    this._state = FilmDetailsView.parseFilmsToState(film, comments);
+    this._state = FilmDetailsView.parseFilmsToState(film);
     this._restoreHandlers();
   }
 
@@ -186,17 +184,19 @@ export default class FilmDetailsView extends AbstractStatrfulView{
     return createFilmDetailsTemplate(this._state);
   }
 
-  static parseFilmsToState = (film, comments) => ({
+  static parseFilmsToState = (film) => ({
     film,
-    listComments: comments,
+    comments: [],
     emotion: null,
     scroll: null,
-    message: null
+    message: null,
+    isBlocked: false,
+    deleteId: null
   });
 
   static parseStateToFilms = (state) => ({
     'film': state.film,
-    'comments': state.message
+    'comments': state.comments
   });
 
   _restoreHandlers = () => {
@@ -232,7 +232,7 @@ export default class FilmDetailsView extends AbstractStatrfulView{
   };
 
   #emojiClickHandler = (evt) => {
-    if (evt.target.tagName !== 'IMG') {
+    if (evt.target.tagName !== 'IMG' || this._state.isBlocked) {
       return;
     }
     evt.preventDefault();
@@ -261,13 +261,12 @@ export default class FilmDetailsView extends AbstractStatrfulView{
     const emotion = this._state.emotion;
 
     const comment = {
-      'id': nanoid(),
-      'author': 'Movie Buff',
       'comment': message,
-      'date': new Date,
       emotion
     };
+    this.updateElement({ isBlocked: true });
     this._callback.addComment(comment);
+    this._setState({ isBlocked: false });
   };
 
   setDeleteCommentHandler = (callback) => {
@@ -279,7 +278,9 @@ export default class FilmDetailsView extends AbstractStatrfulView{
       return;
     }
     evt.preventDefault();
+    this.updateElement({ deleteId: evt.target.dataset.id });
     this._callback.deleteComment(evt.target.dataset.id);
+    this._setState({ deleteId: null });
   };
 
   setWatchlistClickHandler = (callback) => {

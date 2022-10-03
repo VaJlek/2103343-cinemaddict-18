@@ -1,4 +1,5 @@
 import { render, remove, RenderPosition } from '../framework/render.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 
 import FilmListContainerView from '../view/film-list-container-view.js';
 import FilmListView from '../view/film-list-view.js';
@@ -6,6 +7,7 @@ import FilmsView from '../view/films-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import SortingView from '../view/sorting-view.js';
 import FooterView from '../view/footer-view.js';
+import LoadingView from '../view/loading-view.js';
 
 //import FilmsListTopRatedView from '../view/films-list-top-rated-view.js';
 //import FilmsListMostCommentedView from '../view/films-list-most-commented-view.js';
@@ -13,12 +15,15 @@ import FooterView from '../view/footer-view.js';
 import FilmCardPresenter from './film-card-presenter.js';
 import FilmDetailsPresenter from './film-details-presenter.js';
 import { sortDate, sortRating} from '../utils/utils.js';
-import { SortType, UpdateType, UserAction, FilterType } from '../const.js';
+import { SortType, UpdateType, UserAction, FilterType, TimeLimit } from '../const.js';
 import { filter } from '../utils/filter.js';
 
 const FILMS_COUNT_PER_STEP = 5;
 
 export default class ContentPresenter {
+
+  #loadingComponent = new LoadingView();
+  #uiBlocker = new UiBlocker(TimeLimit.LOWER_LIMIT, TimeLimit.UPPER_LIMIT);
 
   #contentContainer = null;
   #footerContainer = null;
@@ -44,12 +49,12 @@ export default class ContentPresenter {
 
   #filmCardPresenter = new Map();
   #filmDetailsPresenter = null;
-
   //#filmCardTopRatedPresenter = new Map();
   //#filmCardMostCommentedPresenter = new Map();
 
   #currentSortType = SortType.DEFAULT;
   #filterType = FilterType.ALL;
+  #isLoading = true;
 
   constructor(contentContainer, moviesModel, commentsModel, filterModel, footer){
     this.#contentContainer = contentContainer;
@@ -64,6 +69,7 @@ export default class ContentPresenter {
     );
     this.#moviesModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
+    this.#commentsModel.addObserver(this.#handleModelEvent);
   }
 
   get films() {
@@ -83,31 +89,27 @@ export default class ContentPresenter {
   }
 
   init = () => {
-
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
     this.#renderContent();
-    this.#renderFooter();
-
   };
 
-  #handleViewAction = (actionType, updateType, update) => {
+  #handleViewAction = async (actionType, updateType, update) => {
+    this.#uiBlocker.block();
+
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-        this.#moviesModel.updateFilm(updateType, update);
-        break;
-      case UserAction.UPDATE_FILM_DETAILS:
-        this.#filmDetailsPresenter.init(update);
-        this.#moviesModel.updateFilm(updateType, update);
-        break;
-      case UserAction.ADD_COMMENT:
-        this.#commentsModel.addComment(updateType, update.comment);
-        this.#moviesModel.updateFilm(updateType, update.film);
-        break;
-      case UserAction.DELETE_COMMENT:
-        this.#commentsModel.deleteComment(updateType, update.id);
-        this.#moviesModel.updateFilm(updateType, update.film);
+        try {
+          this.#filmCardPresenter.get(update.id)?.setSaving();
+          await this.#moviesModel.updateFilm(updateType, update);
+        } catch (err) {
+          this.#filmCardPresenter.get(update.id)?.setAborting();
+        }
         break;
     }
-
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, data) => {
@@ -123,7 +125,16 @@ export default class ContentPresenter {
         this.#clearFilmsList({resetRenderedFilmsCount: true, resetSortType: true});
         this.#renderContent();
         break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderContent();
+        break;
     }
+  };
+
+  #renderLoading = () => {
+    render(this.#loadingComponent, this.#contentContainer);
   };
   /*
   #renderFilmsListTopRated = () => {
@@ -267,7 +278,7 @@ export default class ContentPresenter {
 
     this.#renderSort();
     this.#renderFilmsList();
-
+    this.#renderFooter();
   };
 
 }
