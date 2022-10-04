@@ -48,11 +48,8 @@ const sortDate = (filmA, filmB) => {
   return weight ?? dayjs(filmB.filmInfo.release.date).diff(dayjs(filmA.filmInfo.release.date));
 };
 
-const sortRating = (filmA, filmB) => {
-  const weight = getWeightForNullDate(filmA.filmInfo.totalRating, filmB.filmInfo.totalRating);
-
-  return weight ?? dayjs(filmB.filmInfo.totalRating).diff(dayjs(filmA.filmInfo.totalRating));
-};
+const sortRating = (a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating;
+const sortComments = (a, b) => b.comments.length - a.comments.length;
 
 export {
   getRandomInteger,
@@ -60,6 +57,7 @@ export {
   getFilteredFilmsCount,
   sortDate,
   sortRating,
+  sortComments,
   humanizeToYear,
   humanizeToDate,
   humanizeToDateWithTime,

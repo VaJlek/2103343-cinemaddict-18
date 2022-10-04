@@ -11,17 +11,17 @@ export default class FilmCardPresenter {
   #film = null;
   #filmDetailsPresenter = null;
 
-  constructor( changeData, contentContainer, filmDetailsPresenter) {
+  constructor( changeData, filmDetailsPresenter) {
 
-    this.#contentContainer = contentContainer;
+    //this.#contentContainer = contentContainer;
     this.#changeData = changeData;
     this.#filmDetailsPresenter = filmDetailsPresenter;
   }
 
-  init(film) {
+  init(film, container) {
 
     this.#film = film;
-
+    this.#contentContainer = container;
     const prevFilmCardComponent = this.#filmCardComponent;
 
     this.#filmCardComponent = new FilmCardView(film);
