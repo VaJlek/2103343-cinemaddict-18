@@ -8,6 +8,7 @@ import ShowMoreButtonView from '../view/show-more-button-view.js';
 import SortingView from '../view/sorting-view.js';
 import FooterView from '../view/footer-view.js';
 import LoadingView from '../view/loading-view.js';
+import UserTitleView from '../view/user-title-view.js';
 
 //import FilmsListTopRatedView from '../view/films-list-top-rated-view.js';
 //import FilmsListMostCommentedView from '../view/films-list-most-commented-view.js';
@@ -15,7 +16,7 @@ import LoadingView from '../view/loading-view.js';
 import FilmCardPresenter from './film-card-presenter.js';
 import FilmDetailsPresenter from './film-details-presenter.js';
 import { sortDate, sortRating} from '../utils/utils.js';
-import { SortType, UpdateType, UserAction, FilterType, TimeLimit } from '../const.js';
+import { SortType, UpdateType, UserAction, FilterType, TimeLimit, RatingCountToName } from '../const.js';
 import { filter } from '../utils/filter.js';
 
 const FILMS_COUNT_PER_STEP = 5;
@@ -25,6 +26,7 @@ export default class ContentPresenter {
   #loadingComponent = new LoadingView();
   #uiBlocker = new UiBlocker(TimeLimit.LOWER_LIMIT, TimeLimit.UPPER_LIMIT);
 
+  #headerContainer = null;
   #contentContainer = null;
   #footerContainer = null;
 
@@ -36,6 +38,7 @@ export default class ContentPresenter {
   #contentComponent = null;
   #filmListComponent = null;
   #footerComponent = null;
+  #headerComponent = null;
 
 
   #filmListContainerComponent = new FilmListContainerView();
@@ -57,12 +60,13 @@ export default class ContentPresenter {
   #filterType = FilterType.ALL;
   #isLoading = true;
 
-  constructor(contentContainer, moviesModel, commentsModel, filterModel, footer){
+  constructor(contentContainer, moviesModel, commentsModel, filterModel, siteHeaderElement,siteFooterElement){
     this.#contentContainer = contentContainer;
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
     this.#filterModel = filterModel;
-    this.#footerContainer = footer;
+    this.#footerContainer = siteFooterElement;
+    this.#headerContainer = siteHeaderElement;
 
     this.#filmDetailsPresenter = new FilmDetailsPresenter(
       this.#moviesModel,
@@ -246,14 +250,14 @@ export default class ContentPresenter {
   };
 
   #renderFooter = () => {
-    const prevfooterComponent = this.#footerComponent;
+    const prevFooterComponent = this.#footerComponent;
     this.#footerComponent = new FooterView(this.#moviesModel.films.length);
-    if (prevfooterComponent === null){
+    if (prevFooterComponent === null){
       render(this.#footerComponent, this.#footerContainer);
       return;
     }
-    replace(this.#footerComponent, prevfooterComponent);
-    remove(prevfooterComponent);
+    replace(this.#footerComponent, prevFooterComponent);
+    remove(prevFooterComponent);
 
   };
 
@@ -271,8 +275,25 @@ export default class ContentPresenter {
     //this.#renderFilmsListMostCommented();
   };
 
-  #renderContent = () => {
+  #renderHeader = () => {
 
+    const prevHeaderComponent = this.#headerComponent;
+
+    const countWatched = filter[FilterType.HISTORY](this.#moviesModel.films).length;
+    const ratingName = RatingCountToName.find(({ count }) => count > countWatched).name;
+    this.#headerComponent = new UserTitleView(ratingName);
+
+    if (prevHeaderComponent === null) {
+      render(this.#headerComponent, this.#headerContainer);
+      return;
+    }
+
+    replace(this.#headerComponent, prevHeaderComponent);
+    remove(prevHeaderComponent);
+  };
+
+  #renderContent = () => {
+    this.#renderHeader();
     this.#renderSort();
     this.#renderFilmsList();
     this.#renderFooter();

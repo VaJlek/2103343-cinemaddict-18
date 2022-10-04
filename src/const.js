@@ -44,6 +44,25 @@ const TimeLimit = {
 
 const MAX_LENGTH_DESCRIPTION = 140;
 
+const RatingCountToName = [
+  {
+    name: '',
+    count: 1
+  },
+  {
+    name: 'Novice',
+    count: 11
+  },
+  {
+    name: 'Fan',
+    count: 21
+  },
+  {
+    name: 'Movie Buff',
+    count: Infinity
+  },
+];
+
 export {
   FilterType,
   SortType,
@@ -52,5 +71,6 @@ export {
   Mode,
   Method,
   TimeLimit,
-  MAX_LENGTH_DESCRIPTION
+  MAX_LENGTH_DESCRIPTION,
+  RatingCountToName
 };

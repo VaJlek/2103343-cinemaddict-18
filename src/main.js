@@ -1,5 +1,3 @@
-import { render } from './framework/render.js';
-import UserTitleView from './view/user-title-view.js';
 import ContentPresenter from './presenter/content-presenter.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 
@@ -26,13 +24,11 @@ const commentsModel = new CommentsModel(commentApiService);
 const filterModel = new FilterModel();
 
 
-const contentPresenter = new ContentPresenter(siteMainElement, moviesModel, commentsModel, filterModel, siteFooterElement);
+const contentPresenter = new ContentPresenter(siteMainElement, moviesModel, commentsModel, filterModel, siteHeaderElement, siteFooterElement);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, moviesModel);
 
 
 commentsModel.addObserver(moviesModel.updateModel);
-
-render(new UserTitleView, siteHeaderElement);
 
 filterPresenter.init();
 contentPresenter.init();
