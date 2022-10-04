@@ -2,7 +2,7 @@ import ApiService from './framework/api-service.js';
 import FilmApiService from './film-api-service.js';
 import { Method } from './const.js';
 
-export default class CommentApi extends ApiService {
+export default class CommentApiService extends ApiService {
 
   get = async (id) => {
     const response = await this._load({ url: `comments/${id}` });
@@ -20,7 +20,7 @@ export default class CommentApi extends ApiService {
     const parseResponse = await ApiService.parseResponse(response);
     return {
       film: FilmApiService.adaptToClient(parseResponse.film),
-      comment: parseResponse.comments
+      comment: parseResponse.comments,
     };
   };
 

@@ -1,17 +1,16 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-
+import { MAX_LENGTH_DESCRIPTION } from '../const.js';
 import { humanizeToYear, formatDuration } from '../utils/utils.js';
 
 const createFilmCardTemplate = ({film, isDisabled}) => {
   const { comments, filmInfo, userDetails } = film;
   const { title, totalRating, poster, release, runtime, genre, description } = filmInfo;
-  //: {date},
   const { watchlist, alreadyWatched, favorite} = userDetails;
-
+  const {date} = release;
 
   const commentsCount = comments.length ? `${comments.length} comments` : 'No comments yet';
 
-  const normDate = humanizeToYear(release);
+  const normDate = humanizeToYear(date);
   const duration = formatDuration(runtime);
 
   const watchlistClassName = watchlist
@@ -23,6 +22,9 @@ const createFilmCardTemplate = ({film, isDisabled}) => {
   const favoriteClassName = favorite
     ? 'film-card__controls-item--active'
     : '';
+  const cutDescription = description.length > MAX_LENGTH_DESCRIPTION
+    ? `${description.slice(0, MAX_LENGTH_DESCRIPTION - 1)}...`
+    : description;
 
   return `<article class="film-card">
 <a class="film-card__link">
@@ -31,10 +33,10 @@ const createFilmCardTemplate = ({film, isDisabled}) => {
   <p class="film-card__info">
     <span class="film-card__year">${normDate}</span>
     <span class="film-card__duration">${duration}</span>
-    <span class="film-card__genre">${genre}</span>
+    <span class="film-card__genre">${genre ? genre.join(', ') : ''}</span>
   </p>
   <img src=${poster} alt="" class="film-card__poster">
-  <p class="film-card__description">${description}</p>
+  <p class="film-card__description">${cutDescription}</p>
   <span class="film-card__comments">${commentsCount}</span>
 </a>
 <div class="film-card__controls">

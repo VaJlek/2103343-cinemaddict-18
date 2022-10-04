@@ -1,4 +1,5 @@
 import Observable from '../framework/observable';
+import { UpdateType } from '../const.js';
 
 export default class CommentsModel extends Observable{
 
@@ -16,37 +17,38 @@ export default class CommentsModel extends Observable{
   }
 
   download = async (updateType, data) => {
-    const { id } = data;
     try {
-      this.#comments = await this.#commentsApiService.get(id);
+      this.#comments = await this.#commentsApiService.get(data.id);
     } catch (err) {
       this.#comments = [];
     }
-
     this._notify(updateType, data);
   };
 
-  addComment = (updateType, update) => {
-    this.#comments = [
-      update,
-      ...this.#comments,
-    ];
-
-    this._notify(updateType, update);
+  add = async (updateType, { id, comment }) => {
+    let data;
+    try {
+      data = await this.#commentsApiService.add(id, comment);
+    } catch (err) {
+      throw new Error('Can\'t add comment');
+    }
+    this.#comments = data.comment;
+    this._notify(UpdateType.MODEL, data.film);
+    this._notify(updateType, data.film);
   };
 
-  deleteComment = (updateType, id) => {
-    const index = this.#comments.findIndex((comment) => comment.id === id);
-
-    if (index === -1) {
-      throw new Error('Can\'t delete unexisting comment');
+  delete = async (updateType, { id, film }) => {
+    try {
+      await this.#commentsApiService.delete(id);
+      const index = film.comments.findIndex((comment) => comment === id);
+      film.comments.splice(index, 1);
+    } catch (err) {
+      throw new Error('Can\'t delete comment');
     }
 
-    this.#comments = [
-      ...this.#comments.slice(0, index),
-      ...this.#comments.slice(index + 1),
-    ];
-    this._notify(updateType);
+    this._notify(UpdateType.MODEL, film);
+    this._notify(updateType, film);
   };
+
 }
 

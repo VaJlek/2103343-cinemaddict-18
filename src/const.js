@@ -13,9 +13,8 @@ const SortType = {
 
 const UserAction = {
   UPDATE_FILM: 'UPDATE_FILM',
-  UPDATE_FILM_DETAILS: 'UPDATE_FILM_DETAILS', //?
-  ADD: 'ADD_COMMENT',
-  DELETE: 'DELETE_COMMENT',
+  ADD_COMMENT: 'ADD_COMMENT',
+  DELETE_COMMENT: 'DELETE_COMMENT',
 };
 
 const UpdateType = {
@@ -27,8 +26,8 @@ const UpdateType = {
 };
 
 const Mode = {
-  DEFAULT: 'default',
-  POPUP: 'popup',
+  DEFAULT: 'DEFAULT',
+  POPUP: 'POPUP',
 };
 
 const Method = {
@@ -43,6 +42,8 @@ const TimeLimit = {
   UPPER_LIMIT: 1000
 };
 
+const MAX_LENGTH_DESCRIPTION = 140;
+
 export {
   FilterType,
   SortType,
@@ -50,5 +51,6 @@ export {
   UpdateType,
   Mode,
   Method,
-  TimeLimit
+  TimeLimit,
+  MAX_LENGTH_DESCRIPTION
 };

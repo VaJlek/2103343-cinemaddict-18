@@ -26,14 +26,12 @@ export default class FilmCardPresenter {
 
     this.#filmCardComponent = new FilmCardView(film);
 
-    //render(this.#filmCardComponent, this.#contentContainer); //!!
-
     this.#filmCardComponent.setClickHandler(this.#handleFilmCardLinkClick);
     this.#filmCardComponent.setWatchlistClickHandler(this.#handleWatchlistClick);
     this.#filmCardComponent.setAlreadyWatchedClickHandler(this.#handleAlreadyWatchedClick);
     this.#filmCardComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
 
-    if(prevFilmCardComponent === null || prevFilmCardComponent === null) { //!!
+    if(prevFilmCardComponent === null) {
 
       render(this.#filmCardComponent, this.#contentContainer);
       return;

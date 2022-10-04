@@ -94,6 +94,7 @@ export default class ContentPresenter {
       return;
     }
     this.#renderContent();
+    this.#renderFooter();
   };
 
   #handleViewAction = async (actionType, updateType, update) => {
@@ -103,7 +104,7 @@ export default class ContentPresenter {
       case UserAction.UPDATE_FILM:
         try {
           this.#filmCardPresenter.get(update.id)?.setSaving();
-          await this.#moviesModel.updateFilm(updateType, update);
+          await this.#moviesModel.update(updateType, update);
         } catch (err) {
           this.#filmCardPresenter.get(update.id)?.setAborting();
         }
@@ -115,7 +116,7 @@ export default class ContentPresenter {
   #handleModelEvent = (updateType, data) => {
     switch (updateType) {
       case UpdateType.PATCH:
-        this.#filmCardPresenter.get(data.id).init(data, this.#contentContainer);
+        this.#filmCardPresenter.get(data.id)?.init(data);
         break;
       case UpdateType.MINOR:
         this.#clearFilmsList();
@@ -204,19 +205,8 @@ export default class ContentPresenter {
       this.#filmListContainerComponent.element,
       this.#filmDetailsPresenter,
     );
-    filmCardPresenter.init(film); //, container);
-    /*
-    switch (container) {
-      case this.#filmsListTopRatedContainerComponent.element:
-        this.#filmCardTopRatedPresenter.set(film.id, filmCardPresenter);
-        break;
-      case this.#filmsListMostCommentedContainerComponent.element:
-        this.#filmCardMostCommentedPresenter.set(film.id, filmCardPresenter);
-        break;
-      default: */
+    filmCardPresenter.init(film);
     this.#filmCardPresenter.set(film.id, filmCardPresenter);
-    //}
-
   };
 
   #renderFilms = (films, container) => {
@@ -278,7 +268,6 @@ export default class ContentPresenter {
 
     this.#renderSort();
     this.#renderFilmsList();
-    this.#renderFooter();
   };
 
 }

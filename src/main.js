@@ -31,6 +31,7 @@ const filterPresenter = new FilterPresenter(siteMainElement, filterModel, movies
 
 
 commentsModel.addObserver(moviesModel.updateModel);
+
 render(new UserTitleView, siteHeaderElement);
 
 filterPresenter.init();

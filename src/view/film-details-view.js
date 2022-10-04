@@ -32,7 +32,6 @@ const createCountComments = (count) => `<h3 class="film-details__comments-title"
 ${count ? count : 0}</span></h3>`;
 
 const createFilmDetailsTemplate = ({film, comments: listComments, emotion, message, isBlocked, deleteId}) => {
-
   const { comments, filmInfo, userDetails } = film;
   const { title,
     totalRating,

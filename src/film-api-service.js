@@ -1,12 +1,12 @@
 import ApiService from './framework/api-service.js';
 import { Method } from './const.js';
 
-export default class FilmApi extends ApiService {
+export default class FilmApiService extends ApiService {
 
   get films() {
     return this._load({ url: 'movies' })
       .then(ApiService.parseResponse)
-      .then((films) => films.map(FilmApi.adaptToClient));
+      .then((films) => films.map(FilmApiService.adaptToClient));
   }
 
   update = async (film) => {
@@ -19,7 +19,7 @@ export default class FilmApi extends ApiService {
       });
 
       const parseResponse = await ApiService.parseResponse(response);
-      return FilmApi.adaptToClient(parseResponse);
+      return FilmApiService.adaptToClient(parseResponse);
     } catch (err) {
       throw new Error('FilmApi.update()');
     }

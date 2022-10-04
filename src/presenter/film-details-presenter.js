@@ -9,6 +9,7 @@ export default class FilmDetailsPresenter {
   #filmDetailsComponent = null;
   #commentsModel = null;
   #moviesModel = null;
+  mode = Mode.DEFAULT;
   #uiBlocker = new UiBlocker(TimeLimit.LOWER_LIMIT, TimeLimit.UPPER_LIMIT);
 
 
@@ -24,7 +25,7 @@ export default class FilmDetailsPresenter {
 
     const prevFilmDetailsComponent = this.#filmDetailsComponent;
 
-    this.#filmDetailsComponent = new FilmDetailsView(this.#film, this.#commentsModel.comments);
+    this.#filmDetailsComponent = new FilmDetailsView(this.#film);
 
     this.#filmDetailsComponent.setCloseButtonClickHandler(this.#onFilmDetailsClosePopupButton);
     this.#filmDetailsComponent.setWatchlistClickHandler(this.#handleWatchlistClick);
@@ -37,11 +38,10 @@ export default class FilmDetailsPresenter {
 
     if (prevFilmDetailsComponent === null || this.mode === Mode.DEFAULT ) {
       this.#renderFilmDetails();
-      this.mode = 'popup';
+      this.mode = 'POPUP';
     } else {
       replace(this.#filmDetailsComponent, prevFilmDetailsComponent);
     }
-
     this.#commentsModel.download(UpdateType.PATCH, this.#film);
   };
 
@@ -73,19 +73,19 @@ export default class FilmDetailsPresenter {
 
   #handleWatchlistClick = () => {
     this.#film.userDetails.watchlist = !this.#film.userDetails.watchlist;
-    this.#moviesModel.updateFilm(UserAction.UPDATE_MOVIE, UpdateType.MINOR, this.#film);
+    this.#handleViewAction(UserAction.UPDATE_FILM, UpdateType.MINOR, this.#film);
 
   };
 
   #handleAlreadyWatchedClick = () => {
     this.#film.userDetails.alreadyWatched = !this.#film.userDetails.alreadyWatched;
-    this.#moviesModel.updateFilm(UserAction.UPDATE_MOVIE, UpdateType.MINOR, this.#film);
+    this.#handleViewAction(UserAction.UPDATE_FILM, UpdateType.MINOR, this.#film);
 
   };
 
   #handleFavoriteClick = () => {
     this.#film.userDetails.favorite = !this.#film.userDetails.favorite;
-    this.#moviesModel.updateFilm(UserAction.UPDATE_MOVIE, UpdateType.MINOR, this.#film);
+    this.#handleViewAction(UserAction.UPDATE_FILM, UpdateType.MINOR, this.#film);
   };
 
   #handleAddCommentClick = (comment) => {
@@ -94,25 +94,23 @@ export default class FilmDetailsPresenter {
 
 
   #handleDeleteCommentClick = (id) => {
-    this.#handleAddCommentClick(UserAction.DELETE_COMMENT, UpdateType.MINOR, { id, movie: this.#film });
+    this.#handleViewAction(UserAction.DELETE_COMMENT, UpdateType.MINOR, { id, film: this.#film });
   };
 
-  #updateDetailsComponent = () => {
-    this.#filmDetailsComponent.updateElement(
-      {
-        film: this.#film,
-        comments: this.#commentsModel.comments,
-        isBlocked: false,
-        deleteId: null
-      });};
+  #updateDetailsComponent = () => this.#filmDetailsComponent.updateElement(
+    {
+      film: this.#film,
+      comments: this.#commentsModel.comments,
+      isBlocked: false,
+      deleteId: null
+    });
+
 
   #handleModelEvent = (updateType, data) => {
-    if (!this.mode === Mode.POPUP) {
+    if (!this.mode === Mode.DEFAULT) {
       return;
     }
-
     switch (updateType) {
-
       case UpdateType.PATCH:
         this.#film = data;
         this.#updateDetailsComponent();
@@ -129,10 +127,10 @@ export default class FilmDetailsPresenter {
     this.#uiBlocker.block();
 
     switch (actionType) {
-      case UserAction.UPDATE_MOVIE:
+      case UserAction.UPDATE_FILM:
         try {
           this.#filmDetailsComponent.updateElement({ isBlocked: true });
-          await this.#moviesModel.updateFilm(updateType, update);
+          await this.#moviesModel.update(updateType, update);
         } catch (err) {
           this.#filmDetailsComponent.shake(this.#updateDetailsComponent);
         }
@@ -141,7 +139,7 @@ export default class FilmDetailsPresenter {
       case UserAction.DELETE_COMMENT:
         try {
           this.#filmDetailsComponent.updateElement({ deleteId: update.id, isBlocked: true });
-          await this.#commentsModel.deleteComment(updateType, update);
+          await this.#commentsModel.delete(updateType, update);
         } catch (err) {
           this.#filmDetailsComponent.shake(this.#updateDetailsComponent);
         }
@@ -150,7 +148,7 @@ export default class FilmDetailsPresenter {
       case UserAction.ADD_COMMENT:
         try {
           this.#filmDetailsComponent.updateElement({ isBlocked: true });
-          await this.#commentsModel.addComment(updateType, update);
+          await this.#commentsModel.add(updateType, update);
           this.#filmDetailsComponent.updateElement({ message: null, emotion: null });
         } catch (err) {
           this.#filmDetailsComponent.shake(this.#updateDetailsComponent);
