@@ -1,7 +1,8 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-
+import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(duration);
+dayjs.extend(relativeTime);
 
 // Функция из интернета по генерации случайного числа из диапазона
 // Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
@@ -21,7 +22,7 @@ const humanizeToYear = (dueDate) => dayjs(dueDate).format('YYYY');
 
 const humanizeToDate = (dueDate) => dayjs(dueDate).format('DD MMMM YYYY');
 
-const humanizeToDateWithTime = (dueDate) => dayjs(dueDate).format('YYYY.MM.DD HH:MM');
+const humanizeToDateWithTime = (dueDate) => dayjs(dueDate).fromNow();
 
 const formatDuration = (minutes) => dayjs.duration(minutes, 'minutes').format('H[h] mm[m]');
 

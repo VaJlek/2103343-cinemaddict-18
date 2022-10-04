@@ -33,7 +33,7 @@ export default class MoviesModel extends Observable {
       this.#setFilm(film);
       this._notify(updateType, film);
     } catch (err) {
-      throw new Error('Can\'t update Film');
+      throw new Error('MovieModel.update()');
     }
   };
 
@@ -47,7 +47,7 @@ export default class MoviesModel extends Observable {
     const index = this.#films.findIndex(({ id }) => id === film.id);
 
     if (index === -1) {
-      throw new Error('Can\'t set Film');
+      throw new Error('MovieModel.#setFilm');
     }
     this.#films = [
       ...this.#films.slice(0, index),

@@ -30,7 +30,7 @@ export default class CommentsModel extends Observable{
     try {
       data = await this.#commentsApiService.add(id, comment);
     } catch (err) {
-      throw new Error('Can\'t add comment');
+      throw new Error('CommentsModel.add()');
     }
     this.#comments = data.comment;
     this._notify(UpdateType.MODEL, data.film);
@@ -43,7 +43,7 @@ export default class CommentsModel extends Observable{
       const index = film.comments.findIndex((comment) => comment === id);
       film.comments.splice(index, 1);
     } catch (err) {
-      throw new Error('Can\'t delete comment');
+      throw new Error('CommentsModel.delete()');
     }
 
     this._notify(UpdateType.MODEL, film);
