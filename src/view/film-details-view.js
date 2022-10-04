@@ -21,8 +21,8 @@ const createComment = (message, deleteId) => message ?
 
 const createComments = (comments, listComments, deleteId) => {
   const template = comments.length
-    ? comments.map((index) => createComment(listComments?.find(
-      ({ id }) => id === index), deleteId))
+    ? comments
+      .map((index) => createComment(listComments?.find(({ id }) => id === index), deleteId))
       .join('')
     : '';
   return `<ul class="film-details__comments-list">${template}</ul>`;
@@ -181,6 +181,11 @@ export default class FilmDetailsView extends AbstractStatrfulView{
 
   get template() {
     return createFilmDetailsTemplate(this._state);
+  }
+
+  removeElement() {
+    document.removeEventListener('keydown', this.#addCommentHandler);
+    super.removeElement();
   }
 
   static parseFilmsToState = (film) => ({

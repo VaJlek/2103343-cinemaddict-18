@@ -14,12 +14,12 @@ export default class CommentApiService extends ApiService {
       url: `comments/${id}`,
       method: Method.POST,
       body: JSON.stringify(comment),
-      headers: new Headers({ 'Content-Type': 'application/json' }),
+      headers: new Headers({'Content-Type': 'application/json'}),
     });
 
     const parseResponse = await ApiService.parseResponse(response);
     return {
-      film: FilmApiService.adaptToClient(parseResponse.film),
+      film: FilmApiService.adaptToClient(parseResponse.movie),
       comment: parseResponse.comments,
     };
   };

@@ -203,7 +203,7 @@ export default class ContentPresenter {
     const filmCardPresenter = new FilmCardPresenter(
       this.#handleViewAction,
       this.#filmListContainerComponent.element,
-      this.#filmDetailsPresenter,
+      this.#filmDetailsPresenter.init,
     );
     filmCardPresenter.init(film);
     this.#filmCardPresenter.set(film.id, filmCardPresenter);

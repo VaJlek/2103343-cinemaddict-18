@@ -63,7 +63,7 @@ export default class FilmCardPresenter {
   };
 
   #handleFilmCardLinkClick = () => {
-    this.#filmDetailsPresenter.init(this.#film);
+    this.#filmDetailsPresenter(this.#film);
   };
 
 

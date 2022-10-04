@@ -26,7 +26,7 @@ export default class FilmDetailsPresenter {
     const prevFilmDetailsComponent = this.#filmDetailsComponent;
 
     this.#filmDetailsComponent = new FilmDetailsView(this.#film);
-
+    render(this.#filmDetailsComponent,document.body);
     this.#filmDetailsComponent.setCloseButtonClickHandler(this.#onFilmDetailsClosePopupButton);
     this.#filmDetailsComponent.setWatchlistClickHandler(this.#handleWatchlistClick);
     this.#filmDetailsComponent.setAlreadyWatchedClickHandler(this.#handleAlreadyWatchedClick);
@@ -38,7 +38,7 @@ export default class FilmDetailsPresenter {
 
     if (prevFilmDetailsComponent === null || this.mode === Mode.DEFAULT ) {
       this.#renderFilmDetails();
-      this.mode = 'POPUP';
+      this.mode = Mode.POPUP;
     } else {
       replace(this.#filmDetailsComponent, prevFilmDetailsComponent);
     }
@@ -56,7 +56,7 @@ export default class FilmDetailsPresenter {
 
   #onFilmDetailsClosePopupButton = () => {
     this.mode = Mode.DEFAULT;
-    remove (this.#filmDetailsComponent);
+    this.destroy();
     document.body.classList.remove('hide-overflow');
     document.removeEventListener('keydown', this.#onEscKeyDown);
 
@@ -125,7 +125,6 @@ export default class FilmDetailsPresenter {
 
   #handleViewAction = async (actionType, updateType, update) => {
     this.#uiBlocker.block();
-
     switch (actionType) {
       case UserAction.UPDATE_FILM:
         try {
