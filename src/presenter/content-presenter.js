@@ -1,4 +1,4 @@
-import { render, remove, RenderPosition } from '../framework/render.js';
+import { render, remove, RenderPosition, replace } from '../framework/render.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 
 import FilmListContainerView from '../view/film-list-container-view.js';
@@ -36,6 +36,7 @@ export default class ContentPresenter {
   #contentComponent = null;
   #filmListComponent = null;
   #footerComponent = null;
+
 
   #filmListContainerComponent = new FilmListContainerView();
   //#filmsListTopRatedContainerComponent = new FilmListContainerView();
@@ -94,7 +95,6 @@ export default class ContentPresenter {
       return;
     }
     this.#renderContent();
-    this.#renderFooter();
   };
 
   #handleViewAction = async (actionType, updateType, update) => {
@@ -246,8 +246,15 @@ export default class ContentPresenter {
   };
 
   #renderFooter = () => {
-    this.#footerComponent = new FooterView(this.films.length);
-    render(this.#footerComponent, this.#footerContainer);
+    const prevfooterComponent = this.#footerComponent;
+    this.#footerComponent = new FooterView(this.#moviesModel.films.length);
+    if (prevfooterComponent === null){
+      render(this.#footerComponent, this.#footerContainer);
+      return;
+    }
+    replace(this.#footerComponent, prevfooterComponent);
+    remove(prevfooterComponent);
+
   };
 
   #renderFilmsList = () => {
@@ -268,6 +275,7 @@ export default class ContentPresenter {
 
     this.#renderSort();
     this.#renderFilmsList();
+    this.#renderFooter();
   };
 
 }

@@ -16,7 +16,7 @@ const END_POINT = 'https://18.ecmascript.pages.academy/cinemaddict';
 
 const siteMainElement = document.querySelector('.main');
 const siteHeaderElement = document.querySelector('.header');
-const siteFooterStatisticElement = document.querySelector('.footer__statistics');
+const siteFooterElement = document.querySelector('.footer');
 
 const filmApiService = new FilmApiService(END_POINT, AUTHORIZATION);
 const commentApiService = new CommentApiService(END_POINT, AUTHORIZATION);
@@ -26,7 +26,7 @@ const commentsModel = new CommentsModel(commentApiService);
 const filterModel = new FilterModel();
 
 
-const contentPresenter = new ContentPresenter(siteMainElement, moviesModel, commentsModel, filterModel, siteFooterStatisticElement);
+const contentPresenter = new ContentPresenter(siteMainElement, moviesModel, commentsModel, filterModel, siteFooterElement);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, moviesModel);
 
 
