@@ -26,17 +26,17 @@ const createNavigationTemplate = (filters, currentFilterType) => {
 };
 
 export default class NavigationView extends AbstractView{
-  #filters = null;
+  #filter = null;
   #currentFilter = null;
 
-  constructor(filters, currentFilter) {
+  constructor(filter, currentFilter) {
     super();
-    this.#filters = filters;
+    this.#filter = filter;
     this.#currentFilter = currentFilter;
   }
 
   get template() {
-    return createNavigationTemplate(this.#filters, this.#currentFilter);
+    return createNavigationTemplate(this.#filter, this.#currentFilter);
   }
 
   setFilterTypeChangeHandler = (callback) => {

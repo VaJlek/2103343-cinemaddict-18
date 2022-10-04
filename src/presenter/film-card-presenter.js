@@ -7,11 +7,8 @@ export default class FilmCardPresenter {
 
   #contentContainer = null;
   #filmCardComponent = null;
-
   #changeData = null;
-
   #film = null;
-
   #filmDetailsPresenter = null;
 
   constructor( changeData, contentContainer, filmDetailsPresenter) {
@@ -28,8 +25,6 @@ export default class FilmCardPresenter {
     const prevFilmCardComponent = this.#filmCardComponent;
 
     this.#filmCardComponent = new FilmCardView(film);
-
-    render(this.#filmCardComponent, this.#contentContainer);
 
     this.#filmCardComponent.setClickHandler(this.#handleFilmCardLinkClick);
     this.#filmCardComponent.setWatchlistClickHandler(this.#handleWatchlistClick);
@@ -51,8 +46,24 @@ export default class FilmCardPresenter {
     remove(this.#filmCardComponent);
   };
 
+  setSaving = () => {
+    this.#filmCardComponent.updateElement({
+      isDisabled: true
+    });
+  };
+
+  #resetState = () => {
+    this.#filmCardComponent.updateElement({
+      isDisabled: false
+    });
+  };
+
+  setAborting = () => {
+    this.#filmCardComponent.shake(this.#resetState);
+  };
+
   #handleFilmCardLinkClick = () => {
-    this.#filmDetailsPresenter.init(this.#film);
+    this.#filmDetailsPresenter(this.#film);
   };
 
 

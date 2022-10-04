@@ -5,13 +5,6 @@ const FilterType = {
   FAVORITES: 'favorites',
 };
 
-const filterTypeToText = {
-  [FilterType.ALL]: 'All movies',
-  [FilterType.WATCHLIST]: 'Watchlist',
-  [FilterType.HISTORY]: 'History',
-  [FilterType.FAVORITES]: 'Favorites'
-};
-
 const SortType = {
   DEFAULT: 'default',
   DATE: 'date',
@@ -20,27 +13,64 @@ const SortType = {
 
 const UserAction = {
   UPDATE_FILM: 'UPDATE_FILM',
-  UPDATE_FILM_DETAILS: 'UPDATE_FILM_DETAILS',
-  ADD: 'ADD_COMMENT',
-  DELETE: 'DELETE_COMMENT',
+  ADD_COMMENT: 'ADD_COMMENT',
+  DELETE_COMMENT: 'DELETE_COMMENT',
 };
 
 const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
+  MODEL: 'MODEL',
 };
 
 const Mode = {
-  DEFAULT: 'default',
-  POPUP: 'popup',
+  DEFAULT: 'DEFAULT',
+  POPUP: 'POPUP',
 };
+
+const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
+};
+
+const TimeLimit = {
+  LOWER_LIMIT: 500,
+  UPPER_LIMIT: 1000
+};
+
+const MAX_LENGTH_DESCRIPTION = 140;
+
+const RatingCountToName = [
+  {
+    name: '',
+    count: 1
+  },
+  {
+    name: 'Novice',
+    count: 11
+  },
+  {
+    name: 'Fan',
+    count: 21
+  },
+  {
+    name: 'Movie Buff',
+    count: Infinity
+  },
+];
 
 export {
   FilterType,
-  filterTypeToText,
   SortType,
   UserAction,
   UpdateType,
-  Mode
+  Mode,
+  Method,
+  TimeLimit,
+  MAX_LENGTH_DESCRIPTION,
+  RatingCountToName
 };
