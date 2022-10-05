@@ -26,21 +26,25 @@ export default class FilterPresenter {
       {
         type: FilterType.ALL,
         name: 'all',
+        text: 'All movies',
         count: filter[FilterType.ALL](films).length,
       },
       {
         type: FilterType.WATCHLIST,
         name: 'watchlist',
+        text: 'Watchlist',
         count: filter[FilterType.WATCHLIST](films).length,
       },
       {
         type: FilterType.HISTORY,
         name: 'history',
+        text: 'History',
         count: filter[FilterType.HISTORY](films).length,
       },
       {
         type: FilterType.FAVORITES,
         name: 'favorites',
+        text: 'Favorites',
         count: filter[FilterType.FAVORITES](films).length,
       },
     ];
@@ -57,7 +61,6 @@ export default class FilterPresenter {
       render(this.#filterComponent, this.#filterContainer);
       return;
     }
-
     replace(this.#filterComponent, prevFilterComponent);
     remove(prevFilterComponent);
   };

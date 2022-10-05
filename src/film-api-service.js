@@ -7,7 +7,6 @@ export default class FilmApiService extends ApiService {
     return this._load({ url: 'movies' })
       .then(ApiService.parseResponse)
       .then((films) => films.map(FilmApiService.adaptToClient));
-
   }
 
   update = async (film) => {

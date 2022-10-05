@@ -1,7 +1,6 @@
 import Observable from '../framework/observable.js';
 import { UpdateType } from '../const.js';
 
-
 export default class MoviesModel extends Observable {
 
   #filmsApiService = null;
@@ -55,5 +54,4 @@ export default class MoviesModel extends Observable {
       ...this.#films.slice(index + 1),
     ];
   };
-
 }

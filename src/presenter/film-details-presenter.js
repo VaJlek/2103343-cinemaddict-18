@@ -3,7 +3,6 @@ import { UpdateType, Mode, TimeLimit, UserAction} from '../const.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import FilmDetailsView from '../view/film-details-view.js';
 
-
 export default class FilmDetailsPresenter {
   #film = null;
   #filmDetailsComponent = null;
@@ -11,7 +10,6 @@ export default class FilmDetailsPresenter {
   #moviesModel = null;
   mode = Mode.DEFAULT;
   #uiBlocker = new UiBlocker(TimeLimit.LOWER_LIMIT, TimeLimit.UPPER_LIMIT);
-
 
   constructor(moviesModel, commentsModel) {
     this.#commentsModel = commentsModel;
@@ -59,7 +57,6 @@ export default class FilmDetailsPresenter {
     this.destroy();
     document.body.classList.remove('hide-overflow');
     document.removeEventListener('keydown', this.#onEscKeyDown);
-
   };
 
   #onEscKeyDown = (evt) => {
@@ -70,17 +67,14 @@ export default class FilmDetailsPresenter {
     }
   };
 
-
   #handleWatchlistClick = () => {
     this.#film.userDetails.watchlist = !this.#film.userDetails.watchlist;
     this.#handleViewAction(UserAction.UPDATE_FILM, UpdateType.MINOR, this.#film);
-
   };
 
   #handleAlreadyWatchedClick = () => {
     this.#film.userDetails.alreadyWatched = !this.#film.userDetails.alreadyWatched;
     this.#handleViewAction(UserAction.UPDATE_FILM, UpdateType.MINOR, this.#film);
-
   };
 
   #handleFavoriteClick = () => {
@@ -91,7 +85,6 @@ export default class FilmDetailsPresenter {
   #handleAddCommentClick = (comment) => {
     this.#handleViewAction(UserAction.ADD_COMMENT, UpdateType.MINOR, { comment, id: this.#film.id });
   };
-
 
   #handleDeleteCommentClick = (id) => {
     this.#handleViewAction(UserAction.DELETE_COMMENT, UpdateType.MINOR, { id, film: this.#film });
@@ -104,7 +97,6 @@ export default class FilmDetailsPresenter {
       isBlocked: false,
       deleteId: null
     });
-
 
   #handleModelEvent = (updateType, data) => {
     if (!this.mode === Mode.DEFAULT) {
@@ -131,7 +123,7 @@ export default class FilmDetailsPresenter {
           this.#filmDetailsComponent.updateElement({ isBlocked: true });
           await this.#moviesModel.update(updateType, update);
         } catch (err) {
-          this.#filmDetailsComponent.shake(this.#updateDetailsComponent);
+          this.#filmDetailsComponent.shakeControls(this.#updateDetailsComponent);
         }
         break;
 
@@ -140,7 +132,7 @@ export default class FilmDetailsPresenter {
           this.#filmDetailsComponent.updateElement({ deleteId: update.id, isBlocked: true });
           await this.#commentsModel.delete(updateType, update);
         } catch (err) {
-          this.#filmDetailsComponent.shake(this.#updateDetailsComponent);
+          this.#filmDetailsComponent.shakeComment(this.#updateDetailsComponent, {deleteId: update.id});
         }
         break;
 
@@ -150,11 +142,10 @@ export default class FilmDetailsPresenter {
           await this.#commentsModel.add(updateType, update);
           this.#filmDetailsComponent.updateElement({ message: null, emotion: null });
         } catch (err) {
-          this.#filmDetailsComponent.shake(this.#updateDetailsComponent);
+          this.#filmDetailsComponent.shakeInput(this.#updateDetailsComponent);
         }
         break;
     }
-
     this.#uiBlocker.unblock();
   };
 

@@ -1,7 +1,6 @@
 import ContentPresenter from './presenter/content-presenter.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 
-
 import MoviesModel from './model/movies-model.js';
 import CommentsModel from './model/comments-model.js';
 import FilterModel from './model/filter-model.js';
@@ -26,7 +25,6 @@ const filterModel = new FilterModel();
 
 const contentPresenter = new ContentPresenter(siteMainElement, moviesModel, commentsModel, filterModel, siteHeaderElement, siteFooterElement);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, moviesModel);
-
 
 commentsModel.addObserver(moviesModel.updateModel);
 

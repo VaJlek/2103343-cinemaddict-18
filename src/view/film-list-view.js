@@ -1,12 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { FilterType } from '../const.js';
-
-const NoFilmTextType = {
-  [FilterType.ALL]: 'There are no movies in our database',
-  [FilterType.WATCHLIST]: 'There are no movies to watch now',
-  [FilterType.HISTORY]: 'There are no history movies now',
-  [FilterType.FAVORITES]: 'There are no favorite movies now',
-};
+import { NoFilmTextType } from '../const.js';
 
 const createFilmListTemplate = (filterType, isEmpty) => {
   const hiddenClass = isEmpty ? '' : ' visually-hidden';
@@ -15,7 +8,6 @@ const createFilmListTemplate = (filterType, isEmpty) => {
     `<section class="films-list">
 <h2 class="films-list__title ${hiddenClass}">${noFilmTextValue}
 </h2></section>`);
-
 };
 
 export default class FilmListView extends AbstractView{

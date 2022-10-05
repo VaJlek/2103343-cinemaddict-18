@@ -4,9 +4,7 @@ const createFooterTemplate = (filmsCount) => `<section class="footer__statistics
 <p>${filmsCount} movies inside</p>
 </section>`;
 
-
 export default class FooterView extends AbstractView{
-
   #filmsCount = null;
 
   constructor (filmsCount) {
@@ -17,5 +15,4 @@ export default class FooterView extends AbstractView{
   get template() {
     return createFooterTemplate(this.#filmsCount);
   }
-
 }

@@ -2,9 +2,11 @@ import AbstractStatrfulView from '../framework/view/abstract-stateful-view.js';
 import he from 'he';
 import { humanizeToDateWithTime, humanizeToDate, formatDuration } from '../utils/utils.js';
 
+const SHAKE_CLASS_NAME = 'shake';
+const SHAKE_ANIMATION_TIMEOUT = 600;
 
-const createComment = (message, deleteId) => message ?
-  `<li class="film-details__comment">
+const createComment = (message, deleteId) => message
+  ? `<li class="film-details__comment" data-id="block${message.id}">
     <span class="film-details__comment-emoji">
     <img src="./images/emoji/${message.emotion}.png" width="55" height="55" alt="emoji-${message.emotion}">
     </span>
@@ -17,7 +19,8 @@ const createComment = (message, deleteId) => message ?
         data-id ="${message.id}" ${deleteId ? ' disabled' : ''}>${deleteId === message.id ? 'Deleting...' : 'Delete'}</button>
       </p>
     </div>
-  </li>` : '';
+  </li>`
+  : '';
 
 const createComments = (comments, listComments, deleteId) => {
   const template = comments.length
@@ -61,7 +64,9 @@ const createFilmDetailsTemplate = ({film, comments: listComments, emotion, messa
     : '';
 
   const isChecked = (current, type) => (current === type ? 'checked' : '');
-  const emojiLabelTemplate = emotion ? `<img src="images/emoji/${emotion}.png" width="55" height="55" alt="emoji-smile">` : '';
+  const emojiLabelTemplate = emotion
+    ? `<img src="images/emoji/${emotion}.png" width="55" height="55" alt="emoji-smile">`
+    : '';
 
   return `<section class="film-details">
           <div class="film-details__inner">
@@ -167,9 +172,7 @@ const createFilmDetailsTemplate = ({film, comments: listComments, emotion, messa
 </div>
 </div>
 </section>`;
-
 };
-
 
 export default class FilmDetailsView extends AbstractStatrfulView{
 
@@ -188,20 +191,53 @@ export default class FilmDetailsView extends AbstractStatrfulView{
     super.removeElement();
   }
 
-  static parseFilmsToState = (film) => ({
-    film,
-    comments: [],
-    emotion: null,
-    scroll: null,
-    message: null,
-    isBlocked: false,
-    deleteId: null
-  });
+  shakeInput(callback) {
+    document.querySelector('.film-details__new-comment').classList.add(SHAKE_CLASS_NAME);
+    setTimeout(() => {
+      this.element.classList.remove(SHAKE_CLASS_NAME);
+      callback?.();
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
 
-  static parseStateToFilms = (state) => ({
-    'film': state.film,
-    'comments': state.comments
-  });
+  shakeControls(callback) {
+    document.querySelector('.film-details__controls').classList.add(SHAKE_CLASS_NAME);
+    setTimeout(() => {
+      this.element.classList.remove(SHAKE_CLASS_NAME);
+      callback?.();
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
+  shakeComment(callback, commentId) {
+    document.querySelector(`#block${commentId}`).classList.add(SHAKE_CLASS_NAME);
+    setTimeout(() => {
+      this.element.classList.remove(SHAKE_CLASS_NAME);
+      callback?.();
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
+  setAddCommentHandler = (callback) => {
+    this._callback.addComment = callback;
+  };
+
+  setDeleteCommentHandler = (callback) => {
+    this._callback.deleteComment = callback;
+  };
+
+  setWatchlistClickHandler = (callback) => {
+    this._callback.watchlistClick = callback;
+  };
+
+  setAlreadyWatchedClickHandler = (callback) => {
+    this._callback.alreadyWatchedClick = callback;
+  };
+
+  setFavoriteClickHandler = (callback) => {
+    this._callback.favoriteClick = callback;
+  };
+
+  setCloseButtonClickHandler = (callback) => {
+    this._callback.closeButtonClick = callback;
+  };
 
   _restoreHandlers = () => {
     this.element
@@ -227,12 +263,9 @@ export default class FilmDetailsView extends AbstractStatrfulView{
     this.element
       .querySelector('.film-details__close-btn')
       .addEventListener('click', this.#clickCloseButtonHandler);
-
-
     this.element.scrollTop = this._state.scroll;
     this.element
       .addEventListener('scroll', this.#positionScrollHandler);
-
   };
 
   #emojiClickHandler = (evt) => {
@@ -242,7 +275,6 @@ export default class FilmDetailsView extends AbstractStatrfulView{
     evt.preventDefault();
     this._state.emotion = evt.target.dataset.emotion;
     this.updateElement({ emotion: evt.target.dataset.emotion});
-
   };
 
   #inputHandler = (evt) => {
@@ -252,12 +284,8 @@ export default class FilmDetailsView extends AbstractStatrfulView{
     });
   };
 
-  setAddCommentHandler = (callback) => {
-    this._callback.addComment = callback;
-  };
-
   #addCommentHandler = (evt) => {
-    if (!evt.ctrlKey || evt.key !== 'Enter') {
+    if(!(evt.keyCode === 13 && (evt.metaKey || evt.ctrlKey))) {
       return;
     }
     evt.preventDefault();
@@ -273,10 +301,6 @@ export default class FilmDetailsView extends AbstractStatrfulView{
     this._setState({ isBlocked: false });
   };
 
-  setDeleteCommentHandler = (callback) => {
-    this._callback.deleteComment = callback;
-  };
-
   #deleteCommentHandler = (evt) => {
     if (evt.target.tagName !== 'BUTTON') {
       return;
@@ -287,17 +311,9 @@ export default class FilmDetailsView extends AbstractStatrfulView{
     this._setState({ deleteId: null });
   };
 
-  setWatchlistClickHandler = (callback) => {
-    this._callback.watchlistClick = callback;
-  };
-
   #watchlistClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.watchlistClick();
-  };
-
-  setAlreadyWatchedClickHandler = (callback) => {
-    this._callback.alreadyWatchedClick = callback;
   };
 
   #alreadyWatchedClickHandler = (evt) => {
@@ -305,17 +321,9 @@ export default class FilmDetailsView extends AbstractStatrfulView{
     this._callback.alreadyWatchedClick();
   };
 
-  setFavoriteClickHandler = (callback) => {
-    this._callback.favoriteClick = callback;
-  };
-
   #favoriteClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.favoriteClick();
-  };
-
-  setCloseButtonClickHandler = (callback) => {
-    this._callback.closeButtonClick = callback;
   };
 
   #clickCloseButtonHandler = () => {
@@ -326,4 +334,19 @@ export default class FilmDetailsView extends AbstractStatrfulView{
     this._setState({ scroll: this.element.scrollTop
     });
   };
+
+  static parseFilmsToState = (film) => ({
+    film,
+    comments: [],
+    emotion: null,
+    scroll: null,
+    message: null,
+    isBlocked: false,
+    deleteId: null
+  });
+
+  static parseStateToFilms = (state) => ({
+    'film': state.film,
+    'comments': state.comments
+  });
 }

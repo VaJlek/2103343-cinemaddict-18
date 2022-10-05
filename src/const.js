@@ -1,8 +1,18 @@
+const MAX_LENGTH_DESCRIPTION = 140;
+const FILMS_COUNT_PER_STEP = 5;
+
 const FilterType = {
   ALL: 'all',
   WATCHLIST: 'watchlist',
   HISTORY: 'history',
   FAVORITES: 'favorites',
+};
+
+const NoFilmTextType = {
+  [FilterType.ALL]: 'There are no movies in our database',
+  [FilterType.WATCHLIST]: 'There are no movies to watch now',
+  [FilterType.HISTORY]: 'There are no history movies now',
+  [FilterType.FAVORITES]: 'There are no favorite movies now',
 };
 
 const SortType = {
@@ -42,8 +52,6 @@ const TimeLimit = {
   UPPER_LIMIT: 1000
 };
 
-const MAX_LENGTH_DESCRIPTION = 140;
-
 const RatingCountToName = [
   {
     name: '',
@@ -64,13 +72,15 @@ const RatingCountToName = [
 ];
 
 export {
+  MAX_LENGTH_DESCRIPTION,
+  FILMS_COUNT_PER_STEP,
   FilterType,
+  NoFilmTextType,
   SortType,
   UserAction,
   UpdateType,
   Mode,
   Method,
   TimeLimit,
-  MAX_LENGTH_DESCRIPTION,
   RatingCountToName
 };

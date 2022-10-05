@@ -20,7 +20,6 @@ const createSortingTemplate = (sortType) => {
 };
 
 export default class SortingView extends AbstractView{
-
   #sortType = null;
 
   constructor(sortType) {

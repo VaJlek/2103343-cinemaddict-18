@@ -13,13 +13,11 @@ export default class FilmCardPresenter {
 
   constructor( changeData, filmDetailsPresenter) {
 
-    //this.#contentContainer = contentContainer;
     this.#changeData = changeData;
     this.#filmDetailsPresenter = filmDetailsPresenter;
   }
 
   init(film, container) {
-
     this.#film = film;
     this.#contentContainer = container;
     const prevFilmCardComponent = this.#filmCardComponent;
@@ -32,13 +30,11 @@ export default class FilmCardPresenter {
     this.#filmCardComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
 
     if(prevFilmCardComponent === null) {
-
       render(this.#filmCardComponent, this.#contentContainer);
       return;
     } else {
       replace(this.#filmCardComponent, prevFilmCardComponent);
     }
-
     remove(prevFilmCardComponent);
   }
 
@@ -65,7 +61,6 @@ export default class FilmCardPresenter {
   #handleFilmCardLinkClick = () => {
     this.#filmDetailsPresenter(this.#film);
   };
-
 
   #handleWatchlistClick = () => {
     this.#film.userDetails.watchlist = !this.#film.userDetails.watchlist;

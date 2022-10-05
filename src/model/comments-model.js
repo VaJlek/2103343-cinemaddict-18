@@ -11,7 +11,6 @@ export default class CommentsModel extends Observable{
     this.#commentsApiService = commentsApiService;
   }
 
-
   get comments() {
     return this.#comments;
   }
@@ -45,10 +44,8 @@ export default class CommentsModel extends Observable{
     } catch (err) {
       throw new Error('CommentsModel.delete()');
     }
-
     this._notify(UpdateType.MODEL, film);
     this._notify(updateType, film);
   };
-
 }
 

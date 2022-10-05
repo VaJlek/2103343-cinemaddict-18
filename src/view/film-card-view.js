@@ -8,7 +8,9 @@ const createFilmCardTemplate = ({film, isDisabled}) => {
   const { watchlist, alreadyWatched, favorite} = userDetails;
   const {date} = release;
 
-  const commentsCount = comments.length ? `${comments.length} comments` : 'No comments yet';
+  const commentsCount = comments.length
+    ? `${comments.length} comments`
+    : 'No comments yet';
 
   const normDate = humanizeToYear(date);
   const duration = formatDuration(runtime);
@@ -57,10 +59,33 @@ export default class FilmCardView extends AbstractStatefulView{
     return createFilmCardTemplate(this._state);
   }
 
-  static parseFilmToState = (film) => ({
-    film,
-    isDisabled: false
-  });
+  setClickHandler = (callback) => {
+    this._callback.click = callback;
+    this.element
+      .querySelector('.film-card__link')
+      .addEventListener('click', this.#clickHandler);
+  };
+
+  setWatchlistClickHandler = (callback) => {
+    this._callback.watchlistClick = callback;
+    this.element
+      .querySelector('.film-card__controls-item--add-to-watchlist')
+      .addEventListener('click', this.#watchlistClickHandler);
+  };
+
+  setAlreadyWatchedClickHandler = (callback) => {
+    this._callback.alreadyWatchedClick = callback;
+    this.element
+      .querySelector('.film-card__controls-item--mark-as-watched')
+      .addEventListener('click', this.#alreadyWatchedClickHandler);
+  };
+
+  setFavoriteClickHandler = (callback) => {
+    this._callback.favoriteClick = callback;
+    this.element
+      .querySelector('.film-card__controls-item--favorite')
+      .addEventListener('click', this.#favoriteClickHandler);
+  };
 
   _restoreHandlers = () => {
     this.element
@@ -75,15 +100,6 @@ export default class FilmCardView extends AbstractStatefulView{
     this.element
       .querySelector('.film-card__controls-item--favorite')
       .addEventListener('click', this.#favoriteClickHandler);
-
-  };
-
-  setClickHandler = (callback) => {
-
-    this._callback.click = callback;
-    this.element
-      .querySelector('.film-card__link')
-      .addEventListener('click', this.#clickHandler);
   };
 
   #clickHandler = (evt) => {
@@ -91,23 +107,9 @@ export default class FilmCardView extends AbstractStatefulView{
     this._callback.click();
   };
 
-  setWatchlistClickHandler = (callback) => {
-    this._callback.watchlistClick = callback;
-    this.element
-      .querySelector('.film-card__controls-item--add-to-watchlist')
-      .addEventListener('click', this.#watchlistClickHandler);
-  };
-
   #watchlistClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.watchlistClick();
-  };
-
-  setAlreadyWatchedClickHandler = (callback) => {
-    this._callback.alreadyWatchedClick = callback;
-    this.element
-      .querySelector('.film-card__controls-item--mark-as-watched')
-      .addEventListener('click', this.#alreadyWatchedClickHandler);
   };
 
   #alreadyWatchedClickHandler = (evt) => {
@@ -115,17 +117,15 @@ export default class FilmCardView extends AbstractStatefulView{
     this._callback.alreadyWatchedClick();
   };
 
-  setFavoriteClickHandler = (callback) => {
-    this._callback.favoriteClick = callback;
-    this.element
-      .querySelector('.film-card__controls-item--favorite')
-      .addEventListener('click', this.#favoriteClickHandler);
-  };
-
   #favoriteClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.favoriteClick();
   };
+
+  static parseFilmToState = (film) => ({
+    film,
+    isDisabled: false
+  });
 }
 
 

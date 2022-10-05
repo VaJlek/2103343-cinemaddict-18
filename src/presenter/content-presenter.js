@@ -1,5 +1,8 @@
 import { render, remove, RenderPosition, replace } from '../framework/render.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
+import { sortDate, sortRating, sortComments} from '../utils/utils.js';
+import { SortType, UpdateType, UserAction, FilterType, TimeLimit, RatingCountToName, FILMS_COUNT_PER_STEP} from '../const.js';
+import { filter } from '../utils/filter.js';
 
 import FilmListContainerView from '../view/film-list-container-view.js';
 import FilmListView from '../view/film-list-view.js';
@@ -9,17 +12,11 @@ import SortingView from '../view/sorting-view.js';
 import FooterView from '../view/footer-view.js';
 import LoadingView from '../view/loading-view.js';
 import UserTitleView from '../view/user-title-view.js';
-
 import FilmsListTopRatedView from '../view/films-list-top-rated-view.js';
 import FilmsListMostCommentedView from '../view/films-list-most-commented-view.js';
 
 import FilmCardPresenter from './film-card-presenter.js';
 import FilmDetailsPresenter from './film-details-presenter.js';
-import { sortDate, sortRating, sortComments} from '../utils/utils.js';
-import { SortType, UpdateType, UserAction, FilterType, TimeLimit, RatingCountToName } from '../const.js';
-import { filter } from '../utils/filter.js';
-
-const FILMS_COUNT_PER_STEP = 5;
 
 export default class ContentPresenter {
 
@@ -40,14 +37,12 @@ export default class ContentPresenter {
   #footerComponent = null;
   #headerComponent = null;
 
-
   #filmListContainerComponent = new FilmListContainerView();
   #filmsListTopRatedContainerComponent = new FilmListContainerView();
   #filmsListMostCommentedContainerComponent = new FilmListContainerView();
   #filmsListTopRatedComponent = new FilmsListTopRatedView();
   #filmsListMostCommentedComponent = new FilmsListMostCommentedView();
   #showMoreButtonComponent = null;
-
 
   #renderedFilmsCount = FILMS_COUNT_PER_STEP;
 
@@ -89,7 +84,6 @@ export default class ContentPresenter {
       case SortType.RATING:
         return filteredFilms.sort(sortRating);
     }
-
     return filteredFilms;
   }
 
@@ -162,7 +156,6 @@ export default class ContentPresenter {
     this.#renderFilms(films.slice().slice(0, 2), this.#filmsListMostCommentedContainerComponent.element);
   };
 
-
   #handleSortTypeChange = (sortType) => {
 
     if (this.#currentSortType === sortType) {
@@ -174,7 +167,6 @@ export default class ContentPresenter {
   };
 
   #renderSort = () => {
-
     this.#sortComponent = new SortingView(this.#currentSortType);
     render( this.#sortComponent, this.#contentContainer, RenderPosition.BEFOREEND);
     this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
@@ -195,11 +187,9 @@ export default class ContentPresenter {
     remove(this.#sortComponent);
     remove(this.#showMoreButtonComponent);
 
-    if(resetRenderedFilmsCount){
-      this.#renderedFilmsCount = FILMS_COUNT_PER_STEP;
-    } else {
-      this.#renderedFilmsCount = Math.min(filmsCount, this.#renderedFilmsCount);
-    }
+    this.#renderedFilmsCount = resetRenderedFilmsCount
+      ? FILMS_COUNT_PER_STEP
+      : Math.min(filmsCount, this.#renderedFilmsCount);
 
     if (resetSortType) {
       this.#currentSortType = SortType.DEFAULT;
@@ -209,10 +199,10 @@ export default class ContentPresenter {
   #renderFilmCard = (film, container) => {
     const filmCardPresenter = new FilmCardPresenter(
       this.#handleViewAction,
-      //this.#filmListContainerComponent.element,
       this.#filmDetailsPresenter.init,
     );
     filmCardPresenter.init(film, container);
+
     switch (container) {
       case this.#filmsListTopRatedContainerComponent.element:
         this.#filmCardTopRatedPresenter.set(film.id, filmCardPresenter);
@@ -223,10 +213,7 @@ export default class ContentPresenter {
       default:
         this.#filmCardPresenter.set(film.id, filmCardPresenter);
     }
-  };/*
-    filmCardPresenter.init(film);
-    this.#filmCardPresenter.set(film.id, filmCardPresenter);
-  };*/
+  };
 
   #renderFilms = (films, container) => {
     films.forEach((film) => this.#renderFilmCard(film, container));
@@ -267,6 +254,7 @@ export default class ContentPresenter {
   #renderFooter = () => {
     const prevFooterComponent = this.#footerComponent;
     this.#footerComponent = new FooterView(this.#moviesModel.films.length);
+
     if (prevFooterComponent === null){
       render(this.#footerComponent, this.#footerContainer);
       return;
@@ -277,10 +265,8 @@ export default class ContentPresenter {
   };
 
   #renderFilmsList = () => {
-
     this.#contentComponent = new FilmsView();
     this.#filmListComponent = new FilmListView(this.#filterModel.filter, !this.films.length);
-
 
     render(this.#contentComponent, this.#contentContainer);
     render(this.#filmListComponent, this.#contentComponent.element);
@@ -289,9 +275,7 @@ export default class ContentPresenter {
   };
 
   #renderHeader = () => {
-
     const prevHeaderComponent = this.#headerComponent;
-
     const countWatched = filter[FilterType.HISTORY](this.#moviesModel.films).length;
     const ratingName = RatingCountToName.find(({ count }) => count > countWatched).name;
     this.#headerComponent = new UserTitleView(ratingName);
@@ -300,7 +284,6 @@ export default class ContentPresenter {
       render(this.#headerComponent, this.#headerContainer);
       return;
     }
-
     replace(this.#headerComponent, prevHeaderComponent);
     remove(prevHeaderComponent);
   };
