@@ -6,7 +6,7 @@ const SHAKE_CLASS_NAME = 'shake';
 const SHAKE_ANIMATION_TIMEOUT = 600;
 
 const createComment = (message, deleteId) => message
-  ? `<li class="film-details__comment" data-id="block${message.id}">
+  ? `<li class="film-details__comment" id="block${message.id}">
     <span class="film-details__comment-emoji">
     <img src="./images/emoji/${message.emotion}.png" width="55" height="55" alt="emoji-${message.emotion}">
     </span>
@@ -207,8 +207,9 @@ export default class FilmDetailsView extends AbstractStatrfulView{
     }, SHAKE_ANIMATION_TIMEOUT);
   }
 
-  shakeComment(callback, commentId) {
-    document.querySelector(`#block${commentId}`).classList.add(SHAKE_CLASS_NAME);
+  shakeComment(callback, id) {
+    const {deleteId} = id;
+    document.querySelector(`#block${deleteId}`).classList.add(SHAKE_CLASS_NAME);
     setTimeout(() => {
       this.element.classList.remove(SHAKE_CLASS_NAME);
       callback?.();
